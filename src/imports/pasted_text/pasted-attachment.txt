@@ -1,0 +1,144 @@
+Task: Correct Operational Status Field in Task Summary (Align to SRS §6.0)
+
+Context:
+We are updating the Task Summary section in the SyncPoint Task Workspace.
+
+Currently:
+
+* The "Operational Status" field incorrectly displays workflow state (e.g., Draft)
+
+We need to align this field to the correct definition per Task Planning Requirements Section 6.0.
+
+---
+
+CRITICAL CORRECTION
+
+Operational Status is NOT workflow state.
+
+It must represent:
+
+* Active
+* Suspended
+* Completed
+
+---
+
+UPDATE 1 — Replace Current Value
+
+In the provided example:
+
+REPLACE:
+"Draft"
+
+WITH:
+"Active"
+
+---
+
+UPDATE 2 — Status Badge Implementation
+
+Render Operational Status as a color-coded badge (reuse existing badge component).
+
+Statuses and colors:
+
+1. Active
+
+   * Color: Green (success semantic)
+   * Meaning: Task is active and can proceed through planning/execution
+
+2. Suspended
+
+   * Color: Yellow/Amber (warning semantic)
+   * Meaning: Task is restricted or on hold
+
+3. Completed
+
+   * Color: Gray or Blue-neutral (non-active/completed state)
+   * Meaning: Task is finished and no longer active
+
+Use existing design tokens — do NOT invent new colors.
+
+---
+
+UPDATE 3 — Suspended Status Simplification
+
+There are multiple suspended sub-types (per SRS), such as:
+
+* Suspended (general)
+* Suspended Pending Requirement Validation
+* Suspended Pending Deletion
+* Suspended Pending Termination
+
+UI RULE:
+
+* Badge should ALWAYS display:
+  "Suspended"
+
+* Do NOT display full sub-status in the badge (prevents layout overflow and noise)
+
+---
+
+UPDATE 4 — Tooltip (REQUIRED for Suspended)
+
+On hover over the "Suspended" badge:
+
+Show tooltip with:
+
+1. Full status description (e.g., "Suspended Pending Requirement Validation")
+
+2. Explanation text:
+   Example:
+   "This task is on hold pending validation that it meets its associated requirement."
+
+Follow existing tooltip component styling.
+
+---
+
+UPDATE 5 — Future-Proof Tooltip Behavior
+
+Tooltip should support:
+
+* Status explanation
+* Potential future link to "status change reason"
+
+Do NOT implement link now — just ensure layout supports it.
+
+---
+
+UPDATE 6 — Maintain Layout Integrity
+
+* Do NOT change Task Summary grid layout
+* Do NOT change label positioning
+* Only replace the value rendering (text → badge + tooltip)
+
+---
+
+UPDATE 7 — Data Behavior Clarification
+
+Ensure system distinction:
+
+* Workflow State (Draft, Submitted, Approved, etc.)
+  → NOT shown here
+
+* Operational Status (Active, Suspended, Completed)
+  → Shown in this field
+
+---
+
+DESIGN PRINCIPLES:
+
+* Use semantic color meaning (success, warning, neutral)
+* Keep badges concise
+* Reveal complexity progressively (via tooltip)
+* Align strictly to SRS definitions
+
+---
+
+Outcome:
+
+A corrected Operational Status field that:
+
+* reflects true task state (not workflow stage)
+* uses clear, semantic visual indicators
+* handles complex suspended states cleanly via tooltip
+* aligns with enterprise UX patterns and SRS requirements
