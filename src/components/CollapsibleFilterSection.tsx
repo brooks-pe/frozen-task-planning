@@ -14,6 +14,7 @@ interface CollapsibleFilterSectionProps {
   className?: string;
   highContrast?: boolean;
   title?: string;
+  headerActions?: React.ReactNode;
 }
 
 export function CollapsibleFilterSection({
@@ -22,6 +23,7 @@ export function CollapsibleFilterSection({
   className = '',
   highContrast = false,
   title = 'Filters',
+  headerActions,
 }: CollapsibleFilterSectionProps) {
   const [isExpanded, setIsExpanded] = useState(defaultExpanded);
   const [overflowVisible, setOverflowVisible] = useState(defaultExpanded);
@@ -55,25 +57,28 @@ export function CollapsibleFilterSection({
         <span className="font-['Inter',sans-serif] font-semibold leading-[24px] not-italic text-[#1C2024] text-[18px] tracking-[0px]">
           {title}
         </span>
-        <button
-          onClick={() => setIsExpanded((prev) => !prev)}
-          className={'flex gap-[8px] h-[32px] items-center justify-center px-[12px] rounded-[4px] shrink-0 cursor-pointer bg-transparent border-none transition-colors ' + toggleColorClass}
-          aria-expanded={isExpanded}
-          aria-label={isExpanded ? hideLabel : showLabel}
-        >
-          <span
-            style={{
-              display: 'inline-flex',
-              transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)',
-              transition: 'transform 225ms ease-in-out',
-            }}
+        <div className="flex items-center gap-[8px]">
+          {headerActions}
+          <button
+            onClick={() => setIsExpanded((prev) => !prev)}
+            className={'flex gap-[8px] h-[32px] items-center justify-center px-[12px] rounded-[4px] shrink-0 cursor-pointer bg-transparent border-none transition-colors ' + toggleColorClass}
+            aria-expanded={isExpanded}
+            aria-label={isExpanded ? hideLabel : showLabel}
           >
-            <ChevronIcon />
-          </span>
-          <span className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] not-italic text-[14px]">
-            {isExpanded ? hideLabel : showLabel}
-          </span>
-        </button>
+            <span
+              style={{
+                display: 'inline-flex',
+                transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)',
+                transition: 'transform 225ms ease-in-out',
+              }}
+            >
+              <ChevronIcon />
+            </span>
+            <span className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] not-italic text-[14px]">
+              {isExpanded ? hideLabel : showLabel}
+            </span>
+          </button>
+        </div>
       </div>
 
       <div

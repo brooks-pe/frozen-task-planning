@@ -213,7 +213,7 @@ export function TierAssessmentFlyout({ open, onClose, task, onTierSaved }: TierA
 
             {/* Section 1: Context Summary Card */}
             <div className="rounded-[6px] border border-[#d9dade] bg-[#f9f9fb] p-[16px] flex flex-col gap-[10px]">
-              <p className="font-['Inter:Medium',sans-serif] font-medium text-[12px] leading-[16px] text-[#80838D] m-0 uppercase tracking-[0.5px]">
+              <p className="font-['Inter:Medium',sans-serif] font-medium text-[12px] leading-[16px] m-0 uppercase tracking-[0.5px] text-[#1c2024]">
                 Task Context
               </p>
               <div className="flex flex-col gap-[6px]">
@@ -293,7 +293,7 @@ export function TierAssessmentFlyout({ open, onClose, task, onTierSaved }: TierA
               <>
                 {/* Recommendation Card */}
                 <div className="rounded-[6px] border border-[#d9dade] bg-[#f9f9fb] p-[16px] flex flex-col gap-[10px]">
-                  <p className="font-['Inter:Medium',sans-serif] font-medium text-[12px] leading-[16px] text-[#80838D] m-0 uppercase tracking-[0.5px]">
+                  <p className="font-['Inter:Medium',sans-serif] font-medium text-[12px] leading-[16px] m-0 uppercase tracking-[0.5px] text-[#1c2024]">
                     Recommended BOE Tier
                   </p>
                   <div className="flex items-center gap-[8px]">
@@ -302,12 +302,12 @@ export function TierAssessmentFlyout({ open, onClose, task, onTierSaved }: TierA
                     </span>
                   </div>
                   <div className="flex flex-col gap-[4px]">
-                    <p className="font-['Inter:Regular',sans-serif] font-normal text-[13px] leading-[18px] text-[#60646c] m-0">
+                    <p className="font-['Inter:Regular',sans-serif] font-normal text-[13px] leading-[18px] m-0 text-[#1c2024]">
                       The system recommends {recommendation.tier} based on the following factors:
                     </p>
                     <ul className="m-0 pl-[18px] flex flex-col gap-[2px]">
                       {recommendation.reasons.map((reason, i) => (
-                        <li key={i} className="font-['Inter:Regular',sans-serif] font-normal text-[13px] leading-[18px] text-[#60646c]">
+                        <li key={i} className="font-['Inter:Regular',sans-serif] font-normal text-[13px] leading-[18px] text-[#1c2024]">
                           {reason}
                         </li>
                       ))}
@@ -424,7 +424,7 @@ export function TierAssessmentFlyout({ open, onClose, task, onTierSaved }: TierA
 function SourceRow({ label, value, isWarning }: { label: string; value: string; isWarning?: boolean }) {
   return (
     <div className="flex items-baseline gap-[6px]">
-      <span className="font-['Inter:Regular',sans-serif] font-normal text-[12px] leading-[16px] text-[#80838D] shrink-0">
+      <span className="font-['Inter:Regular',sans-serif] font-normal text-[12px] leading-[16px] shrink-0 text-[#1c2024]">
         {label}:
       </span>
       {isWarning ? (

@@ -117,7 +117,7 @@ export function CloneTaskFlyout({ open, onClose, sourceTask, onTaskCloned }: Clo
 
   const handleCreateClone = () => {
     if (!sourceTask) return;
-    const nextId = `TSK-${String(538 + Math.floor(Math.random() * 100)).padStart(4, '0')}`;
+    const nextId = `41-${String(Math.floor(Math.random() * 9000) + 1000)}`;
     onTaskCloned?.({
       taskId: nextId,
       title: newTitle || sourceTask.title,

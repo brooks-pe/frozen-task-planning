@@ -128,33 +128,33 @@ const MILESTONES: Milestone[] = [
 
 // Stable mapping: task ID → updatedBy name and time-of-day suffix
 const TASK_UPDATED_BY: Record<string, { updatedBy: string; timeSuffix: string }> = {
-  'TSK-0412': { updatedBy: 'CDR Williams, J.',    timeSuffix: '09:14' },
-  'TSK-0389': { updatedBy: 'LCDR Patel, R.',      timeSuffix: '08:45' },
-  'TSK-0540': { updatedBy: 'LT Nguyen, K.',       timeSuffix: '17:02' },
-  'TSK-0401': { updatedBy: 'LT Chen, M.',         timeSuffix: '16:32' },
-  'TSK-0377': { updatedBy: 'CDR Williams, J.',    timeSuffix: '14:18' },
-  'TSK-0536': { updatedBy: 'CDR Martinez, S.',    timeSuffix: '13:40' },
-  'TSK-0408': { updatedBy: 'LCDR Patel, R.',      timeSuffix: '16:55' },
-  'TSK-0532': { updatedBy: 'LCDR Thompson, A.',   timeSuffix: '11:22' },
-  'TSK-0538': { updatedBy: 'LT Chen, M.',         timeSuffix: '15:10' },
-  'TSK-0504': { updatedBy: 'CDR Williams, J.',    timeSuffix: '09:30' },
-  'TSK-0362': { updatedBy: 'CDR Martinez, S.',    timeSuffix: '10:22' },
-  'TSK-0420': { updatedBy: 'LT Nguyen, K.',       timeSuffix: '15:47' },
-  'TSK-0502': { updatedBy: 'LCDR Patel, R.',      timeSuffix: '14:05' },
-  'TSK-0531': { updatedBy: 'LCDR Thompson, A.',   timeSuffix: '10:48' },
-  'TSK-0431': { updatedBy: 'LT Chen, M.',         timeSuffix: '10:30' },
-  'TSK-0358': { updatedBy: 'LCDR Thompson, A.',   timeSuffix: '14:08' },
-  'TSK-0533': { updatedBy: 'CDR Williams, J.',    timeSuffix: '09:55' },
-  'TSK-0537': { updatedBy: 'LCDR Patel, R.',      timeSuffix: '11:15' },
-  'TSK-0501': { updatedBy: 'CDR Martinez, S.',    timeSuffix: '16:20' },
-  'TSK-0503': { updatedBy: 'LCDR Thompson, A.',   timeSuffix: '08:30' },
-  'TSK-0505': { updatedBy: 'LT Chen, M.',         timeSuffix: '13:45' },
-  'TSK-0506': { updatedBy: 'CDR Williams, J.',    timeSuffix: '12:00' },
-  'TSK-0507': { updatedBy: 'LT Nguyen, K.',       timeSuffix: '10:15' },
-  'TSK-0530': { updatedBy: 'LCDR Patel, R.',      timeSuffix: '11:50' },
-  'TSK-0534': { updatedBy: 'CDR Martinez, S.',    timeSuffix: '09:40' },
-  'TSK-0535': { updatedBy: 'LCDR Thompson, A.',   timeSuffix: '15:30' },
-  'TSK-0539': { updatedBy: 'LT Nguyen, K.',       timeSuffix: '14:22' },
+  '41-0938': { updatedBy: 'CDR Williams, J.',    timeSuffix: '09:14' },
+  '41-0563': { updatedBy: 'LCDR Patel, R.',      timeSuffix: '08:45' },
+  '41-1021': { updatedBy: 'LT Nguyen, K.',       timeSuffix: '17:02' },
+  '41-0512': { updatedBy: 'LT Chen, M.',         timeSuffix: '16:32' },
+  '41-0425': { updatedBy: 'CDR Williams, J.',    timeSuffix: '14:18' },
+  '41-0926': { updatedBy: 'CDR Martinez, S.',    timeSuffix: '13:40' },
+  '41-0691': { updatedBy: 'LCDR Patel, R.',      timeSuffix: '16:55' },
+  '41-0731': { updatedBy: 'LCDR Thompson, A.',   timeSuffix: '11:22' },
+  '41-1137': { updatedBy: 'LT Chen, M.',         timeSuffix: '15:10' },
+  '41-0815': { updatedBy: 'CDR Williams, J.',    timeSuffix: '09:30' },
+  '41-0318': { updatedBy: 'CDR Martinez, S.',    timeSuffix: '10:22' },
+  '41-0648': { updatedBy: 'LT Nguyen, K.',       timeSuffix: '15:47' },
+  '41-0847': { updatedBy: 'LCDR Patel, R.',      timeSuffix: '14:05' },
+  '41-0614': { updatedBy: 'LCDR Thompson, A.',   timeSuffix: '10:48' },
+  '41-0347': { updatedBy: 'LT Chen, M.',         timeSuffix: '10:30' },
+  '41-0193': { updatedBy: 'LCDR Thompson, A.',   timeSuffix: '14:08' },
+  '41-0482': { updatedBy: 'CDR Williams, J.',    timeSuffix: '09:55' },
+  '41-1058': { updatedBy: 'LCDR Patel, R.',      timeSuffix: '11:15' },
+  '41-0279': { updatedBy: 'CDR Martinez, S.',    timeSuffix: '16:20' },
+  '41-1256': { updatedBy: 'LCDR Thompson, A.',   timeSuffix: '08:30' },
+  '41-0783': { updatedBy: 'LT Chen, M.',         timeSuffix: '13:45' },
+  '41-0974': { updatedBy: 'CDR Williams, J.',    timeSuffix: '12:00' },
+  '41-0756': { updatedBy: 'LT Nguyen, K.',       timeSuffix: '10:15' },
+  '41-1103': { updatedBy: 'LCDR Patel, R.',      timeSuffix: '11:50' },
+  '41-1074': { updatedBy: 'CDR Martinez, S.',    timeSuffix: '09:40' },
+  '41-1192': { updatedBy: 'LCDR Thompson, A.',   timeSuffix: '15:30' },
+  '41-0869': { updatedBy: 'LT Nguyen, K.',       timeSuffix: '14:22' },
 };
 
 /** Format ISO date + time suffix into display string */
@@ -634,19 +634,39 @@ function RecentTaskUpdatesTable() {
             </div>
           </div>
           <div className="flex items-center gap-[4px]">
-            {filterLabels.map((f) => (
-              <button
-                key={f.key}
-                onClick={() => setActiveFilter(f.key)}
-                className={`h-[28px] px-[10px] rounded-[4px] border-none cursor-pointer transition-colors font-['Inter:Medium',sans-serif] font-medium text-[13px] leading-[20px] ${
-                  activeFilter === f.key
-                    ? 'bg-[#004b72] text-white'
-                    : 'bg-transparent text-[#60646c] hover:bg-[rgba(0,75,114,0.06)]'
-                }`}
-              >
-                {f.label}
-              </button>
-            ))}
+            {/* Segmented control — matches G-Invoicing Bulk Status Update pattern */}
+            <div
+              className="inline-flex w-fit h-[32px] items-center rounded-[4px] shrink-0 bg-[#F5F5F7] border border-solid border-[#e0e1e6] p-[2px] overflow-hidden box-border"
+              role="radiogroup"
+              aria-label="Time range filter"
+            >
+              {filterLabels.map((f) => {
+                const isSelected = activeFilter === f.key;
+                return (
+                  <button
+                    key={f.key}
+                    role="radio"
+                    aria-checked={isSelected}
+                    onClick={() => setActiveFilter(f.key)}
+                    className={`flex box-border h-full items-center justify-center px-[12px] rounded-[3px] cursor-pointer transition-colors duration-150 border-none whitespace-nowrap ${
+                      isSelected
+                        ? 'bg-[#DDEEF6] shadow-[inset_0_0_0_1px_#80BBDA]'
+                        : 'bg-transparent hover:bg-[rgba(255,255,255,0.5)]'
+                    }`}
+                  >
+                    <span
+                      className={`font-['Inter:${isSelected ? 'Medium' : 'Regular'}',sans-serif] ${
+                        isSelected ? 'font-medium' : 'font-normal'
+                      } leading-[20px] not-italic text-[14px] ${
+                        isSelected ? 'text-[#004B72]' : 'text-[#1C2024]'
+                      }`}
+                    >
+                      {f.label}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
             {/* Divider */}
             <div className="w-[1px] h-[20px] bg-[#e0e1e6] shrink-0 mx-[8px]" />
             {/* View All Tasks link */}

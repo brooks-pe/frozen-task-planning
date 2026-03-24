@@ -362,6 +362,7 @@ export function EditTaskFlyout({ open, onClose, onTaskUpdated, taskId }: EditTas
                   { value: 'FY2026', label: 'FY2026' },
                   { value: 'FY2027', label: 'FY2027' },
                 ]}
+                noSearch
               />
             </FieldGroup>
 
@@ -482,36 +483,161 @@ function TextInput({ value, onChange, placeholder, error }: { value: string; onC
   );
 }
 
-function SelectInput({ value, onChange, placeholder, options, disabled, error }: {
+function SelectInput({ value, onChange, placeholder, options, disabled, error, noSearch }: {
   value: string;
   onChange: (v: string) => void;
   placeholder: string;
   options: { value: string; label: string }[];
   disabled?: boolean;
   error?: boolean;
+  noSearch?: boolean;
 }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [search, setSearch] = useState('');
+  const containerRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [dropdownPos, setDropdownPos] = useState<{ top: number; left: number; width: number }>({ top: 0, left: 0, width: 0 });
+
+  const selectedLabel = options.find(o => o.value === value)?.label ?? '';
+  const filteredOptions = search
+    ? options.filter(opt => opt.label.toLowerCase().includes(search.toLowerCase()))
+    : options;
+
+  const handleOpen = useCallback(() => {
+    if (disabled) return;
+    if (containerRef.current) {
+      const rect = containerRef.current.getBoundingClientRect();
+      setDropdownPos({ top: rect.bottom + 4, left: rect.left, width: rect.width });
+    }
+    setIsOpen(true);
+    setSearch('');
+  }, [disabled]);
+
+  const handleClose = useCallback(() => {
+    setIsOpen(false);
+    setSearch('');
+  }, []);
+
+  const handleSelect = useCallback((val: string) => {
+    onChange(val);
+    handleClose();
+  }, [onChange, handleClose]);
+
+  useEffect(() => {
+    if (isOpen && searchInputRef.current) {
+      requestAnimationFrame(() => searchInputRef.current?.focus());
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handler = (e: MouseEvent) => {
+      const target = e.target as Node;
+      const inContainer = containerRef.current?.contains(target);
+      const inDropdown = dropdownRef.current?.contains(target);
+      if (!inContainer && !inDropdown) handleClose();
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [isOpen, handleClose]);
+
+  if (noSearch) {
+    return (
+      <div className="relative">
+        <select
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          disabled={disabled}
+          className={`h-[36px] w-full px-[10px] pr-[32px] rounded-[4px] border font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] outline-none appearance-none bg-white cursor-pointer focus:border-[#004b72] focus:shadow-[0_0_0_1px_#004b72] transition-shadow box-border ${
+            disabled ? 'bg-[#f5f5f7] text-[#8b8d98] cursor-not-allowed' : value ? 'text-[#1C2024]' : 'text-[#8b8d98]'
+          } ${error ? 'border-[#d4183d]' : 'border-[rgba(0,6,46,0.2)]'}`}
+          style={{ color: disabled ? '#8b8d98' : (value ? '#1C2024' : '#8b8d98') }}
+        >
+          <option value="" disabled style={{ color: '#8b8d98' }}>{placeholder}</option>
+          {options.map(opt => (
+            <option key={opt.value} value={opt.value} style={{ color: '#1C2024' }}>{opt.label}</option>
+          ))}
+        </select>
+        <div className="absolute right-[10px] top-1/2 -translate-y-1/2 pointer-events-none">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M3 4.5L6 7.5L9 4.5" stroke={disabled ? '#a0a1a6' : '#60646c'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="relative">
-      <select
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
+    <div ref={containerRef} className="relative">
+      <button
+        type="button"
+        onClick={() => isOpen ? handleClose() : handleOpen()}
         disabled={disabled}
-        className={`h-[36px] w-full px-[10px] pr-[32px] rounded-[4px] border font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] outline-none appearance-none bg-white cursor-pointer focus:border-[#004b72] focus:shadow-[0_0_0_1px_#004b72] transition-shadow box-border ${
-          disabled ? 'bg-[#f5f5f7] text-[#8b8d98] cursor-not-allowed' : value ? 'text-[#1C2024]' : 'text-[#8b8d98]'
-        } ${error ? 'border-[#d4183d]' : ''}`}
+        className={`h-[36px] w-full px-[10px] pr-[32px] rounded-[4px] border font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-left outline-none box-border transition-shadow ${
+          disabled
+            ? 'bg-[#f5f5f7] cursor-not-allowed border-[rgba(0,6,46,0.12)]'
+            : isOpen
+              ? 'bg-white cursor-pointer border-[#004b72] shadow-[0_0_0_1px_#004b72]'
+              : `bg-white cursor-pointer ${error ? 'border-[#d4183d]' : 'border-[rgba(0,6,46,0.2)]'}`
+        }`}
         style={{ color: disabled ? '#8b8d98' : (value ? '#1C2024' : '#8b8d98') }}
       >
-        <option value="" disabled style={{ color: '#8b8d98' }}>{placeholder}</option>
-        {options.map(opt => (
-          <option key={opt.value} value={opt.value} style={{ color: '#1C2024' }}>{opt.label}</option>
-        ))}
-      </select>
-      {/* Chevron */}
+        <span className="block truncate">{selectedLabel || placeholder}</span>
+      </button>
       <div className="absolute right-[10px] top-1/2 -translate-y-1/2 pointer-events-none">
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-          <path d="M3 4.5L6 7.5L9 4.5" stroke={disabled ? '#a0a1a6' : '#60646c'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M3 4.5L6 7.5L9 4.5" stroke={disabled ? '#a0a1a6' : isOpen ? '#004b72' : '#60646c'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </div>
+
+      {isOpen && createPortal(
+        <div
+          ref={dropdownRef}
+          style={{ position: 'fixed', top: dropdownPos.top, left: dropdownPos.left, width: dropdownPos.width, zIndex: 9999 }}
+          className="bg-white border border-[rgba(0,6,46,0.2)] rounded-[4px] shadow-[0px_4px_12px_rgba(0,0,0,0.12)] flex flex-col"
+        >
+          {/* Search input */}
+          <div className="p-[8px] border-b border-[#e0e1e6]">
+            <div className="relative">
+              <div className="absolute left-[8px] top-1/2 -translate-y-1/2 pointer-events-none">
+                <svg width={14} height={14} viewBox="0 0 14 14" fill="none">
+                  <path d="M12.25 12.25L9.71 9.71M11.08 6.42C11.08 9 9 11.08 6.42 11.08C3.83 11.08 1.75 9 1.75 6.42C1.75 3.83 3.83 1.75 6.42 1.75C9 1.75 11.08 3.83 11.08 6.42Z" stroke="#60646C" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
+              <input
+                ref={searchInputRef}
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search…"
+                className="w-full h-[32px] pl-[28px] pr-[8px] rounded-[4px] border border-[rgba(0,6,46,0.2)] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] outline-none focus:border-[#004B72] focus:ring-[2px] focus:ring-[rgba(0,75,114,0.2)]"
+              />
+            </div>
+          </div>
+          {/* Options list */}
+          <div className="overflow-y-auto" style={{ maxHeight: '200px' }}>
+            {filteredOptions.length === 0 ? (
+              <div className="px-[12px] py-[8px] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#60646c]">
+                No results
+              </div>
+            ) : (
+              filteredOptions.map(opt => (
+                <div
+                  key={opt.value}
+                  onClick={() => handleSelect(opt.value)}
+                  className={`px-[12px] py-[6px] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] cursor-pointer ${
+                    opt.value === value ? 'bg-[rgba(0,75,114,0.05)]' : 'hover:bg-[#F9F9FB]'
+                  }`}
+                >
+                  {opt.label}
+                </div>
+              ))
+            )}
+          </div>
+        </div>,
+        document.body
+      )}
     </div>
   );
 }

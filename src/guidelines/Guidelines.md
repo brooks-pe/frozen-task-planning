@@ -1,97 +1,368 @@
-# SyncPoint Guidelines — Router
+# SyncPoint Guidelines (Compressed v1)
 
-Load only module(s) relevant to the current task. Global rules are always active.
+## 1. Core Operating Rules (Always Active)
 
----
+### Scope Control
 
-## Global Rules (Always Active)
+* Make the **smallest possible change**
+* **Do not modify anything outside scope**
+* Do not refactor, clean up, or “improve” adjacent areas
+* One concern per prompt
+
+### Pattern Reuse (Critical)
+
+* Always reuse **existing implemented patterns**
+* Do NOT recreate or approximate designs
+* Implementation > design mockups
+
+### Stability Over Cleverness
+
+* Prefer predictable, explicit layouts
+* No auto-resizing layouts that shift with content
+* No layout changes unless explicitly requested
 
 ### Change Safety
-- Smallest change possible. One concern per prompt.
-- Preserve existing behavior unless explicitly asked to change it.
-- Do NOT clean up unrelated code, rename files, modify layout while adding interaction, or modify content while adjusting styling.
-- If both visual and behavioral changes are implied, ask for confirmation.
-- Repetition is a failure mode. Do not reapply or reimplement completed work.
-- If context is lost, ask one clarifying question or request fresh context.
 
-### Destructive Changes
-- Deleting/replacing pages, renaming routes, removing nav items requires explicit intent.
-- If ambiguous between "create new" and "replace existing," confirm first.
-
-### Incremental Build
-1. Shell + routing → 2. Static table → 3. Parent expansion → 4. Child expansion → 5. Editable fields → 6. Simulated behavior.
-- Do not combine phases unless instructed.
-
-### Multi-Step Execution
-- Prompt before stopping if additional steps are needed.
-
-### Pattern Reuse
-- Reference existing implementations, not original designs.
-- Match structure, spacing, styling, behavior exactly unless told otherwise.
-
-### Cross-Page Changes
-- Visual-only changes may span multiple pages per request.
-- Structural changes: page-by-page unless instructed otherwise.
-- If both structural + multi-page, pause and ask.
-- Hardening protocol: Canonical page → harden → validate → propagate.
+* Preserve behavior unless explicitly changing it
+* If visual + logic changes are both implied → **ask first**
+* Destructive changes (delete, replace, reroute) require explicit instruction
 
 ---
 
-## Core Principles
+## 2. Layout System
 
-- Explicit layout over auto-sizing. Fixed grid templates when alignment matters.
-- One grid template per table. Headers/rows/expanded content share it.
-- Figma = visual reference, not structural mandate. Match the *look*, not the *implementation*.
-- React functional components, CSS Grid, Tailwind, clear boundaries (Shell → Page → Section → Component).
+### Structure
 
-> When in doubt, choose predictable and stable over clever.
+* Use: `Shell → Page → Section → Component`
+* Tables and structured layouts use **CSS Grid only**
+* One grid definition per table (shared across all rows)
 
----
+### Alignment Rules
 
-## Module Routing
+* Headers, rows, expanded content share exact column structure
+* No per-row layout variation
+* No layout shift on interaction
 
-| Task Domain | Module |
-|---|---|
-| Table layout, columns, rows, expansion, sorting, selection, grouping | `tables.md` |
-| Filter bars, search, dropdowns, clear filters, filter toggle | `filters.md` |
-| Form fields, inputs, validation, date pickers | `forms.md` |
-| Sidebar, top nav, routing, page creation | `navigation.md` |
-| Colors, backgrounds, hover, accent, accessibility, tooltips, sticky footer | `visual-system.md` |
-| Font tokens, text roles, KPI typography | `typography.md` |
-| Segmented controls, pagination, split buttons, pills, toasts, cell states | `components.md` |
-| Simulated data, visual lock vs data lock | `data-behavior.md` |
-| Banners, badges, pills, warning/info/success callouts | `banners-badges.md` |
-| Page headers, top-level layout, breadcrumbs, section spacing | `page-layout.md` |
-| Structured metadata sections (e.g., Task Summary), key-value layouts | `metadata-sections.md` |
+### Spacing
+
+* Standard spacing rhythm: **16px (gap-4)**
+* Do not invent new spacing values
 
 ---
 
-## Multi-Module Loading
+## 3. Tables (High Priority)
 
-- Load minimum required modules only.
-- When multiple apply:
-  - Forms + Components → Forms governs behavior, Components governs structure.
-  - Tables + Components → Tables governs layout, Components governs interactions.
-- Conflict resolution: more specific module wins.
-- Do NOT merge or reinterpret rules across domains.
+### Core Rules
 
-## Scope Control
+* CSS Grid only (no flexbox/table elements)
+* All columns explicitly defined
+* Max **one flexible column (1fr)**
 
-- Do NOT apply rules from unrelated modules.
-- Do NOT expand beyond the requested change.
-- Do NOT refactor adjacent areas.
-- Only implement the exact requested scope.
+### Behavior
+
+* Sorting: Asc → Desc → Clear (single column)
+* Row selection:
+
+  * persistent
+  * left accent rail + subtle background
+  * no layout shift
+
+### Expansion
+
+* Expanded rows span full width
+* Do NOT redefine grid
+* Parent-child relationship must be visually clear
+
+### Data
+
+* Currency: right-aligned + formatted
+* Numbers: right-aligned if comparable
+* No visual-only fake data inconsistencies
 
 ---
 
-## Reuse & Correction Rules
+## 4. Forms & Inputs
 
-### Pattern Reuse (Strengthened)
-- Before creating a new pattern, search for an existing implementation and match it exactly.
-- Reference existing implementations, not original designs.
+### Validation
 
-### Correction Rule
-- When fixing UI, replace incorrect styling rather than preserving it.
+* Only on blur + submit
+* Error = red border + message (always both)
 
-### Visual Reference Rule
-- If a design image is provided, treat layout and structure as authoritative unless explicitly told to reinterpret.
+### Disabled State (Global Standard)
+
+* `bg-[#e0e1e6]`, `text-[#8b8d98]`, `cursor-not-allowed`
+* No hover state
+
+### Input Behavior
+
+* Entire field is interactive (no dead zones)
+* No layout shift while editing
+
+---
+
+## 5. Filters
+
+### Single Pattern Only
+
+* One consistent filter container across all pages
+
+### Behavior
+
+* Immediate apply (no Apply button)
+* Clear Filters = instant reset
+
+### Structure
+
+* Header: "Filters" + toggle (always present)
+* No alternate toolbar versions
+
+---
+
+## 6. Components (Interaction Patterns)
+
+### Segmented Controls
+
+* One shared container
+* Selected = filled pill
+* No layout shift
+
+### Status / Badges
+
+* Must reuse existing badge styles
+* No new colors
+* Inline, no layout impact
+
+### Feedback
+
+* Success = toast + subtle row highlight
+* No layout movement
+
+---
+
+## 7. Data Behavior
+
+### Rules
+
+* Data can change → UI structure cannot
+* Filters = full dataset swap (not partial mutation)
+* Totals and values must reconcile
+
+### Never:
+
+* Add UI to explain data
+* Modify layout during data changes
+
+---
+
+## 8. Metadata Sections
+
+* Fixed grid across all rows
+* Labels above values
+* No wrapping that breaks layout
+* Long text:
+  * may wrap up to 2 lines
+  * truncate only after 2 lines (ellipsis)
+  * show full value via tooltip on hover
+
+---
+
+## 9. Navigation & Pages
+
+### Page Creation Order
+
+1. Component
+2. Route
+3. Navigation
+
+### Consistency
+
+* Titles, breadcrumbs, and routes must match
+* Top row layout must remain consistent across pages
+
+---
+
+## 10. Typography
+
+* All text must use defined roles (no custom sizes)
+* No ad-hoc font weights or sizes
+* KPIs:
+
+  * Value = prominent
+  * Label = secondary
+  * Metadata = subtle
+
+---
+
+## 11. Visual System
+
+### Colors
+
+* Use only defined semantic colors
+* No custom hex values
+
+### Interaction
+
+* Hover must NOT shift layout
+* Hover ≠ selected state
+
+### Accessibility
+
+* All interactions keyboard accessible
+* Focus states visible
+
+---
+
+## 12. Anti-Drift Rules (Critical)
+
+* Do NOT:
+
+  * Combine unrelated changes
+  * Expand scope beyond request
+  * Reinterpret existing patterns
+  * Introduce new layout systems
+* If unsure → ask one question instead of guessing
+
+---
+
+## 13. Editing Model (Task Summary & Metadata)
+
+### Inline Editing (Primary Pattern)
+
+* Editing must occur **in place**, not via modal/flyout (unless explicitly required)
+* Enter edit mode via a single action (e.g., "Edit")
+* Replace values with inputs **without changing layout structure**
+* Layout must remain stable (no reflow or resizing)
+
+### Save Behavior
+
+* One save model per section:
+  * Save (primary)
+  * Cancel (secondary)
+* No per-field save buttons
+* No auto-save on blur
+
+### Field-Specific Editing
+
+* Clicking a field-level CTA (e.g., "Add Objective") should:
+  * enter section edit mode
+  * focus the relevant field
+* Do not create isolated editing flows
+
+### Derived Fields
+
+* Derived fields must:
+  * remain read-only
+  * update automatically when source field changes
+* Never allow manual override of derived values
+
+---
+
+## 14. Field → Component Mapping
+
+### Rule
+
+* Each field must always use its **canonical input type**
+* Do NOT infer input types generically (e.g., "text → input")
+* Always reuse the pattern used elsewhere in the app
+
+### Examples
+
+* Execution Statement → searchable dropdown
+* WBS Attribute → searchable dropdown
+* Funding Source → searchable dropdown
+* Task Type → radio buttons
+* Period of Performance → date range picker
+* Objective → multiline textarea
+
+### Searchable Dropdown Standard
+
+* Must include search input at top
+* Must match existing dropdown behavior exactly
+* No alternate dropdown variants
+
+### Anti-Pattern (Forbidden)
+
+* Do NOT convert fields based on display type
+  * (e.g., badge → dropdown)
+* Do NOT invent new input patterns
+
+---
+
+## 15. Text Overflow & Responsiveness
+
+### Two-Line Rule
+
+* Text values may wrap to a maximum of 2 lines
+* If content exceeds 2 lines:
+  * truncate with ellipsis (...)
+  * no third line allowed
+
+### Tooltip Rule
+
+* Tooltip appears ONLY when text is truncated
+* Tooltip shows full value
+* Must reuse existing tooltip pattern
+
+--
+
+## 16. Interaction Consistency
+
+### Pattern Reuse Across Contexts
+
+* Components must behave the same across:
+  * Create
+  * Edit
+  * Inline editing
+
+### Examples
+
+* Dropdowns must match across all contexts
+* Date pickers must match across all contexts
+* Radio buttons must match across all contexts
+
+### Anti-Drift
+
+* If a component behaves differently in one place → it must be corrected
+* Do NOT introduce alternate versions of the same component
+
+### Goal
+
+* Preserve layout stability
+* Improve readability on smaller screens
+
+---
+
+### Typography Role Enforcement (Critical)
+
+- Semantic typography roles must be followed exactly
+- `Body` text is `14/20` and is the default size for standard readable content
+- `13/18` is reserved for `Column Header` usage only
+- Do NOT use 13px as general body, metadata, helper, or supporting text unless a specific semantic role explicitly defines it
+- Do NOT invent intermediate text sizes for convenience
+- If text appears to function as normal readable content, default to Body (`14/20`)
+
+---
+
+### Icon Library Standard
+
+- Use `lucide-react` icons wherever an icon is needed
+- Do NOT mix icon libraries unless explicitly required by existing implementation
+- Reuse existing icon patterns before introducing any new icon usage
+- Icon sizing and stroke weight should remain consistent with nearby UI patterns
+
+---
+
+### Text Contrast and Neutral Color Usage
+
+- Do NOT place low-contrast gray text on gray or muted backgrounds unless the content is intentionally disabled
+- Standard readable text must maintain strong contrast against its background
+- Muted/secondary text may be used only when readability remains clear
+- Disabled styling is the only acceptable use case for intentionally low-contrast text on muted surfaces
+- Avoid “gray on gray” combinations that make active content appear disabled or washed out
+
+---
+
+## Final Rule
+
+> When in doubt:
+> **match existing SyncPoint behavior exactly and make the smallest possible change**

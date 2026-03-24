@@ -1,5 +1,5 @@
+import { Check } from 'lucide-react';
 import React from 'react';
-import { Check, ChevronDown } from 'lucide-react';
 
 type StepState = 'completed' | 'active' | 'next' | 'upcoming';
 
@@ -11,13 +11,13 @@ interface WorkflowStep {
 
 const WORKFLOW_STEPS: WorkflowStep[] = [
   { label: 'Draft', state: 'active', tooltip: 'Task has been created but not yet submitted for BOE development.' },
-  { label: 'BOE Build-Up', state: 'next', tooltip: 'Next workflow state. Submitting will send this task to BOE Build-Up.' },
-  { label: 'Activity Acceptance', state: 'upcoming', tooltip: 'This stage begins after BOE development is completed.' },
-  { label: 'Project Acceptance', state: 'upcoming', tooltip: 'Project acceptance follows activity-level review.' },
-  { label: 'Project Allocation', state: 'upcoming', tooltip: 'Funding allocation occurs after project acceptance.' },
-  { label: 'Impact Assessment', state: 'upcoming', tooltip: 'Evaluates changes against the current baseline.' },
-  { label: 'Project Approval', state: 'upcoming', tooltip: 'Project-level approval is required before program review.' },
-  { label: 'Program Approval', state: 'upcoming', tooltip: 'Program approval is the final authorization step.' },
+  { label: 'BOE Build', state: 'next', tooltip: 'Next workflow state. Submitting will send this task to BOE Build-Up.' },
+  { label: 'Activity Accept', state: 'upcoming', tooltip: 'This stage begins after BOE development is completed.' },
+  { label: 'Proj Accept', state: 'upcoming', tooltip: 'Project acceptance follows activity-level review.' },
+  { label: 'Proj Allocate', state: 'upcoming', tooltip: 'Funding allocation occurs after project acceptance.' },
+  { label: 'Impact Assess', state: 'upcoming', tooltip: 'Evaluates changes against the current baseline.' },
+  { label: 'Proj Approval', state: 'upcoming', tooltip: 'Project-level approval is required before program review.' },
+  { label: 'Prog Approval', state: 'upcoming', tooltip: 'Program approval is the final authorization step.' },
   { label: 'Baselined', state: 'upcoming', tooltip: 'The task is baselined after all approvals are completed.' },
 ];
 
@@ -39,7 +39,7 @@ function StepPill({ step }: { step: WorkflowStep }) {
       onMouseEnter={() => setShowTooltip(true)}
       onMouseLeave={() => setShowTooltip(false)}
     >
-      <div className={`${baseClasses} ${stateClasses[step.state]}`}>
+      <div className={`${baseClasses} ${stateClasses[step.state]} text-[#80838d]`}>
         {step.state === 'completed' && <Check size={11} />}
         {step.state === 'active' && (
           <div className="w-[6px] h-[6px] rounded-full bg-[#004B72] shrink-0" />
@@ -67,72 +67,102 @@ function StepConnector() {
   );
 }
 
-export function WorkflowFooter() {
-  const [actionsOpen, setActionsOpen] = React.useState(false);
-  const dropdownRef = React.useRef<HTMLDivElement>(null);
-
-  // Close dropdown on outside click
-  React.useEffect(() => {
-    if (!actionsOpen) return;
-    const handleClick = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setActionsOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClick);
-    return () => document.removeEventListener('mousedown', handleClick);
-  }, [actionsOpen]);
+export function WorkflowFooter({ tierAssigned = false, isTier0 = false, tier0BoePopulated = false }: { tierAssigned?: boolean; isTier0?: boolean; tier0BoePopulated?: boolean }) {
+  // Tier 0 with BOE fields populated → skip BOE Build, promote Proj Allocate
+  const isT0Skip = tierAssigned && isTier0 && tier0BoePopulated;
 
   return (
     <div className="sticky bottom-0 z-40 bg-white border-t border-[#e0e1e6] shadow-[0_-2px_8px_rgba(0,0,0,0.08)]">
       <div className="flex items-center justify-between px-[24px] py-[12px] gap-[16px]">
-        {/* Left: Workflow Timeline */}
+        {/* Unified Workflow Action Timeline */}
         <div className="flex items-center gap-[6px] min-w-0" style={{ overflowX: 'auto', scrollbarWidth: 'thin' }}>
           {WORKFLOW_STEPS.map((step, i) => (
             <React.Fragment key={step.label}>
-              <StepPill step={step} />
+              {step.state === 'active' ? (
+                tierAssigned ? (
+                  isTier0 ? (
+                    /* Tier 0 → regular secondary outline button, no split */
+                    <button
+                      className="bg-white h-[32px] px-[12px] rounded-[4px] border border-[#004B72] font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] text-[#004B72] cursor-pointer hover:bg-[#f0f7fc] transition-colors whitespace-nowrap shrink-0"
+                    >
+                      Save Draft
+                    </button>
+                  ) : (
+                    /* Tier 1/2 → standard secondary button, single action */
+                    <button
+                      className="bg-white h-[32px] px-[12px] rounded-[4px] border border-[#004B72] font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] text-[#004B72] cursor-pointer hover:bg-[#f0f7fc] transition-colors whitespace-nowrap shrink-0"
+                    >
+                      Save Draft
+                    </button>
+                  )
+                ) : (
+                  /* No tier → neutral outline "Draft" — current state indicator, not action */
+                  <button
+                    className="h-[32px] px-[12px] rounded-[4px] bg-white border border-[rgba(0,8,48,0.27)] font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] text-[#1C2024] cursor-default whitespace-nowrap shrink-0"
+                  >
+                    Draft
+                  </button>
+                )
+              ) : step.state === 'next' ? (
+                isT0Skip ? (
+                  /* T0 skip path → BOE Build rendered as inactive, same as upcoming */
+                  <button
+                    disabled
+                    className="h-[32px] px-[12px] rounded-[4px] bg-[#f0f0f3] text-[#80838D] cursor-not-allowed font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] whitespace-nowrap shrink-0 border-none"
+                  >
+                    BOE Build
+                  </button>
+                ) : tierAssigned ? (
+                  isTier0 ? (
+                    /* Tier 0 → regular primary button, no split */
+                    <button
+                      className="bg-[#004B72] text-white h-[32px] px-[12px] rounded-[4px] font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] cursor-pointer hover:bg-[#003a5c] transition-colors whitespace-nowrap shrink-0 border-none"
+                    >
+                      Submit to BOE Build
+                    </button>
+                  ) : (
+                    /* Tier 1/2 → standard primary button, single action */
+                    <button
+                      className="bg-[#004B72] text-white h-[32px] px-[12px] rounded-[4px] font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] cursor-pointer hover:bg-[#003a5c] transition-colors whitespace-nowrap shrink-0 border-none"
+                    >
+                      Submit to BOE Build
+                    </button>
+                  )
+                ) : (
+                  /* No tier → match upcoming state styling, visually inactive */
+                  <button
+                    disabled
+                    className="h-[32px] px-[12px] rounded-[4px] bg-[#f0f0f3] text-[#80838D] cursor-not-allowed font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] whitespace-nowrap shrink-0 border-none"
+                  >
+                    BOE Build
+                  </button>
+                )
+              ) : step.label === 'Proj Allocate' && isT0Skip ? (
+                /* T0 skip path → Proj Allocate becomes primary action */
+                <button
+                  className="bg-[#004B72] text-white h-[32px] px-[12px] rounded-[4px] font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] cursor-pointer hover:bg-[#003a5c] transition-colors whitespace-nowrap shrink-0 border-none"
+                >
+                  Submit to Proj Allocate
+                </button>
+              ) : (
+                /* Upcoming / completed → disabled button, no interaction */
+                <button
+                  disabled
+                  className={`h-[32px] px-[10px] rounded-[4px] font-['Inter:Medium',sans-serif] font-medium text-[12px] leading-[16px] whitespace-nowrap shrink-0 border-none cursor-not-allowed flex items-center gap-[5px] ${
+                    step.state === 'completed'
+                      ? 'bg-[#e6f6eb] text-[rgba(0,113,63,0.87)]'
+                      : 'bg-[#f0f0f3] text-[#80838D]'
+                  }`}
+                >
+                  {step.state === 'completed' && <Check size={11} />}
+                  {step.label}
+                </button>
+              )}
               {i < WORKFLOW_STEPS.length - 1 && <StepConnector />}
             </React.Fragment>
           ))}
         </div>
-
-        {/* Right: Save + Actions */}
-        <div className="flex items-center gap-[8px] shrink-0">
-          {/* Save Button (Secondary Outline) */}
-          <button className="bg-white h-[32px] px-[12px] rounded-[4px] font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] text-[#1C2024] whitespace-nowrap cursor-pointer hover:bg-[#f5f5f5] transition-colors relative">
-            <div aria-hidden="true" className="absolute border border-[rgba(0,8,48,0.27)] border-solid inset-0 pointer-events-none rounded-[4px]" />
-            Save
-          </button>
-
-          {/* Actions Split Button (Primary) */}
-          <div ref={dropdownRef} className="relative flex">
-            {/* Main action */}
-            <button
-              className="bg-[#004B72] text-white h-[32px] px-[14px] rounded-l-[4px] font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] whitespace-nowrap cursor-pointer hover:bg-[#003a5c] transition-colors"
-            >
-              Submit to BOE Build-Up
-            </button>
-            {/* Dropdown trigger */}
-            <button
-              onClick={() => setActionsOpen(prev => !prev)}
-              className="bg-[#004B72] text-white h-[32px] w-[30px] flex items-center justify-center rounded-r-[4px] border-l border-[rgba(255,255,255,0.25)] cursor-pointer hover:bg-[#003a5c] transition-colors"
-            >
-              <ChevronDown size={14} />
-            </button>
-
-            {/* Dropdown Menu */}
-            {actionsOpen && (
-              <div className="absolute bottom-full right-0 mb-[4px] bg-white border border-[#e0e1e6] rounded-[6px] shadow-lg min-w-[200px] py-[4px] z-50">
-                <button
-                  onClick={() => setActionsOpen(false)}
-                  className="w-full text-left px-[12px] py-[8px] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] hover:bg-[#f5f5f5] transition-colors cursor-pointer bg-transparent border-none"
-                >
-                  Submit to BOE Build-Up
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
+        {/* Right-side Save + Submit removed — actions unified into timeline */}
       </div>
     </div>
   );

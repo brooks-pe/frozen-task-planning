@@ -1274,7 +1274,7 @@ function Icon3() {
 function TaskPlanningSubmenu({ currentPath }: { currentPath: string }) {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const isDashboardActive = currentPath === '/task-planning/dashboard';
-  const isTasksActive = currentPath === '/task-planning/tasks';
+  const isTasksActive = currentPath === '/task-planning/tasks' || currentPath.startsWith('/task-planning/tasks/');
   const isTaskRequirementsActive = currentPath === '/task-requirements-alignment' || currentPath.startsWith('/task-requirements-alignment/');
   
   return (

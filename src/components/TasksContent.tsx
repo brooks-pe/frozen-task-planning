@@ -26,7 +26,7 @@ import type { TaskRow } from './TaskPlanningData';
 
 type TaskColumnKey = 'taskId' | 'executingActivity' | 'project' | 'title' | 'workflowState' | 'requested' | 'allocated' | 'gap';
 
-// ─── Column Definitions ────────���─────────────────────────────────────
+// ─── Column Definitions ─────────────────────────────────────────────
 
 const TASK_TABLE_GRID = 'minmax(80px, 0.8fr) minmax(130px, 1.3fr) minmax(130px, 1.3fr) minmax(160px, 2fr) minmax(130px, 1.3fr) minmax(90px, 1fr) minmax(90px, 1fr) minmax(80px, 1fr) 48px';
 
@@ -80,14 +80,15 @@ export default function TasksContent() {
   const [createdTasks, setCreatedTasks] = useState<TaskRow[]>([]);
   const [highlightedTaskId, setHighlightedTaskId] = useState<string | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
 
   // Toast auto-dismiss
   useEffect(() => {
-    if (!toastMessage) return;
-    const timer = setTimeout(() => setToastMessage(null), 3500);
+    if (!showSuccessToast) return;
+    const timer = setTimeout(() => setShowSuccessToast(false), 6000);
     return () => clearTimeout(timer);
-  }, [toastMessage]);
+  }, [showSuccessToast]);
 
   // Highlight auto-dismiss
   useEffect(() => {
@@ -112,7 +113,8 @@ export default function TasksContent() {
     };
     setCreatedTasks(prev => [newTask, ...prev]);
     setHighlightedTaskId(task.taskId);
-    setToastMessage(`Task ${task.taskId} created`);
+    setToastMessage(task.taskId);
+    setShowSuccessToast(true);
   }, []);
 
   // Read initial statusFocus from URL if present
@@ -413,127 +415,151 @@ export default function TasksContent() {
         </div>
 
         {/* Body Rows */}
-        {sortedData.length === 0 ? (
-          <div className="flex items-center justify-center py-[40px] px-[24px]">
-            <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#60646c] text-[14px]">
-              No tasks match the current filters.
-            </p>
-          </div>
-        ) : (
-          sortedData.map((task) => (
-            <div
-              key={task.taskId}
-              className={`border-b border-[#e0e1e6] hover:bg-[#fafafa] transition-all cursor-pointer grid ${
-                highlightedTaskId === task.taskId ? 'animate-[rowPulse_2s_ease-out]' : ''
-              }`}
-              style={{
-                gridTemplateColumns: TASK_TABLE_GRID,
-                ...(highlightedTaskId === task.taskId ? { backgroundColor: 'rgba(58, 194, 58, 0.08)' } : {}),
-              }}
-            >
-              {/* Task ID */}
-              <div className="px-[12px] py-[12px] flex items-center justify-between min-w-0">
-                <Link
-                  to={`/task-planning/tasks/${task.taskId}`}
-                  className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] text-[#147DB9] text-[14px] hover:underline cursor-pointer no-underline"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  {task.taskId}
-                </Link>
-                {(() => {
-                  const primaryTag = getPrimaryStatusTag(task.statusFocusTags);
-                  return primaryTag ? <StatusFocusDot tag={primaryTag} /> : null;
-                })()}
-              </div>
-              {/* Executing Activity */}
-              <div className="px-[12px] py-[12px] flex items-center min-w-0">
-                <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px] truncate">
-                  {task.executingActivity}
-                </p>
-              </div>
-              {/* Project */}
-              <div className="px-[12px] py-[12px] flex items-center min-w-0">
-                <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px] truncate">
-                  {task.project}
-                </p>
-              </div>
-              {/* Title */}
-              <div className="px-[12px] py-[12px] flex items-center min-w-0">
-                <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px] truncate">
-                  {task.title}
-                </p>
-              </div>
-              {/* Workflow State */}
-              <div className="px-[12px] py-[12px] flex items-center min-w-0">
-                <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px] truncate">
-                  {task.workflowState}
-                </p>
-              </div>
-              {/* Requested */}
-              <div className="px-[12px] py-[12px] flex items-center justify-end min-w-0">
-                <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px] whitespace-nowrap">
-                  {formatCurrency(task.requested)}
-                </p>
-              </div>
-              {/* Allocated */}
-              <div className="px-[12px] py-[12px] flex items-center justify-end min-w-0">
-                <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px] whitespace-nowrap">
-                  {formatCurrency(task.allocated)}
-                </p>
-              </div>
-              {/* Gap */}
-              <div className="px-[12px] py-[12px] flex items-center justify-end min-w-0">
-                <p className={`font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[14px] whitespace-nowrap ${
-                  task.gap > 0 ? 'text-[#ca6c18]' : 'text-[#60646c]'
-                }`}>
-                  {task.gap > 0 ? formatCurrency(task.gap) : '$0'}
-                </p>
-              </div>
-              {/* Actions */}
-              <div className="px-[12px] py-[12px] flex items-center justify-center min-w-0">
-                <div className="relative">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setOpenMenuId(openMenuId === task.taskId ? null : task.taskId);
-                    }}
-                    className="w-[24px] h-[24px] flex items-center justify-center hover:bg-[rgba(0,0,0,0.05)] rounded-[4px] cursor-pointer border-none bg-transparent"
+        {(() => {
+          // 20 representative rows — covers all 9 workflow states; full dataset unchanged
+          const VISIBLE_IDS = new Set([
+            '41-0279', '41-0847', '41-1103',          // Draft (3)
+            '41-0938', '41-1256', '41-0731',          // BOE Build-Up (3)
+            '41-0563', '41-0815',                     // Activity Acceptance (2)
+            '41-0347', '41-0926', '41-1058',          // Project Acceptance (3)
+            '41-0691', '41-0783',                     // Project Allocation (2)
+            '41-0425', '41-1137',                     // Impact Assessment (2)
+            '41-0512', '41-1021',                     // Project Approval (2)
+            '41-0648', '41-0974',                     // Program Approval (2)
+            '41-0318',                                // Baselined (1)
+            ...createdTasks.map(t => t.taskId),       // Always include newly created tasks
+          ]);
+          const displayData = sortedData.filter(t => VISIBLE_IDS.has(t.taskId));
+          return displayData.length === 0 ? (
+            <div className="flex items-center justify-center py-[40px] px-[24px]">
+              <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#60646c] text-[14px]">
+                No tasks match the current filters.
+              </p>
+            </div>
+          ) : (
+            displayData.map((task) => (
+              <div
+                key={task.taskId}
+                className={`border-b border-[#e0e1e6] hover:bg-[#fafafa] transition-all cursor-pointer grid ${
+                  highlightedTaskId === task.taskId ? 'animate-[rowPulse_2s_ease-out]' : ''
+                }`}
+                style={{
+                  gridTemplateColumns: TASK_TABLE_GRID,
+                  ...(highlightedTaskId === task.taskId ? { backgroundColor: 'rgba(58, 194, 58, 0.08)' } : {}),
+                }}
+              >
+                {/* Task ID */}
+                <div className="px-[12px] py-[12px] flex items-center justify-between min-w-0">
+                  <Link
+                    to={`/task-planning/tasks/${task.taskId}`}
+                    className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] text-[#147DB9] text-[14px] hover:underline cursor-pointer no-underline"
+                    onClick={(e) => e.stopPropagation()}
                   >
-                    <MoreVertical size={16} className="text-[#60646C]" />
-                  </button>
-                  {openMenuId === task.taskId && (
-                    <>
-                      <div
-                        className="fixed inset-0 z-[100]"
-                        onClick={() => setOpenMenuId(null)}
-                      />
-                      <div className="absolute right-0 top-full mt-[4px] z-[101] bg-white rounded-[8px] p-[8px] min-w-[160px] shadow-[0px_12px_32px_-16px_rgba(0,9,50,0.12),0px_12px_60px_0px_rgba(0,0,0,0.15)] border border-[rgba(0,0,51,0.06)]">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setOpenMenuId(null);
-                            setCloneTaskOpen(true);
-                            setCloneSourceTask(task);
-                            // Clone action
-                          }}
-                          className="w-full bg-white hover:bg-[rgba(0,0,85,0.02)] h-[32px] rounded-[4px] flex items-center gap-[8px] px-[12px] transition-colors border-none cursor-pointer"
-                        >
-                          <svg width={16} height={16} viewBox="0 0 16 16" fill="none">
-                            <rect x="5.5" y="5.5" width="8" height="8" rx="1.5" stroke="black" strokeLinecap="round" strokeLinejoin="round" />
-                            <path d="M10.5 5.5V4C10.5 3.17157 9.82843 2.5 9 2.5H4C3.17157 2.5 2.5 3.17157 2.5 4V9C2.5 9.82843 3.17157 10.5 4 10.5H5.5" stroke="black" strokeLinecap="round" strokeLinejoin="round" />
-                          </svg>
-                          <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px]">
-                            Clone
-                          </p>
-                        </button>
-                      </div>
-                    </>
-                  )}
+                    {task.taskId}
+                  </Link>
+                  {(() => {
+                    const primaryTag = getPrimaryStatusTag(task.statusFocusTags);
+                    return primaryTag ? <StatusFocusDot tag={primaryTag} /> : null;
+                  })()}
+                </div>
+                {/* Executing Activity */}
+                <div className="px-[12px] py-[12px] flex items-center min-w-0">
+                  <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px] truncate">
+                    {task.executingActivity}
+                  </p>
+                </div>
+                {/* Project */}
+                <div className="px-[12px] py-[12px] flex items-center min-w-0">
+                  <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px] truncate">
+                    {task.project}
+                  </p>
+                </div>
+                {/* Title */}
+                <div className="px-[12px] py-[12px] flex items-center min-w-0">
+                  <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px] truncate">
+                    {task.title}
+                  </p>
+                </div>
+                {/* Workflow State */}
+                <div className="px-[12px] py-[12px] flex items-center min-w-0">
+                  <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px] truncate">
+                    {task.workflowState}
+                  </p>
+                </div>
+                {/* Requested */}
+                <div className="px-[12px] py-[12px] flex items-center justify-end min-w-0">
+                  <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px] whitespace-nowrap">
+                    {task.workflowState === 'Draft'
+                      ? 'Not Yet Estimated'
+                      : formatCurrency(task.requested)}
+                  </p>
+                </div>
+                {/* Allocated */}
+                <div className="px-[12px] py-[12px] flex items-center justify-end min-w-0">
+                  <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px] whitespace-nowrap">
+                    {task.workflowState === 'Draft'
+                      ? 'Not Yet Allocated'
+                      : formatCurrency(task.allocated)}
+                  </p>
+                </div>
+                {/* Gap */}
+                <div className="px-[12px] py-[12px] flex items-center justify-end min-w-0">
+                  <p className={`font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[14px] whitespace-nowrap ${
+                    task.workflowState === 'Draft'
+                      ? 'text-[#1c2024]'
+                      : task.gap > 0 ? 'text-[#ca6c18]' : 'text-[#60646c]'
+                  }`}>
+                    {task.workflowState === 'Draft'
+                      ? 'Not Applicable'
+                      : task.gap > 0 ? formatCurrency(task.gap) : '$0'}
+                  </p>
+                </div>
+                {/* Actions */}
+                <div className="px-[12px] py-[12px] flex items-center justify-center min-w-0">
+                  <div className="relative">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setOpenMenuId(openMenuId === task.taskId ? null : task.taskId);
+                      }}
+                      className="w-[24px] h-[24px] flex items-center justify-center hover:bg-[rgba(0,0,0,0.05)] rounded-[4px] cursor-pointer border-none bg-transparent"
+                    >
+                      <MoreVertical size={16} className="text-[#60646C]" />
+                    </button>
+                    {openMenuId === task.taskId && (
+                      <>
+                        <div
+                          className="fixed inset-0 z-[100]"
+                          onClick={() => setOpenMenuId(null)}
+                        />
+                        <div className="absolute right-0 top-full mt-[4px] z-[101] bg-white rounded-[8px] p-[8px] min-w-[160px] shadow-[0px_12px_32px_-16px_rgba(0,9,50,0.12),0px_12px_60px_0px_rgba(0,0,0,0.15)] border border-[rgba(0,0,51,0.06)]">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setOpenMenuId(null);
+                              setCloneTaskOpen(true);
+                              setCloneSourceTask(task);
+                              // Clone action
+                            }}
+                            className="w-full bg-white hover:bg-[rgba(0,0,85,0.02)] h-[32px] rounded-[4px] flex items-center gap-[8px] px-[12px] transition-colors border-none cursor-pointer"
+                          >
+                            <svg width={16} height={16} viewBox="0 0 16 16" fill="none">
+                              <rect x="5.5" y="5.5" width="8" height="8" rx="1.5" stroke="black" strokeLinecap="round" strokeLinejoin="round" />
+                              <path d="M10.5 5.5V4C10.5 3.17157 9.82843 2.5 9 2.5H4C3.17157 2.5 2.5 3.17157 2.5 4V9C2.5 9.82843 3.17157 10.5 4 10.5H5.5" stroke="black" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                            <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px]">
+                              Clone
+                            </p>
+                          </button>
+                        </div>
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))
-        )}
+            ))
+          );
+        })()}
       </div>
       <CreateTaskFlyout open={createTaskOpen} onClose={() => setCreateTaskOpen(false)} onTaskCreated={handleTaskCreated} />
       <CloneTaskFlyout
@@ -546,17 +572,32 @@ export default function TasksContent() {
         }}
       />
 
-      {/* Success Toast */}
-      {toastMessage && (
+      {/* Success Toast — top-right, matches User Management / Task Workspace pattern */}
+      {showSuccessToast && (
         <div
-          className="fixed bottom-[24px] left-1/2 -translate-x-1/2 z-[9999] flex items-center gap-[8px] px-[16px] py-[10px] rounded-[6px] shadow-[0_4px_16px_rgba(0,0,0,0.14)]"
-          style={{ backgroundColor: '#1C2024', color: '#fff', fontFamily: "'Inter', sans-serif" }}
+          className="fixed top-[100px] right-[24px] z-50 bg-[#e6f6eb] content-stretch flex gap-[8px] items-start overflow-clip p-[12px] rounded-[6px] w-[352px] shadow-lg animate-slide-in-right"
         >
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <circle cx="8" cy="8" r="7" stroke="#3ca23c" strokeWidth="1.5" />
-            <path d="M5.5 8L7 9.5L10.5 6" stroke="#3ca23c" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-          <span className="font-normal text-[14px] leading-[20px]">{toastMessage}</span>
+          <div className="content-stretch flex h-[20px] items-center relative shrink-0">
+            <div className="relative shrink-0 size-[16px]">
+              <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 16 16">
+                <g clipPath="url(#clip0_tasks_create)">
+                  <path d="M14.6654 7.38667V8C14.6646 9.43761 14.2003 10.8365 13.3392 11.988C12.4781 13.1394 11.2665 13.9817 9.88921 14.3893C8.51188 14.7969 7.03815 14.7479 5.68963 14.2497C4.3411 13.7515 3.18975 12.8307 2.40723 11.6247C1.62471 10.4187 1.25287 8.99205 1.34746 7.55754C1.44205 6.12303 1.99812 4.75755 2.93217 3.66471C3.86621 2.57188 5.1285 1.81024 6.53077 1.49344C7.93304 1.17664 9.40016 1.32152 10.7121 1.90667" stroke="rgba(0,113,63,0.87)" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M14.6667 2.66666L8 9.34L6 7.34" stroke="rgba(0,113,63,0.87)" strokeLinecap="round" strokeLinejoin="round" />
+                </g>
+                <defs>
+                  <clipPath id="clip0_tasks_create">
+                    <rect fill="white" height="16" width="16" />
+                  </clipPath>
+                </defs>
+              </svg>
+            </div>
+          </div>
+          <div className="flex-[1_0_0] font-['Inter:Medium',sans-serif] font-medium leading-[20px] min-h-px min-w-px not-italic relative text-[14px] text-[rgba(0,113,63,0.87)]">
+            <p className="mb-0">Task Created</p>
+            <p className="font-['Inter:Regular',sans-serif] font-normal mb-0 text-[rgba(0,113,63,0.87)]">
+              Task {toastMessage} has been created and added to Draft.
+            </p>
+          </div>
         </div>
       )}
     </div>
