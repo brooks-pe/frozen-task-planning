@@ -1,14 +1,15 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
-import { useSearchParams, Link } from 'react-router';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { useSearchParams, Link, useNavigate } from 'react-router';
 import { SyncPointBreadcrumb } from './SyncPointBreadcrumb';
 import { CollapsibleFilterSection } from './CollapsibleFilterSection';
 import { SearchableFilterDropdown } from './SearchableFilterDropdown';
 import { MultiSelectFilterDropdown } from './MultiSelectFilterDropdown';
-import { SortIndicator } from './SortUtils';
+import { SortUpIcon, SortDownIcon, SortUpDownIcon } from './SortUtils';
 import type { SortDirection } from './SortUtils';
 import { SearchIcon, MoreVertical } from './InlineIcons';
 import { CreateTaskFlyout } from './CreateTaskFlyout';
 import { CloneTaskFlyout } from './CloneTaskFlyout';
+import { createPortal } from 'react-dom';
 import {
   TASKS_DATA,
   WORKFLOW_ORDER,
@@ -28,17 +29,17 @@ type TaskColumnKey = 'taskId' | 'executingActivity' | 'project' | 'title' | 'wor
 
 // ─── Column Definitions ─────────────────────────────────────────────
 
-const TASK_TABLE_GRID = 'minmax(80px, 0.8fr) minmax(130px, 1.3fr) minmax(130px, 1.3fr) minmax(160px, 2fr) minmax(130px, 1.3fr) minmax(90px, 1fr) minmax(90px, 1fr) minmax(80px, 1fr) 48px';
+const TASK_TABLE_GRID = 'minmax(80px, 0.8fr) minmax(90px, 1fr) minmax(130px, 1.6fr) minmax(160px, 2.3fr) minmax(120px, 1.1fr) minmax(72px, 0.75fr) minmax(72px, 0.75fr) minmax(68px, 0.7fr) 48px';
 
-const COLUMNS: { key: TaskColumnKey; label: string; sortType: 'string' | 'number' }[] = [
-  { key: 'taskId', label: 'TASK ID', sortType: 'string' },
-  { key: 'executingActivity', label: 'EXECUTING ACTIVITY', sortType: 'string' },
-  { key: 'project', label: 'PROJECT', sortType: 'string' },
-  { key: 'title', label: 'TITLE', sortType: 'string' },
-  { key: 'workflowState', label: 'WORKFLOW STATE', sortType: 'string' },
-  { key: 'requested', label: 'REQUESTED', sortType: 'number' },
-  { key: 'allocated', label: 'ALLOCATED', sortType: 'number' },
-  { key: 'gap', label: 'GAP', sortType: 'number' },
+const COLUMNS: { key: TaskColumnKey; label: string; displayName: string; headerLines?: [string, string]; sortType: 'string' | 'number' }[] = [
+  { key: 'taskId',            label: 'TASK ID',            displayName: 'Task ID',            sortType: 'string' },
+  { key: 'executingActivity', label: 'EXECUTING ACTIVITY', displayName: 'Executing Activity', headerLines: ['EXECUTING', 'ACTIVITY'], sortType: 'string' },
+  { key: 'project',           label: 'PROJECT',            displayName: 'Project',            sortType: 'string' },
+  { key: 'title',             label: 'TITLE',              displayName: 'Title',              sortType: 'string' },
+  { key: 'workflowState',     label: 'WORKFLOW STATE',     displayName: 'Workflow State',     headerLines: ['WORKFLOW', 'STATE'], sortType: 'string' },
+  { key: 'requested',         label: 'REQUESTED',          displayName: 'Requested',          sortType: 'number' },
+  { key: 'allocated',         label: 'ALLOCATED',          displayName: 'Allocated',          sortType: 'number' },
+  { key: 'gap',               label: 'DELTA',              displayName: 'Delta',              sortType: 'number' },
 ];
 
 // ─── Currency Formatter ─────────────────────────────────────────────────
@@ -70,6 +71,102 @@ function StatusFocusDot({ tag }: { tag: string }) {
   );
 }
 
+// ─── Clamped Cell with Truncation Tooltip ───────────────────────────────
+
+function ClampedCell({ value, textColor = '#1c2024' }: { value: string; textColor?: string }) {
+  const textRef = useRef<HTMLParagraphElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const [isTruncated, setIsTruncated] = useState(false);
+  const [tooltipVisible, setTooltipVisible] = useState(false);
+  const [tooltipPos, setTooltipPos] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
+
+  useEffect(() => {
+    const el = textRef.current;
+    if (!el) return;
+    const check = () => setIsTruncated(el.scrollHeight > el.clientHeight + 1);
+    check();
+    const ro = new ResizeObserver(check);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [value]);
+
+  const handleMouseEnter = useCallback(() => {
+    if (!isTruncated || !wrapperRef.current) return;
+    const rect = wrapperRef.current.getBoundingClientRect();
+    const tooltipWidth = 280;
+    let left = rect.left;
+    if (left + tooltipWidth > window.innerWidth - 16) left = window.innerWidth - tooltipWidth - 16;
+    if (left < 8) left = 8;
+    setTooltipPos({ top: rect.top - 6, left });
+    setTooltipVisible(true);
+  }, [isTruncated]);
+
+  const handleMouseLeave = useCallback(() => setTooltipVisible(false), []);
+
+  return (
+    <div ref={wrapperRef} className="min-w-0 w-full" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+      <p
+        ref={textRef}
+        className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[14px]"
+        style={{
+          color: textColor,
+          display: '-webkit-box',
+          WebkitBoxOrient: 'vertical',
+          WebkitLineClamp: 2,
+          overflow: 'hidden',
+        }}
+      >
+        {value}
+      </p>
+      {isTruncated && tooltipVisible && createPortal(
+        <span
+          className="fixed z-[9999] bg-[#1C2024] text-white rounded-[4px] px-[10px] py-[8px] font-['Inter:Regular',sans-serif] font-normal text-[12px] leading-[16px] shadow-[0_2px_8px_rgba(0,0,0,0.16)] pointer-events-none"
+          style={{ top: tooltipPos.top, left: tooltipPos.left, maxWidth: '280px', transform: 'translateY(-100%)' }}
+        >
+          {value}
+        </span>,
+        document.body
+      )}
+    </div>
+  );
+}
+
+// ─── Draft Dash Cell with Tooltip ──────────────────────────────────────
+
+function DraftDashCell({ tooltip }: { tooltip: string }) {
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const [tooltipVisible, setTooltipVisible] = useState(false);
+  const [tooltipPos, setTooltipPos] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
+
+  const handleMouseEnter = useCallback(() => {
+    if (!wrapperRef.current) return;
+    const rect = wrapperRef.current.getBoundingClientRect();
+    const tooltipWidth = 180;
+    let left = rect.left + rect.width / 2 - tooltipWidth / 2;
+    if (left + tooltipWidth > window.innerWidth - 16) left = window.innerWidth - tooltipWidth - 16;
+    if (left < 8) left = 8;
+    setTooltipPos({ top: rect.top - 6, left });
+    setTooltipVisible(true);
+  }, []);
+
+  const handleMouseLeave = useCallback(() => setTooltipVisible(false), []);
+
+  return (
+    <div ref={wrapperRef} className="flex items-center justify-end w-full cursor-default" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+      <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#80838D] text-[14px] select-none">—</p>
+      {tooltipVisible && createPortal(
+        <span
+          className="fixed z-[9999] bg-[#1C2024] text-white rounded-[4px] px-[10px] py-[8px] font-['Inter:Regular',sans-serif] font-normal text-[12px] leading-[16px] shadow-[0_2px_8px_rgba(0,0,0,0.16)] pointer-events-none whitespace-nowrap"
+          style={{ top: tooltipPos.top, left: tooltipPos.left, transform: 'translateY(-100%)' }}
+        >
+          {tooltip}
+        </span>,
+        document.body
+      )}
+    </div>
+  );
+}
+
 // ─── Main Component ─────────────────────────────────────────────────────
 
 export default function TasksContent() {
@@ -82,6 +179,7 @@ export default function TasksContent() {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [showSuccessToast, setShowSuccessToast] = useState(false);
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   // Toast auto-dismiss
   useEffect(() => {
@@ -140,10 +238,14 @@ export default function TasksContent() {
 
   // Table state
   const [searchValue, setSearchValue] = useState('');
-  const [sortColumn, setSortColumn] = useState<TaskColumnKey | null>('workflowState');
-  const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
 
-  // Clear the URL param after reading so it doesn't persist on manual filter changes
+  // ── Multi-column sort state ─────────────────────────────────────────────
+  // Stack of up to 2 entries, ordered by priority: [primary, secondary]
+  type SortEntry = { key: TaskColumnKey; direction: SortDirection };
+  const [sortStack, setSortStack] = useState<SortEntry[]>([
+    { key: 'workflowState', direction: 'asc' },
+  ]);
+
   const handleStatusFocusChange = useCallback((value: string) => {
     setTaskStatusFocus(value);
     // Remove statusFocus from URL when user manually changes filter
@@ -174,21 +276,62 @@ export default function TasksContent() {
     }
   };
 
-  const handleSort = useCallback((columnKey: TaskColumnKey) => {
-    if (sortColumn === columnKey) {
-      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-    } else {
-      setSortColumn(columnKey);
-      setSortDirection('asc');
-    }
-  }, [sortColumn, sortDirection]);
+  const handleSort = useCallback((columnKey: TaskColumnKey, shiftKey = false) => {
+    setSortStack(prev => {
+      const existingIdx = prev.findIndex(e => e.key === columnKey);
 
-  const getDirection = useCallback((columnKey: TaskColumnKey) => {
-    if (sortColumn === columnKey) {
-      return sortDirection;
-    }
-    return null;
-  }, [sortColumn, sortDirection]);
+      if (shiftKey && prev.length > 0) {
+        // Shift+click: add/cycle/remove secondary sort
+        if (existingIdx === -1) {
+          // Not in stack — add as secondary (max 2 total)
+          if (prev.length < 2) {
+            return [...prev, { key: columnKey, direction: 'asc' }];
+          }
+          // Already 2 sorts, replace the secondary
+          return [prev[0], { key: columnKey, direction: 'asc' }];
+        } else {
+          // Already in stack — cycle direction
+          const entry = prev[existingIdx];
+          if (entry.direction === 'asc') {
+            const updated = [...prev];
+            updated[existingIdx] = { key: columnKey, direction: 'desc' };
+            return updated;
+          } else {
+            // Remove from stack; remaining entries reflow
+            const remaining = prev.filter((_, i) => i !== existingIdx);
+            return remaining;
+          }
+        }
+      } else {
+        // Plain click: set as sole primary
+        if (existingIdx === 0 && prev.length === 1) {
+          // It IS the primary and the only sort — cycle
+          if (prev[0].direction === 'asc') return [{ key: columnKey, direction: 'desc' }];
+          return []; // clear
+        }
+        if (existingIdx === 0) {
+          // Primary clicked while secondary exists — cycle primary, keep secondary
+          if (prev[0].direction === 'asc') {
+            return [{ key: columnKey, direction: 'desc' }, prev[1]];
+          }
+          // Remove primary → secondary becomes primary
+          return [prev[1]];
+        }
+        // New column or secondary clicked without shift → replace entire stack
+        return [{ key: columnKey, direction: 'asc' }];
+      }
+    });
+  }, []);
+
+  const getDirection = useCallback((columnKey: TaskColumnKey): SortDirection | null => {
+    const entry = sortStack.find(e => e.key === columnKey);
+    return entry ? entry.direction : null;
+  }, [sortStack]);
+
+  const getSortIndex = useCallback((columnKey: TaskColumnKey): number | null => {
+    const idx = sortStack.findIndex(e => e.key === columnKey);
+    return idx === -1 ? null : idx + 1;
+  }, [sortStack]);
 
   // Filtering logic
   const filteredData = useMemo(() => {
@@ -226,16 +369,17 @@ export default function TasksContent() {
     return data;
   }, [workflowState, taskStatusFocus, executingActivity, project, searchValue, createdTasks]);
 
-  // Sorting logic — uses WORKFLOW_ORDER for workflowState column
+  // Sorting logic — applies primary then secondary sort
   const sortedData = useMemo(() => {
-    if (!sortColumn || !sortDirection) return filteredData;
-    const col = COLUMNS.find(c => c.key === sortColumn);
-    if (!col) return filteredData;
-    return [...filteredData].sort((a, b) => {
-      const aVal = a[sortColumn];
-      const bVal = b[sortColumn];
+    if (sortStack.length === 0) return filteredData;
+
+    const sortByEntry = (a: TaskRow, b: TaskRow, entry: SortEntry): number => {
+      const col = COLUMNS.find(c => c.key === entry.key);
+      if (!col) return 0;
+      const aVal = a[entry.key];
+      const bVal = b[entry.key];
       let result: number;
-      if (sortColumn === 'workflowState') {
+      if (entry.key === 'workflowState') {
         const aOrder = WORKFLOW_ORDER[String(aVal)] ?? 99;
         const bOrder = WORKFLOW_ORDER[String(bVal)] ?? 99;
         result = aOrder - bOrder;
@@ -244,15 +388,30 @@ export default function TasksContent() {
       } else {
         result = String(aVal).localeCompare(String(bVal));
       }
-      return sortDirection === 'asc' ? result : -result;
+      return entry.direction === 'asc' ? result : -result;
+    };
+
+    return [...filteredData].sort((a, b) => {
+      const primary = sortByEntry(a, b, sortStack[0]);
+      if (primary !== 0 || sortStack.length < 2) return primary;
+      return sortByEntry(a, b, sortStack[1]);
     });
-  }, [filteredData, sortColumn, sortDirection]);
+  }, [filteredData, sortStack]);
 
   return (
     <div className="flex flex-col items-start p-[24px] w-full">
       {/* Version Bar */}
       <div className="flex items-start justify-end overflow-clip pb-[12px] w-full">
         <div className="flex gap-[24px] items-start shrink-0">
+          <Link
+            to="/task-planning/tasks/create-grid"
+            className="bg-white flex gap-[8px] h-[32px] items-center justify-center px-[12px] relative rounded-[4px] shrink-0 cursor-pointer no-underline hover:bg-[#f5f5f5] transition-colors"
+          >
+            <div aria-hidden="true" className="absolute border border-[rgba(0,8,48,0.27)] border-solid inset-0 pointer-events-none rounded-[4px]" />
+            <span className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1c2024] text-[14px] whitespace-nowrap">
+              Create Task Grid
+            </span>
+          </Link>
           <button
             onClick={() => setCreateTaskOpen(true)}
             className="bg-[#004b72] flex gap-[8px] h-[32px] items-center justify-center px-[12px] rounded-[4px] shrink-0 cursor-pointer border-none hover:bg-[#003a57] transition-colors"
@@ -378,8 +537,35 @@ export default function TasksContent() {
                 <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_1.5px_2px_0px_rgba(0,0,0,0.1),inset_0px_1.5px_2px_0px_rgba(0,0,85,0.02)]" />
               </div>
             </div>
-            <div className="flex items-center">
-              {/* Empty - task count removed */}
+            <div className="flex items-center gap-[16px]">
+              {sortStack.length > 0 && (
+                <>
+                  <span className="font-['Inter:Regular',sans-serif] font-normal text-[13px] leading-[18px] text-[#60646C] whitespace-nowrap">
+                    Sorted by:{' '}
+                    {sortStack.map((entry, i) => {
+                      const col = COLUMNS.find(c => c.key === entry.key);
+                      const name = col?.displayName ?? entry.key;
+                      const arrow = entry.direction === 'asc' ? '↑' : '↓';
+                      return (
+                        <span key={entry.key}>
+                          {i > 0 && <span className="text-[#b9bbc6]">, </span>}
+                          <span className="font-['Inter:Medium',sans-serif] font-medium text-[#1C2024]">{name}</span>
+                          {' '}{arrow}
+                        </span>
+                      );
+                    })}
+                  </span>
+                  <button
+                    onClick={() => setSortStack([])}
+                    className="bg-transparent border-none cursor-pointer flex items-center h-[28px] px-[10px] rounded-[4px] hover:bg-[rgba(0,75,114,0.06)] transition-colors outline-none"
+                    style={{ color: '#004B72' }}
+                  >
+                    <span className="font-['Inter:Medium',sans-serif] font-medium text-[13px] leading-[18px]">
+                      Clear Sort
+                    </span>
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -391,20 +577,42 @@ export default function TasksContent() {
         >
           {COLUMNS.map((col) => {
             const dir = getDirection(col.key);
+            const sortIdx = getSortIndex(col.key);
+            const isPrimary = sortIdx === 1;
             const isFinancial = col.key === 'requested' || col.key === 'allocated' || col.key === 'gap';
             return (
               <div
                 key={col.key}
-                className={`px-[12px] py-[12px] flex items-center gap-[6px] min-w-0 cursor-pointer select-none hover:bg-[rgba(0,0,85,0.04)] ${isFinancial ? 'justify-end' : ''}`}
-                onClick={() => handleSort(col.key)}
+                className={`px-[12px] py-[12px] flex items-center gap-[6px] min-w-0 cursor-pointer select-none hover:bg-[rgba(0,0,85,0.04)] ${isFinancial ? 'justify-end' : ''} ${isPrimary ? 'bg-[rgba(0,75,114,0.05)]' : ''}`}
+                onClick={(e) => handleSort(col.key, e.shiftKey)}
                 role="button"
                 tabIndex={0}
-                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSort(col.key); } }}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSort(col.key, e.shiftKey); } }}
               >
-                <p className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[18px] text-[#1C2024] text-[13px] uppercase tracking-[0.5px] whitespace-nowrap">
-                  {col.label}
+                <p className={`font-['Inter:Semi_Bold',sans-serif] leading-[18px] text-[13px] uppercase tracking-[0.5px] text-[#1C2024] ${col.headerLines ? '' : 'whitespace-nowrap'} ${isPrimary ? 'font-semibold' : 'font-medium'}`}>
+                  {col.headerLines ? (
+                    <>{col.headerLines[0]}<br />{col.headerLines[1]}</>
+                  ) : col.label}
                 </p>
-                <SortIndicator direction={dir} />
+                <span className="shrink-0 flex items-center gap-[3px] text-[#1C2024]">
+                  {dir === 'asc' ? <SortUpIcon /> : dir === 'desc' ? <SortDownIcon /> : <SortUpDownIcon />}
+                  {sortIdx !== null && (
+                    <span
+                      className="inline-flex items-center justify-center rounded-full text-white leading-none"
+                      style={{
+                        width: '14px',
+                        height: '14px',
+                        fontSize: '9px',
+                        fontFamily: "'Inter', sans-serif",
+                        fontWeight: 600,
+                        backgroundColor: isPrimary ? '#004B72' : '#80838D',
+                        flexShrink: 0,
+                      }}
+                    >
+                      {sortIdx}
+                    </span>
+                  )}
+                </span>
               </div>
             );
           })}
@@ -449,7 +657,7 @@ export default function TasksContent() {
                 }}
               >
                 {/* Task ID */}
-                <div className="px-[12px] py-[12px] flex items-center justify-between min-w-0">
+                <div className={`px-[12px] py-[12px] flex items-center justify-between min-w-0`}>
                   <Link
                     to={`/task-planning/tasks/${task.taskId}`}
                     className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] text-[#147DB9] text-[14px] hover:underline cursor-pointer no-underline"
@@ -463,56 +671,50 @@ export default function TasksContent() {
                   })()}
                 </div>
                 {/* Executing Activity */}
-                <div className="px-[12px] py-[12px] flex items-center min-w-0">
-                  <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px] truncate">
-                    {task.executingActivity}
-                  </p>
+                <div className={`px-[12px] py-[12px] flex items-center min-w-0`}>
+                  <ClampedCell value={task.executingActivity} />
                 </div>
                 {/* Project */}
-                <div className="px-[12px] py-[12px] flex items-center min-w-0">
-                  <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px] truncate">
-                    {task.project}
-                  </p>
+                <div className={`px-[12px] py-[12px] flex items-center min-w-0`}>
+                  <ClampedCell value={task.project} />
                 </div>
                 {/* Title */}
-                <div className="px-[12px] py-[12px] flex items-center min-w-0">
-                  <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px] truncate">
-                    {task.title}
-                  </p>
+                <div className={`px-[12px] py-[12px] flex items-center min-w-0`}>
+                  <ClampedCell value={task.title} />
                 </div>
                 {/* Workflow State */}
-                <div className="px-[12px] py-[12px] flex items-center min-w-0">
-                  <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px] truncate">
-                    {task.workflowState}
-                  </p>
+                <div className={`px-[12px] py-[12px] flex items-center min-w-0`}>
+                  <ClampedCell value={task.workflowState} />
                 </div>
                 {/* Requested */}
-                <div className="px-[12px] py-[12px] flex items-center justify-end min-w-0">
-                  <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px] whitespace-nowrap">
-                    {task.workflowState === 'Draft'
-                      ? 'Not Yet Estimated'
-                      : formatCurrency(task.requested)}
-                  </p>
+                <div className={`px-[12px] py-[12px] flex items-center justify-end min-w-0`}>
+                  {task.workflowState === 'Draft' ? (
+                    <DraftDashCell tooltip="Not Yet Estimated" />
+                  ) : (
+                    <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px] whitespace-nowrap">
+                      {formatCurrency(task.requested)}
+                    </p>
+                  )}
                 </div>
                 {/* Allocated */}
-                <div className="px-[12px] py-[12px] flex items-center justify-end min-w-0">
-                  <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px] whitespace-nowrap">
-                    {task.workflowState === 'Draft'
-                      ? 'Not Yet Allocated'
-                      : formatCurrency(task.allocated)}
-                  </p>
+                <div className={`px-[12px] py-[12px] flex items-center justify-end min-w-0`}>
+                  {task.workflowState === 'Draft' ? (
+                    <DraftDashCell tooltip="Not Yet Allocated" />
+                  ) : (
+                    <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px] whitespace-nowrap">
+                      {formatCurrency(task.allocated)}
+                    </p>
+                  )}
                 </div>
                 {/* Gap */}
-                <div className="px-[12px] py-[12px] flex items-center justify-end min-w-0">
-                  <p className={`font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[14px] whitespace-nowrap ${
-                    task.workflowState === 'Draft'
-                      ? 'text-[#1c2024]'
-                      : task.gap > 0 ? 'text-[#ca6c18]' : 'text-[#60646c]'
-                  }`}>
-                    {task.workflowState === 'Draft'
-                      ? 'Not Applicable'
-                      : task.gap > 0 ? formatCurrency(task.gap) : '$0'}
-                  </p>
+                <div className={`px-[12px] py-[12px] flex items-center justify-end min-w-0`}>
+                  {task.workflowState === 'Draft' ? (
+                    <DraftDashCell tooltip="Not Applicable" />
+                  ) : (
+                    <p className={`font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[14px] whitespace-nowrap ${task.gap > 0 ? 'text-[#ca6c18]' : 'text-[#60646c]'}`}>
+                      {task.gap > 0 ? formatCurrency(task.gap) : '$0'}
+                    </p>
+                  )}
                 </div>
                 {/* Actions */}
                 <div className="px-[12px] py-[12px] flex items-center justify-center min-w-0">
@@ -561,7 +763,17 @@ export default function TasksContent() {
           );
         })()}
       </div>
-      <CreateTaskFlyout open={createTaskOpen} onClose={() => setCreateTaskOpen(false)} onTaskCreated={handleTaskCreated} />
+      <CreateTaskFlyout
+        open={createTaskOpen}
+        onClose={() => setCreateTaskOpen(false)}
+        onTaskCreated={handleTaskCreated}
+        onTaskCreatedAndOpen={(task) => {
+          handleTaskCreated(task);
+          setTimeout(() => {
+            navigate('/task-planning/tasks/41-0279');
+          }, 400);
+        }}
+      />
       <CloneTaskFlyout
         open={cloneTaskOpen}
         onClose={() => setCloneTaskOpen(false)}

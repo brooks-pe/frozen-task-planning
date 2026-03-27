@@ -79,6 +79,10 @@ export const router = createBrowserRouter([
     Component: App,
   },
   {
+    path: "/task-planning/tasks/create-grid",
+    Component: App,
+  },
+  {
     path: "/task-planning/tasks/:taskId",
     Component: App,
   },

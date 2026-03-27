@@ -29,6 +29,7 @@ import TaskIdDetailsContent from './components/TaskIdDetailsContent';
 import GInvoicePerformanceItemsContent from './components/GInvoicePerformanceItemsContent';
 import TaskPlanningDashboard from './components/TaskPlanningDashboard';
 import TasksContent from './components/TasksContent';
+import CreateTaskGrid from './components/CreateTaskGrid';
 import TaskWorkspaceHeader from './components/TaskWorkspaceHeader';
 import PlaceholderPage from './components/PlaceholderPage';
 import ErrorBoundary from './components/ErrorBoundary';
@@ -98,7 +99,8 @@ export function App() {
   const isTaskIdDetails = location.pathname.startsWith('/task-requirements-alignment/') && location.pathname !== '/task-requirements-alignment';
   const isTaskPlanningDashboard = location.pathname === '/task-planning/dashboard';
   const isTaskPlanningTasks = location.pathname === '/task-planning/tasks';
-  const isTaskWorkspace = location.pathname.startsWith('/task-planning/tasks/') && location.pathname !== '/task-planning/tasks';
+  const isCreateTaskGrid = location.pathname === '/task-planning/tasks/create-grid';
+  const isTaskWorkspace = location.pathname.startsWith('/task-planning/tasks/') && location.pathname !== '/task-planning/tasks' && location.pathname !== '/task-planning/tasks/create-grid';
   
   // Placeholder pages
   const isPendingRoleRequests = location.pathname === '/pending-role-requests';
@@ -150,6 +152,7 @@ export function App() {
         isTaskIdDetails={isTaskIdDetails}
         isTaskPlanningDashboard={isTaskPlanningDashboard}
         isTaskPlanningTasks={isTaskPlanningTasks}
+        isCreateTaskGrid={isCreateTaskGrid}
         isTaskWorkspace={isTaskWorkspace}
       />
     </div>
@@ -191,6 +194,7 @@ function PeShell({
   isTaskIdDetails,
   isTaskPlanningDashboard,
   isTaskPlanningTasks,
+  isCreateTaskGrid,
   isTaskWorkspace
 }: any) {
   return (
@@ -239,6 +243,7 @@ function PeShell({
           isTaskIdDetails={isTaskIdDetails}
           isTaskPlanningDashboard={isTaskPlanningDashboard}
           isTaskPlanningTasks={isTaskPlanningTasks}
+          isCreateTaskGrid={isCreateTaskGrid}
           isTaskWorkspace={isTaskWorkspace}
         />
       </div>
@@ -842,6 +847,8 @@ function Middle({ isSidebarCollapsed, isUserManagementPage, isUserProfilePage, i
     content = <UserManagementContent />;
   } else if (isAdminConsole) {
     content = <AdminConsoleContent />;
+  } else if (location.pathname === '/task-planning/tasks/create-grid') {
+    content = <CreateTaskGrid />;
   } else if (isTaskWorkspaceLocal) {
     content = <TaskWorkspaceHeader />;
   } else if (isTaskPlanningTasks) {
@@ -1208,7 +1215,7 @@ function Chevron2() {
 
 function TaskPlanning({ hoveredItem, setHoveredItem }: any) {
   const location = useLocation();
-  const isOnTaskPlanningRoute = location.pathname === '/task-requirements-alignment' || location.pathname.startsWith('/task-requirements-alignment/') || location.pathname === '/task-planning/dashboard' || location.pathname === '/task-planning/tasks';
+  const isOnTaskPlanningRoute = location.pathname === '/task-requirements-alignment' || location.pathname.startsWith('/task-requirements-alignment/') || location.pathname === '/task-planning/dashboard' || location.pathname === '/task-planning/tasks' || location.pathname.startsWith('/task-planning/tasks/');
   const [isExpanded, setIsExpanded] = useState(isOnTaskPlanningRoute);
   
   useEffect(() => {

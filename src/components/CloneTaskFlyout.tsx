@@ -8,22 +8,9 @@ interface CloneTaskFlyoutProps {
   open: boolean;
   onClose: () => void;
   sourceTask: TaskRow | null;
+  currentTier?: string | null;
   onTaskCloned?: (task: { taskId: string; title: string; executingActivity: string; requested: number }) => void;
 }
-
-const CLONE_MODES = [
-  { value: 'current', label: 'Clone within current planning year' },
-  { value: 'follow-on', label: 'Create follow-on task for future year' },
-];
-
-const COPY_FORWARD_OPTIONS = [
-  { key: 'taskHeader', label: 'Task Header Information', defaultChecked: true },
-  { key: 'subtasks', label: 'Subtasks', defaultChecked: false },
-  { key: 'boeSummary', label: 'BOE Summary', defaultChecked: true },
-  { key: 'tier2Labor', label: 'Tier 2 Labor Lines', defaultChecked: true },
-  { key: 'deliverables', label: 'Deliverables', defaultChecked: true },
-  { key: 'riskEntries', label: 'Risk Entries', defaultChecked: true },
-];
 
 // Mock appropriation mapping for display
 const ACTIVITY_APPROPRIATION: Record<string, string> = {
@@ -36,22 +23,65 @@ const ACTIVITY_APPROPRIATION: Record<string, string> = {
   'Cyber Systems Division – Network Ops': 'O&MN',
 };
 
-// Mock tier mapping
-const TASK_TIER: Record<string, string> = {};
-// Default all tasks to Tier 1
-function getTier(_taskId: string): string {
-  return 'Tier 1';
+// Mock tier mapping — assign representative tiers across real task IDs
+const TASK_TIER: Record<string, string> = {
+  '41-0279': 'Tier 1',
+  '41-0847': 'Tier 2',
+  '41-1103': 'Tier 0',
+  '41-0614': 'No Tier Assigned',
+  '41-0938': 'Tier 1',
+  '41-1256': 'Tier 2',
+  '41-0731': 'Tier 1',
+  '41-0482': 'Tier 0',
+  '41-1074': 'No Tier Assigned',
+};
+
+function getTier(taskId: string): string {
+  return TASK_TIER[taskId] ?? 'Tier 1';
+}
+
+/** Returns the tier-appropriate Copy Forward Content options. */
+function getCopyForwardOptions(tier: string): { key: string; label: string; defaultChecked: boolean }[] {
+  switch (tier) {
+    case 'No Tier Assigned':
+      return [
+        { key: 'taskHeader', label: 'Task Header Information', defaultChecked: true },
+      ];
+    case 'Tier 0':
+      return [
+        { key: 'taskHeader', label: 'Task Header Information', defaultChecked: true },
+        { key: 'tier0Boe',   label: 'Tier 0 BOE',             defaultChecked: true },
+      ];
+    case 'Tier 1':
+      return [
+        { key: 'taskHeader', label: 'Task Header Information', defaultChecked: true },
+        { key: 'subtasks',   label: 'Subtasks',                defaultChecked: false },
+        { key: 'boeSummary', label: 'BOE Summary',             defaultChecked: true },
+        { key: 'tier1Labor', label: 'Tier 1 Labor Lines',      defaultChecked: true },
+        { key: 'deliverables', label: 'Deliverables',          defaultChecked: true },
+        { key: 'riskEntries',  label: 'Risk Entries',          defaultChecked: true },
+      ];
+    case 'Tier 2':
+    default:
+      return [
+        { key: 'taskHeader',  label: 'Task Header Information', defaultChecked: true },
+        { key: 'subtasks',    label: 'Subtasks',                defaultChecked: false },
+        { key: 'boeSummary',  label: 'BOE Summary',             defaultChecked: true },
+        { key: 'tier2Labor',  label: 'Tier 2 Labor Lines',      defaultChecked: true },
+        { key: 'deliverables', label: 'Deliverables',           defaultChecked: true },
+        { key: 'riskEntries',  label: 'Risk Entries',           defaultChecked: true },
+      ];
+  }
 }
 
 // ─── Component ──────────────────────────────────────────────────────────────
 
-export function CloneTaskFlyout({ open, onClose, sourceTask, onTaskCloned }: CloneTaskFlyoutProps) {
+export function CloneTaskFlyout({ open, onClose, sourceTask, currentTier: currentTierProp, onTaskCloned }: CloneTaskFlyoutProps) {
   const [animating, setAnimating] = useState(false);
   const [visible, setVisible] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
 
   // Form state
-  const [cloneMode, setCloneMode] = useState('current');
   const [newTitle, setNewTitle] = useState('');
   const [planningYear, setPlanningYear] = useState('FY2026');
   const [popStartDate, setPopStartDate] = useState('');
@@ -62,19 +92,23 @@ export function CloneTaskFlyout({ open, onClose, sourceTask, onTaskCloned }: Clo
   // Reset form when source task changes or panel opens
   useEffect(() => {
     if (open && sourceTask) {
-      setNewTitle(sourceTask.title);
+      setNewTitle(sourceTask.title + ' Copy');
       setPlanningYear('FY2026');
       setPopStartDate('');
       setPopEndDate('');
-      setCloneMode('current');
       setCloneNotes('');
+      // Use workspace tier if provided (including null = "No Tier Assigned"), else fall back to static map
+      const tier = currentTierProp !== undefined
+        ? (currentTierProp || 'No Tier Assigned')
+        : getTier(sourceTask.taskId);
+      const opts = getCopyForwardOptions(tier);
       const defaults: Record<string, boolean> = {};
-      COPY_FORWARD_OPTIONS.forEach(opt => {
+      opts.forEach(opt => {
         defaults[opt.key] = opt.defaultChecked;
       });
       setCopyForward(defaults);
     }
-  }, [open, sourceTask]);
+  }, [open, sourceTask, currentTierProp]);
 
   // Animation lifecycle
   useEffect(() => {
@@ -134,7 +168,10 @@ export function CloneTaskFlyout({ open, onClose, sourceTask, onTaskCloned }: Clo
   if (!visible || !sourceTask) return null;
 
   const appropriation = ACTIVITY_APPROPRIATION[sourceTask.executingActivity] ?? 'O&MN';
-  const tier = getTier(sourceTask.taskId);
+  const tier = currentTierProp !== undefined
+    ? (currentTierProp || 'No Tier Assigned')
+    : getTier(sourceTask.taskId);
+  const copyForwardOptions = getCopyForwardOptions(tier);
 
   return createPortal(
     <div
@@ -206,16 +243,6 @@ export function CloneTaskFlyout({ open, onClose, sourceTask, onTaskCloned }: Clo
               </div>
             </div>
 
-            {/* Clone Mode */}
-            <FieldGroup label="Clone Mode">
-              <SelectInput
-                value={cloneMode}
-                onChange={setCloneMode}
-                placeholder="Select clone mode..."
-                options={CLONE_MODES}
-              />
-            </FieldGroup>
-
             {/* New Task Title */}
             <FieldGroup label="New Task Title">
               <input
@@ -269,7 +296,7 @@ export function CloneTaskFlyout({ open, onClose, sourceTask, onTaskCloned }: Clo
             {/* Copy Forward Content */}
             <FieldGroup label="Copy Forward Content">
               <div className="flex flex-col gap-[10px]">
-                {COPY_FORWARD_OPTIONS.map(opt => (
+                {copyForwardOptions.map(opt => (
                   <label key={opt.key} className="flex items-center gap-[10px] cursor-pointer select-none">
                     <span
                       className="inline-flex items-center justify-center w-[18px] h-[18px] rounded-[3px] border-[1.5px] shrink-0 transition-colors"

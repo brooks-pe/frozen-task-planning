@@ -316,7 +316,7 @@ function TaskTypeRadio({ value, onChange }: { value: string; onChange: (v: strin
   return (
     <div className="flex items-center gap-[20px] h-[32px]">
       <RadioOption label="CODB" checked={value === 'CODB'} onChange={() => onChange('CODB')} name="taskTypeSummary" />
-      <RadioOption label="Non-CODB" checked={value === 'Non-CODB'} onChange={() => onChange('Non-CODB')} name="taskTypeSummary" />
+      <RadioOption label="Standard" checked={value === 'Non-CODB'} onChange={() => onChange('Non-CODB')} name="taskTypeSummary" />
     </div>
   );
 }
@@ -824,7 +824,7 @@ export function TaskSummarySection({ taskId, currentTier, onOpenTierAssessment, 
           <div style={ROW_GRID_STYLE}>
             <MetadataField label="Requested" value="Not Yet Estimated" />
             <MetadataField label="Allocated" value="Not Yet Allocated" />
-            <MetadataField label="Gap" value="Not Applicable" />
+            <MetadataField label="Delta" value="Not Applicable" />
             {isEditing ? (
               <EditableField label="Funding Source">
                 <InlineSearchableDropdown

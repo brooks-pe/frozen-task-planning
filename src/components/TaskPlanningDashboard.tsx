@@ -1,8 +1,9 @@
 import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router';
+import { ChevronRight } from 'lucide-react';
 import { SyncPointBreadcrumb } from './SyncPointBreadcrumb';
-import { useColumnSort, SortIndicator, compareValues } from './SortUtils';
+import { useColumnSort, SortIndicator, compareValues, SortUpIcon, SortDownIcon, SortUpDownIcon } from './SortUtils';
 import type { SortDirection } from './SortUtils';
 import { SearchIcon } from './InlineIcons';
 import { TASKS_DATA, getKPICounts, getWorkflowStateCounts } from './TaskPlanningData';
@@ -110,19 +111,32 @@ const COMPLETED_PAST: number[] = (() => {
 // ─── Planning Milestones Data ───────────────────────────────────────────────
 
 interface Milestone {
+  step: number;
   name: string;
   date: string;
-  isNext: boolean;
+  rawDate: Date;
 }
 
+const TODAY = new Date('2026-03-26');
+
 const MILESTONES: Milestone[] = [
-  { name: 'BOE Submissions Due', date: 'Mar 28, 2026', isNext: true },
-  { name: 'Activity Acceptance Deadline', date: 'Apr 11, 2026', isNext: false },
-  { name: 'Project Allocation Review', date: 'Apr 25, 2026', isNext: false },
-  { name: 'Impact Assessment Complete', date: 'May 9, 2026', isNext: false },
-  { name: 'Program Approval Gate', date: 'May 30, 2026', isNext: false },
-  { name: 'Baseline Lock', date: 'Jun 13, 2026', isNext: false },
+  { step: 1, name: 'PM approve FY North Stars (Top-Level Requirements)', date: 'Feb 21, 2026', rawDate: new Date('2026-02-21') },
+  { step: 2, name: 'Establish PAPM Top-Level Requirements for the FY26 (North Star Inputs) with Metric.', date: 'Mar 14, 2026', rawDate: new Date('2026-03-14') },
+  { step: 3, name: 'Create Task Shells and submit to supporting Activity', date: 'Apr 18, 2026', rawDate: new Date('2026-04-18') },
+  { step: 4, name: 'APM Acceptance', date: 'Jun 6, 2026', rawDate: new Date('2026-06-06') },
+  { step: 5, name: 'APM push to Awaiting Allocation', date: 'Jun 13, 2026', rawDate: new Date('2026-06-13') },
+  { step: 6, name: 'BFM Release Planning Year Controls', date: 'May 12, 2026', rawDate: new Date('2026-05-12') },
+  { step: 7, name: 'PAPM Distribute funds to APMs', date: 'May 23, 2026', rawDate: new Date('2026-05-23') },
+  { step: 8, name: 'APM Allocate Task, Complete Risk Process and submit to PAPM', date: 'Jul 18, 2026', rawDate: new Date('2026-07-18') },
+  { step: 9, name: 'PAPM Review and Accept Tasking (Per PMC)', date: 'Aug 1, 2026', rawDate: new Date('2026-08-01') },
+  { step: 10, name: 'Develop PMC Briefs', date: 'Aug 8, 2026', rawDate: new Date('2026-08-08') },
+  { step: 11, name: 'Conduct PMC', date: 'Aug 13, 2026', rawDate: new Date('2026-08-13') },
+  { step: 12, name: 'PAPMs/APMs resolve any PMC action and submit FINAL tasks for PM approval', date: 'Sep 12, 2026', rawDate: new Date('2026-09-12') },
+  { step: 13, name: 'PM approves all task', date: 'Sep 30, 2026', rawDate: new Date('2026-09-30') },
+  { step: 14, name: 'Activities submit Final Obligation phasing plan', date: 'Sep 30, 2026', rawDate: new Date('2026-09-30') },
 ];
+
+const NEXT_UP_INDEX = MILESTONES.findIndex(ms => ms.rawDate >= TODAY);
 
 // ─── Recent Task Updates (derived from shared TASKS_DATA) ───────────────────
 
@@ -234,6 +248,10 @@ function StatusFocusDot({ tag }: { tag: string }) {
 // ─── Main Component ─────────────────────────────────────────────────────────
 
 export default function TaskPlanningDashboard() {
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, []);
+
   return (
     <div className="flex flex-col w-full bg-white">
       {/* Header Section */}
@@ -273,10 +291,7 @@ export default function TaskPlanningDashboard() {
           <KPISummaryRow />
 
           {/* Workflow Progress + Planning Milestones */}
-          <div className="grid gap-[16px]" style={{ gridTemplateColumns: '1fr 1fr' }}>
-            <WorkflowProgressCard />
-            <PlanningMilestonesCard />
-          </div>
+          <WidgetRow />
 
           {/* Funding Risk + Allocation Progress */}
           <div className="grid gap-[16px]" style={{ gridTemplateColumns: '1fr 1fr' }}>
@@ -351,7 +366,49 @@ function KPICard({ data }: { data: KPICardData }) {
   );
 }
 
+// ─── Widget Row ────────────────────────────────────────────────────────────
+
+function WidgetRow() {
+  const wfRef = useRef<HTMLDivElement>(null);
+  const [rowHeight, setRowHeight] = useState<number | undefined>(undefined);
+
+  useEffect(() => {
+    if (!wfRef.current) return;
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        // Use borderBoxSize for accurate outer height including border/padding
+        const h = entry.borderBoxSize?.[0]?.blockSize ?? entry.target.getBoundingClientRect().height;
+        setRowHeight(h);
+      }
+    });
+    observer.observe(wfRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div
+      className="grid gap-[16px] items-start"
+      style={{ gridTemplateColumns: '1fr 1fr' }}
+    >
+      <div ref={wfRef}>
+        <WorkflowProgressCard />
+      </div>
+      <div style={rowHeight ? { height: rowHeight, minHeight: 0 } : {}}>
+        <PlanningMilestonesCard />
+      </div>
+    </div>
+  );
+}
+
 // ─── Workflow Progress Card ────────────────────────────────────────────────
+
+/** Returns the bar fill color/gradient based on workflow state name and completion pct. */
+function getBarBackground(stateName: string, pct: number): string {
+  if (pct === 100) return '#16A34A';           // green — 100% complete override
+  if (stateName === 'Draft') return '#DC2626'; // red — behind current milestone
+  if (stateName === 'BOE Build-Up') return '#F59E0B'; // amber — active/next-up milestone
+  return 'linear-gradient(90deg, #004b72 0%, #005a87 100%)'; // blue — default progress
+}
 
 function WorkflowProgressCard() {
   const navigate = useNavigate();
@@ -419,7 +476,7 @@ function WorkflowProgressCard() {
                 {pct > 0 && (
                   <div
                     className="h-full rounded-full transition-all flex items-center"
-                    style={{ width: `max(${pct}%, 44px)`, background: 'linear-gradient(90deg, #004b72 0%, #005a87 100%)' }}
+                    style={{ width: `max(${pct}%, 44px)`, background: getBarBackground(state.name, pct) }}
                   >
                     <span className="pl-[10px] font-['Inter:Medium',sans-serif] font-medium text-[11px] text-white leading-[16px] drop-shadow-[0_0_1px_rgba(0,0,0,0.2)] whitespace-nowrap">
                       {pct}%
@@ -453,46 +510,139 @@ function WorkflowProgressCard() {
 // ─── Planning Milestones Card ───────────────────────────────────────────────
 
 function PlanningMilestonesCard() {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const nextUpRef = useRef<HTMLDivElement>(null);
+  const [showPulse, setShowPulse] = useState(NEXT_UP_INDEX !== -1);
+
+  useEffect(() => {
+    // Auto-scroll to next-up milestone — constrained to widget's own scroll container only,
+    // never touches page/document scroll position.
+    if (nextUpRef.current && scrollRef.current) {
+      const containerTop = scrollRef.current.getBoundingClientRect().top;
+      const itemTop = nextUpRef.current.getBoundingClientRect().top;
+      scrollRef.current.scrollTop += itemTop - containerTop;
+    }
+    // Stop pulse after 3 seconds
+    if (showPulse) {
+      const timer = setTimeout(() => setShowPulse(false), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
   return (
-    <div className="flex flex-col relative rounded-[5px]">
-      <div aria-hidden="true" className="absolute border border-[#e0e1e6] border-solid inset-0 pointer-events-none rounded-[5px]" />
+    <div className="flex flex-col border border-[#e0e1e6] border-solid rounded-[5px] overflow-hidden h-full">
       {/* Card Header */}
-      <div className="px-[20px] pt-[20px] pb-[16px] flex items-center gap-[8px]">
+      <div className="px-[20px] pt-[20px] pb-[16px] flex items-center gap-[8px] shrink-0">
         <CalendarIcon />
         <p className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[24px] not-italic text-[#1C2024] text-[16px]">
           Planning Milestones
         </p>
         <InfoTooltip text="Key planning deadlines that govern task progression through the workflow." />
+        {/* Scroll indicator — signals list is scrollable */}
+        <span
+          className="ml-auto flex items-center gap-[4px] text-[#a0a4af] shrink-0 cursor-default select-none"
+          title="Scroll to see all milestones"
+          aria-hidden="true"
+        >
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+            <path d="M6.5 2L4.5 4.5H8.5L6.5 2Z" fill="#a0a4af" />
+            <path d="M6.5 11L4.5 8.5H8.5L6.5 11Z" fill="#a0a4af" />
+            <line x1="6.5" y1="4.5" x2="6.5" y2="8.5" stroke="#a0a4af" strokeWidth="1" />
+          </svg>
+          <span className="font-['Inter:Regular',sans-serif] font-normal text-[11px] leading-[16px] text-[#1c2024]">
+            Scroll
+          </span>
+        </span>
       </div>
-      {/* Milestone Rows */}
-      <div className="flex flex-col">
-        {MILESTONES.map((ms, i) => (
-          <div
-            key={ms.name}
-            className={`flex items-center justify-between px-[20px] py-[12px] gap-[16px] ${ 
-              ms.isNext ? 'bg-[rgba(0,75,114,0.04)]' : ''
-            } ${i < MILESTONES.length - 1 ? 'border-b border-[#e0e1e6]' : ''}`}
-            style={ms.isNext ? { borderLeft: '4px solid #147DB9' } : { borderLeft: '4px solid transparent' }}
-          >
-            <div className="flex items-center gap-[8px] min-w-0 flex-1">
-              <p className={`font-['Inter:${ms.isNext ? 'Semi_Bold' : 'Medium'}',sans-serif] ${ms.isNext ? 'font-semibold' : 'font-medium'} leading-[20px] not-italic text-[#1C2024] text-[14px]`}>
-                {ms.name}
-              </p>
-              {ms.isNext && (
-                <span
-                  className="font-['Inter:Semi_Bold',sans-serif] font-semibold text-[11px] leading-[16px] text-[#92400E] bg-[#FEF3C7] px-[6px] py-[1px] rounded-[3px] uppercase tracking-[0.3px] shrink-0 border border-solid border-[#92400E]"
-                  title="The next upcoming milestone that requires attention based on the current planning schedule."
+      {/* Milestone scroll wrapper — overflow-hidden creates the content peek clip zone */}
+      <div className="flex-1 min-h-0 relative overflow-hidden">
+        {/* Scroll container stops 12px before wrapper bottom → last visible row peeks */}
+        <div
+          ref={scrollRef}
+          className="flex flex-col absolute inset-x-0 top-0 overflow-y-auto"
+          style={{
+            bottom: '12px',
+            scrollbarWidth: 'thin',
+            scrollbarColor: '#a0a4af #ededf0',
+          }}
+        >
+          {MILESTONES.map((ms, i) => {
+            const isPast = ms.rawDate < TODAY;
+            const isNextUp = i === NEXT_UP_INDEX;
+            return (
+              <div
+                key={`${ms.step}-${ms.name}`}
+                ref={isNextUp ? nextUpRef : undefined}
+                className={`flex items-start justify-between px-[20px] py-[12px] gap-[16px] ${
+                  isNextUp ? 'bg-[#FFFBEB]' : ''
+                }`}
+                style={
+                  isNextUp
+                    ? {
+                        borderLeft: '4px solid #92400E',
+                        borderTop: '1px solid #D97706',
+                        borderRight: '1px solid #D97706',
+                        borderBottom: '1px solid #D97706',
+                        ...(showPulse ? { animation: 'milestonePulse 1.5s ease-in-out 2' } : {}),
+                      }
+                    : {
+                        borderLeft: '4px solid transparent',
+                        borderBottom: i < MILESTONES.length - 1 ? '1px solid #e0e1e6' : 'none',
+                      }
+                }
+              >
+                <div className="flex items-start gap-[8px] min-w-0 flex-1">
+                  <p
+                    className={`font-['Inter:${isNextUp ? 'Semi_Bold' : 'Medium'}',sans-serif] ${
+                      isNextUp ? 'font-semibold' : 'font-medium'
+                    } leading-[20px] not-italic text-[14px]`}
+                    style={{ color: isPast && !isNextUp ? '#80838D' : '#1C2024' }}
+                  >
+                    {ms.step}. {ms.name}
+                  </p>
+                  {isNextUp && (
+                    <span
+                      className="font-['Inter:Semi_Bold',sans-serif] font-semibold text-[11px] leading-[16px] text-[#92400E] bg-[#FEF3C7] px-[6px] py-[1px] rounded-[3px] uppercase tracking-[0.3px] shrink-0 border border-solid border-[#92400E] mt-[2px]"
+                      title="The next upcoming milestone that requires attention based on the current planning schedule."
+                    >
+                      Next Up
+                    </span>
+                  )}
+                  {isPast && !isNextUp && (
+                    <span
+                      className="font-['Inter:Medium',sans-serif] font-medium text-[11px] leading-[16px] text-[#60646C] bg-[#f0f0f3] px-[6px] py-[1px] rounded-[3px] uppercase tracking-[0.3px] shrink-0 mt-[2px]"
+                    >
+                      Complete
+                    </span>
+                  )}
+                </div>
+                <p
+                  className={`font-['Inter:${isNextUp ? 'Semi_Bold' : 'Regular'}',sans-serif] ${isNextUp ? 'font-semibold' : 'font-normal'} leading-[20px] not-italic text-[14px] shrink-0`}
+                  style={{ color: isPast && !isNextUp ? '#DC2626' : isNextUp ? '#92400E' : '#60646c' }}
                 >
-                  Next Up
-                </span>
-              )}
-            </div>
-            <p className={`font-['Inter:${ms.isNext ? 'Semi_Bold' : 'Regular'}',sans-serif] ${ms.isNext ? 'font-semibold' : 'font-normal'} leading-[20px] not-italic text-[#60646c] text-[14px] shrink-0`}>
-              {ms.date}
-            </p>
-          </div>
-        ))}
+                  {ms.date}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+        {/* Bottom fade gradient — signals scrollability, sits above content, non-interactive */}
+        <div
+          aria-hidden="true"
+          className="absolute bottom-0 left-0 right-0 pointer-events-none z-10"
+          style={{
+            height: '40px',
+            background: 'linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.92) 60%, rgba(255,255,255,1) 100%)',
+          }}
+        />
       </div>
+      {/* Pulse animation keyframes */}
+      <style>{`
+        @keyframes milestonePulse {
+          0%, 100% { background-color: #FFFBEB; }
+          50% { background-color: rgba(254, 243, 199, 0.85); }
+        }
+      `}</style>
     </div>
   );
 }
@@ -504,44 +654,6 @@ function CalendarIcon() {
       <path d="M2 7H16" stroke="#60646c" strokeWidth="1.5" />
       <path d="M6 1.5V4.5" stroke="#60646c" strokeWidth="1.5" strokeLinecap="round" />
       <path d="M12 1.5V4.5" stroke="#60646c" strokeWidth="1.5" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-// ─── Empty State Card ───────────────────────────────────────────────────────
-
-function EmptyStateCard({ title, message, headerTooltip, emptyTooltip }: { title: string; message: string; headerTooltip: string; emptyTooltip: string }) {
-  return (
-    <div className="flex flex-col relative rounded-[5px]" style={{ minHeight: '200px' }}>
-      <div aria-hidden="true" className="absolute border border-[#e0e1e6] border-solid inset-0 pointer-events-none rounded-[5px]" />
-      {/* Card Header */}
-      <div className="px-[20px] pt-[20px] pb-[12px]">
-        <div className="flex items-center gap-[6px]">
-          <p className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[24px] not-italic text-[#1C2024] text-[16px]">
-            {title}
-          </p>
-          <InfoTooltip text={headerTooltip} />
-        </div>
-      </div>
-      {/* Empty State */}
-      <div className="flex-1 flex flex-col items-center justify-center gap-[12px] pb-[20px]">
-        <EmptyIcon />
-        <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] not-italic text-[#60646c] text-[14px]">
-          {message}
-        </p>
-        <InfoTooltip text={emptyTooltip} />
-      </div>
-    </div>
-  );
-}
-
-function EmptyIcon() {
-  return (
-    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-      <rect x="4" y="8" width="32" height="24" rx="3" stroke="#c0c1c6" strokeWidth="1.5" />
-      <path d="M4 14H36" stroke="#c0c1c6" strokeWidth="1.5" />
-      <circle cx="20" cy="24" r="4" stroke="#c0c1c6" strokeWidth="1.5" />
-      <path d="M18 24L20 26L22.5 22" stroke="#c0c1c6" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -564,11 +676,28 @@ function RecentTaskUpdatesTable() {
   const navigate = useNavigate();
   const [activeFilter, setActiveFilter] = useState<'24h' | '5d' | '30d'>('30d');
   const [searchValue, setSearchValue] = useState('');
+  const [isExpanded, setIsExpanded] = useState(true);
+  const [overflowVisible, setOverflowVisible] = useState(true);
+
+  const handleTransitionEnd = useCallback(
+    (e: React.TransitionEvent<HTMLDivElement>) => {
+      if (e.target !== e.currentTarget) return;
+      if (isExpanded) setOverflowVisible(true);
+    },
+    [isExpanded],
+  );
+
+  const handleToggle = useCallback(() => {
+    setIsExpanded((prev) => {
+      if (prev) setOverflowVisible(false);
+      return !prev;
+    });
+  }, []);
 
   const filterLabels: { key: '24h' | '5d' | '30d'; label: string }[] = [
     { key: '24h', label: 'Last 24 Hours' },
     { key: '5d', label: 'Last 5 Days' },
-    { key: '30d', label: 'Last 30 Days' },
+    { key: '30d', label: 'Last 10 Days' },
   ];
 
   const { sortColumn, sortDirection, handleSort, getDirection } = useColumnSort<TaskColumnKey>();
@@ -679,80 +808,155 @@ function RecentTaskUpdatesTable() {
             >
               View All Tasks
             </span>
-          </div>
-        </div>
-      </div>
-
-      {/* Column Headers */}
-      <div
-        className="bg-[#f9f9fb] border-b border-[#e0e1e6] grid"
-        style={{ gridTemplateColumns: TASK_TABLE_GRID }}
-      >
-        {TASK_COLUMNS.map((col) => {
-          const dir = getDirection(col.key);
-          // Show active accent for default sort (updatedOn desc) when no explicit sort chosen
-          const displayDir = sortColumn === null && col.key === 'updatedOn' ? 'desc' as SortDirection : dir;
-          return (
-            <div
-              key={col.key}
-              className="px-[12px] py-[12px] flex items-center gap-[6px] min-w-0 cursor-pointer select-none hover:bg-[rgba(0,0,85,0.04)]"
-              onClick={() => handleSort(col.key)}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSort(col.key); } }}
+            {/* Divider */}
+            <div className="w-[1px] h-[20px] bg-[#e0e1e6] shrink-0 mx-[8px]" />
+            {/* Collapse toggle — matches CollapsibleFilterSection pattern exactly */}
+            <button
+              onClick={handleToggle}
+              className="flex gap-[8px] h-[32px] items-center justify-center px-[12px] rounded-[4px] shrink-0 cursor-pointer bg-transparent border-none transition-colors text-[#1C2024] hover:text-[#000000]"
+              aria-expanded={isExpanded}
+              aria-label={isExpanded ? 'Hide Recent Tasks' : 'Show Recent Tasks'}
             >
-              <p className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[18px] text-[#1C2024] text-[13px] uppercase tracking-[0.5px] whitespace-nowrap">
-                {col.label}
-              </p>
-              <SortIndicator direction={displayDir} />
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Body Rows */}
-      {filteredTasks.map((task) => (
-        <div
-          key={task.taskId}
-          className="border-b border-[#e0e1e6] hover:bg-[#fafafa] transition-colors cursor-pointer grid"
-          style={{ gridTemplateColumns: TASK_TABLE_GRID }}
-        >
-          {/* Task ID */}
-          <div className="px-[12px] py-[12px] flex items-center justify-between min-w-0">
-            <span className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] text-[#147DB9] text-[14px] hover:underline cursor-pointer">
-              {task.taskId}
-            </span>
-            {(() => {
-              const primaryTag = getPrimaryStatusTag(task.statusFocusTags);
-              return primaryTag ? <StatusFocusDot tag={primaryTag} /> : null;
-            })()}
-          </div>
-          {/* Title */}
-          <div className="px-[12px] py-[12px] flex items-center min-w-0">
-            <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px] truncate">
-              {task.title}
-            </p>
-          </div>
-          {/* Workflow State */}
-          <div className="px-[12px] py-[12px] flex items-center min-w-0">
-            <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px] truncate">
-              {task.workflowState}
-            </p>
-          </div>
-          {/* Updated By */}
-          <div className="px-[12px] py-[12px] flex items-center min-w-0">
-            <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#60646c] text-[14px] truncate">
-              {task.updatedBy}
-            </p>
-          </div>
-          {/* Updated On */}
-          <div className="px-[12px] py-[12px] flex items-center min-w-0">
-            <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#60646c] text-[14px] truncate">
-              {task.updatedOn}
-            </p>
+              <span
+                style={{
+                  display: 'inline-flex',
+                  transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)',
+                  transition: 'transform 225ms ease-in-out',
+                }}
+              >
+                <ChevronRight size={16} strokeWidth={2} />
+              </span>
+              <span className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] not-italic text-[14px]">
+                {isExpanded ? 'Hide Recent Tasks' : 'Show Recent Tasks'}
+              </span>
+            </button>
           </div>
         </div>
-      ))}
+      </div>
+
+      {/* Collapsible body — grid-template-rows animation matches CollapsibleFilterSection */}
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateRows: isExpanded ? '1fr' : '0fr',
+          transition: 'grid-template-rows 225ms ease-in-out',
+        }}
+        onTransitionEnd={handleTransitionEnd}
+      >
+        <div style={{ overflow: overflowVisible ? 'visible' : 'hidden' }}>
+          {/* Column Headers */}
+          <div
+            className="bg-[#f9f9fb] border-b border-[#e0e1e6] grid"
+            style={{ gridTemplateColumns: TASK_TABLE_GRID }}
+          >
+            {TASK_COLUMNS.map((col) => {
+              const dir = getDirection(col.key);
+              // Show active accent for default sort (updatedOn desc) when no explicit sort chosen
+              const displayDir = sortColumn === null && col.key === 'updatedOn' ? 'desc' as SortDirection : dir;
+              const isActive = sortColumn === col.key || (sortColumn === null && col.key === 'updatedOn');
+              return (
+                <div
+                  key={col.key}
+                  className={`px-[12px] py-[12px] flex items-center gap-[6px] min-w-0 cursor-pointer select-none hover:bg-[rgba(0,0,85,0.04)] ${isActive ? 'bg-[rgba(0,75,114,0.05)]' : ''}`}
+                  onClick={() => handleSort(col.key)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSort(col.key); } }}
+                >
+                  <p className={`font-['Inter:Semi_Bold',sans-serif] leading-[18px] text-[#1C2024] text-[13px] uppercase tracking-[0.5px] whitespace-nowrap ${isActive ? 'font-semibold' : 'font-medium'}`}>
+                    {col.label}
+                  </p>
+                  <span className="shrink-0 flex items-center gap-[3px] text-[#1C2024]">
+                    {displayDir === 'asc' ? <SortUpIcon /> : displayDir === 'desc' ? <SortDownIcon /> : <SortUpDownIcon />}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Body Rows */}
+          {filteredTasks.map((task) => (
+            <div
+              key={task.taskId}
+              className="border-b border-[#e0e1e6] hover:bg-[#fafafa] transition-colors cursor-pointer grid"
+              style={{ gridTemplateColumns: TASK_TABLE_GRID }}
+            >
+              {/* Task ID */}
+              <div className="px-[12px] py-[12px] flex items-center justify-between min-w-0">
+                <span className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] text-[#147DB9] text-[14px] hover:underline cursor-pointer">
+                  {task.taskId}
+                </span>
+                {(() => {
+                  const primaryTag = getPrimaryStatusTag(task.statusFocusTags);
+                  return primaryTag ? <StatusFocusDot tag={primaryTag} /> : null;
+                })()}
+              </div>
+              {/* Title */}
+              <div className="px-[12px] py-[12px] flex items-center min-w-0">
+                <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px] truncate">
+                  {task.title}
+                </p>
+              </div>
+              {/* Workflow State */}
+              <div className="px-[12px] py-[12px] flex items-center min-w-0">
+                <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px] truncate">
+                  {task.workflowState}
+                </p>
+              </div>
+              {/* Updated By */}
+              <div className="px-[12px] py-[12px] flex items-center min-w-0">
+                <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#60646c] text-[14px] truncate">
+                  {task.updatedBy}
+                </p>
+              </div>
+              {/* Updated On */}
+              <div className="px-[12px] py-[12px] flex items-center min-w-0">
+                <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#60646c] text-[14px] truncate">
+                  {task.updatedOn}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
+  );
+}
+
+// ─── Empty State Card ─────────────────────────────────────────────────────
+
+function EmptyStateCard({ title, message, headerTooltip, emptyTooltip }: { title: string; message: string; headerTooltip: string; emptyTooltip: string }) {
+  return (
+    <div className="flex flex-col relative rounded-[5px]" style={{ minHeight: '200px' }}>
+      <div aria-hidden="true" className="absolute border border-[#e0e1e6] border-solid inset-0 pointer-events-none rounded-[5px]" />
+      {/* Card Header */}
+      <div className="px-[20px] pt-[20px] pb-[12px]">
+        <div className="flex items-center gap-[6px]">
+          <p className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[24px] not-italic text-[#1C2024] text-[16px]">
+            {title}
+          </p>
+          <InfoTooltip text={headerTooltip} />
+        </div>
+      </div>
+      {/* Empty State */}
+      <div className="flex-1 flex flex-col items-center justify-center gap-[12px] pb-[20px]">
+        <EmptyIcon />
+        <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] not-italic text-[#60646c] text-[14px]">
+          {message}
+        </p>
+        <InfoTooltip text={emptyTooltip} />
+      </div>
+    </div>
+  );
+}
+
+function EmptyIcon() {
+  return (
+    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+      <rect x="4" y="8" width="32" height="24" rx="3" stroke="#c0c1c6" strokeWidth="1.5" />
+      <path d="M4 14H36" stroke="#c0c1c6" strokeWidth="1.5" />
+      <circle cx="20" cy="24" r="4" stroke="#c0c1c6" strokeWidth="1.5" />
+      <path d="M18 24L20 26L22.5 22" stroke="#c0c1c6" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
   );
 }

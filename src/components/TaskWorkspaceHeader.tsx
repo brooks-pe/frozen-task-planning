@@ -26,6 +26,7 @@ export default function TaskWorkspaceHeader() {
   const [currentTier, setCurrentTier] = React.useState<string | null>(null);
   const [showSuccessToast, setShowSuccessToast] = React.useState(false);
   const [showTierPulse, setShowTierPulse] = React.useState(false);
+  const [showCloneToast, setShowCloneToast] = React.useState(false);
   const [activeTab, setActiveTab] = React.useState<'overview' | 'boe'>('overview');
   const [reimbursableTotal, setReimbursableTotal] = React.useState('');
   const [directCiteTotal, setDirectCiteTotal] = React.useState('');
@@ -80,6 +81,15 @@ export default function TaskWorkspaceHeader() {
     setShowTierPulse(true);
     setTimeout(() => setShowSuccessToast(false), 6000);
     setTimeout(() => setShowTierPulse(false), 1500);
+  };
+
+  const handleTaskCloned = (cloned: { taskId: string; title: string; executingActivity: string; requested: number }) => {
+    // Update the visible page title to match the cloned task's New Task Title
+    setTaskTitle(cloned.title);
+    setSavedTaskTitle(cloned.title);
+    // Show clone success toast (top-right, same pattern as tier toast)
+    setShowCloneToast(true);
+    setTimeout(() => setShowCloneToast(false), 6000);
   };
 
   // Dev-only: override tier for UI testing
@@ -263,7 +273,7 @@ export default function TaskWorkspaceHeader() {
                   onClick={() => setActiveTab('boe')}
                   className={`px-[16px] py-[10px] font-['Inter:Medium',sans-serif] font-medium leading-[20px] border-b-[2px] transition-colors cursor-pointer bg-transparent ${ activeTab === 'boe' ? 'border-[#004B72] text-[#004B72]' : 'border-transparent text-[#60646C] hover:text-[#1C2024]' } text-[16px]`}
                 >
-                  {isTier0 ? 'Tier 0 BOE' : 'BOE Planning'}
+                  {isTier0 ? 'Tier 0 BOE' : 'Add Subtasks'}
                 </button>
               )}
             </div>
@@ -380,11 +390,40 @@ export default function TaskWorkspaceHeader() {
         </div>
       )}
 
+      {/* Clone Success Toast */}
+      {showCloneToast && (
+        <div
+          className={`fixed top-[100px] right-[24px] z-50 bg-[#e6f6eb] content-stretch flex gap-[8px] items-start overflow-clip p-[12px] rounded-[6px] w-[352px] shadow-lg transition-all duration-300 ${showCloneToast ? 'animate-slide-in-right' : 'animate-slide-out-right'}`}
+        >
+          <div className="content-stretch flex h-[20px] items-center relative shrink-0">
+            <div className="relative shrink-0 size-[16px]">
+              <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 16 16">
+                <g clipPath="url(#clip1_clone_success)">
+                  <path d="M14.6654 7.38667V8C14.6646 9.43761 14.2003 10.8365 13.3392 11.988C12.4781 13.1394 11.2665 13.9817 9.88921 14.3893C8.51188 14.7969 7.03815 14.7479 5.68963 14.2497C4.3411 13.7515 3.18975 12.8307 2.40723 11.6247C1.62471 10.4187 1.25287 8.99205 1.34746 7.55754C1.44205 6.12303 1.99812 4.75755 2.93217 3.66471C3.86621 2.57188 5.1285 1.81024 6.53077 1.49344C7.93304 1.17664 9.40016 1.32152 10.7121 1.90667" stroke="rgba(0,113,63,0.87)" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M14.6667 2.66666L8 9.34L6 7.34" stroke="rgba(0,113,63,0.87)" strokeLinecap="round" strokeLinejoin="round" />
+                </g>
+                <defs>
+                  <clipPath id="clip1_clone_success">
+                    <rect fill="white" height="16" width="16" />
+                  </clipPath>
+                </defs>
+              </svg>
+            </div>
+          </div>
+          <div className="flex-[1_0_0] font-['Inter:Medium',sans-serif] font-medium leading-[20px] min-h-px min-w-px not-italic relative text-[14px] text-[rgba(0,113,63,0.87)]">
+            <p className="mb-0">Task Cloned</p>
+            <p className="font-['Inter:Regular',sans-serif] font-normal mb-0">The cloned task has been created in Draft status and is ready for editing.</p>
+          </div>
+        </div>
+      )}
+
       {/* Clone Task Flyout */}
       <CloneTaskFlyout
         open={cloneFlyoutOpen}
         onClose={() => setCloneFlyoutOpen(false)}
         sourceTask={task}
+        currentTier={currentTier}
+        onTaskCloned={handleTaskCloned}
       />
 
       {/* Tier Assessment Flyout */}
