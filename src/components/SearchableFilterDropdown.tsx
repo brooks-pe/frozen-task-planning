@@ -123,15 +123,17 @@ export function SearchableFilterDropdown({ value, onChange, options, className, 
   };
 
   return (
-    <div ref={containerRef} className="relative" onKeyDown={handleKeyDown}>
+    <div ref={containerRef} className="relative min-w-0" onKeyDown={handleKeyDown}>
       {/* Trigger button - matches native select styling */}
       <button
         type="button"
         onClick={() => isOpen ? handleClose() : handleOpen()}
-        className={`bg-white h-[32px] pl-[12px] pr-[32px] rounded-[4px] border border-[rgba(0,6,46,0.2)] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] cursor-pointer text-left whitespace-nowrap ${className || ''}`}
+        className={`bg-white h-[32px] w-full min-w-0 pl-[12px] pr-[32px] rounded-[4px] border border-[rgba(0,6,46,0.2)] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] cursor-pointer text-left overflow-hidden ${className || ''}`}
         style={triggerStyle}
       >
-        {value}
+        <span className="block overflow-hidden text-ellipsis whitespace-nowrap">
+          {value}
+        </span>
       </button>
       <ChevronDown
         className="absolute right-[10px] top-1/2 -translate-y-1/2 pointer-events-none text-[#60646C]"
@@ -142,7 +144,7 @@ export function SearchableFilterDropdown({ value, onChange, options, className, 
       {isOpen && (
         <div
           className="absolute top-[calc(100%+4px)] left-0 min-w-full bg-white border border-[rgba(0,6,46,0.2)] rounded-[4px] shadow-[0px_4px_12px_rgba(0,0,0,0.12)] z-50 flex flex-col"
-          style={{ maxHeight: '280px' }}
+          style={{ width: 'max-content', minWidth: '100%', maxWidth: 'min(560px, calc(100vw - 32px))', maxHeight: '280px' }}
         >
           {/* Search input */}
           <div className="p-[8px] border-b border-[#e0e1e6]">
