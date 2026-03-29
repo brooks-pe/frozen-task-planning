@@ -597,6 +597,10 @@ const EXECUTING_ACTIVITY_OPTIONS = [
   'PMS 340',
 ];
 
+export const TASK_SUMMARY_PROJECT_OPTIONS = Array.from(
+  new Set(EXECUTION_STATEMENTS.map(es => es.project))
+);
+
 const PLANNING_YEAR_OPTIONS = [
   'FY2025',
   'FY2026',
@@ -644,6 +648,7 @@ interface TaskSummarySectionProps {
 export function TaskSummarySection({ taskId, currentTier, onOpenTierAssessment, showPulse, isEditing, onEnterEditMode, onSave, onCancel }: TaskSummarySectionProps) {
   const defaultESId = 'ES-005'; // "Maritime ISR Modernization Program"
   const defaultES = EXECUTION_STATEMENTS.find(es => es.id === defaultESId)!;
+  const isNewlyCreatedTask = taskId === '41-0279';
 
   const [formState, setFormState] = useState<EditFormState>(() => ({
     executionStatementId: defaultESId,
@@ -651,8 +656,8 @@ export function TaskSummarySection({ taskId, currentTier, onOpenTierAssessment, 
     wbsAttribute: '5.2 — Sensor Fusion Systems',
     fundingSource: 'BLI 0721/RU004562',
     planningYear: 'FY2026',
-    popStart: '03/03/2026',
-    popEnd: '10/30/2027',
+    popStart: isNewlyCreatedTask ? '' : '03/03/2026',
+    popEnd: isNewlyCreatedTask ? '' : '10/30/2027',
     previousTask: 'Not Yet Linked',
     associatedTasks: 'None linked',
     nextTask: 'Not Yet Created',
@@ -711,7 +716,8 @@ export function TaskSummarySection({ taskId, currentTier, onOpenTierAssessment, 
 
   const displayPop = savedState.popStart && savedState.popEnd
     ? `${formatDisplayDate(savedState.popStart)} - ${formatDisplayDate(savedState.popEnd)}`
-    : '3 Mar 2026 - 30 Oct 2027';
+    : '';
+  const displayTaskType = savedState.taskType === 'Non-CODB' ? 'Standard' : savedState.taskType;
 
   const headerActions = isEditing ? (
     <div className="flex items-center gap-[8px]">
@@ -778,23 +784,6 @@ export function TaskSummarySection({ taskId, currentTier, onOpenTierAssessment, 
               />
             )}
             {isEditing ? (
-              <EditableField label="Executing Activity">
-                <InlineSearchableDropdown
-                  value={formState.executingActivity}
-                  onChange={v => updateField('executingActivity', v)}
-                  options={EXECUTING_ACTIVITY_OPTIONS}
-                />
-              </EditableField>
-            ) : (
-              <MetadataField label="Executing Activity" value={savedState.executingActivity} />
-            )}
-            <MetadataField
-              label="Project"
-              value={isEditing ? (editES?.project ?? '') : (savedES?.project ?? 'Coastal Surveillance Modernization')}
-              muted={isEditing}
-              longText
-            />
-            {isEditing ? (
               <EditableField label="WBS Attribute">
                 <InlineSearchableDropdown
                   value={formState.wbsAttribute}
@@ -806,25 +795,6 @@ export function TaskSummarySection({ taskId, currentTier, onOpenTierAssessment, 
               <MetadataField label="WBS Attribute" value={savedState.wbsAttribute} />
             )}
             <MetadataField label="Appropriation" value={isEditing ? (editES?.appropriation ?? '') : (savedES?.appropriation ?? 'O&MN')} badge="appropriation" />
-            <MetadataField 
-              label="Tier" 
-              value={currentTier || 'Not Assigned'} 
-              badge={currentTier ? undefined : 'not-assigned'} 
-              action={currentTier ? undefined : { text: 'Assign Tier', onClick: onOpenTierAssessment }} 
-              showPulse={showPulse} 
-            />
-          </div>
-        </div>
-
-        {/* Divider */}
-        <div className="border-t border-solid border-[#e0e1e6]" />
-
-        {/* Row 2 — Planning, Funding & Timeframe */}
-        <div className="px-[8px] py-[12px]">
-          <div style={ROW_GRID_STYLE}>
-            <MetadataField label="Requested" value="Not Yet Estimated" />
-            <MetadataField label="Allocated" value="Not Yet Allocated" />
-            <MetadataField label="Delta" value="Not Applicable" />
             {isEditing ? (
               <EditableField label="Funding Source">
                 <InlineSearchableDropdown
@@ -847,6 +817,25 @@ export function TaskSummarySection({ taskId, currentTier, onOpenTierAssessment, 
             ) : (
               <MetadataField label="Planning Year" value={savedState.planningYear} />
             )}
+            <MetadataField 
+              label="Tier" 
+              value={currentTier || 'Not Assigned'} 
+              badge={currentTier ? undefined : 'not-assigned'} 
+              action={currentTier ? undefined : { text: 'Assign Tier', onClick: onOpenTierAssessment }} 
+              showPulse={showPulse} 
+            />
+          </div>
+        </div>
+
+        {/* Divider */}
+        <div className="border-t border-solid border-[#e0e1e6]" />
+
+        {/* Row 2 — Planning, Funding & Timeframe */}
+        <div className="px-[8px] py-[12px]">
+          <div style={ROW_GRID_STYLE}>
+            <MetadataField label="Requested" value="Not Yet Estimated" />
+            <MetadataField label="Allocated" value="Not Yet Allocated" />
+            <MetadataField label="Delta" value="Not Applicable" />
             {isEditing ? (
               <EditableField label="Period of Performance">
                 <DateRangeInput
@@ -857,7 +846,26 @@ export function TaskSummarySection({ taskId, currentTier, onOpenTierAssessment, 
                 />
               </EditableField>
             ) : (
-              <MetadataField label="Period of Performance" value={displayPop} />
+              <MetadataField
+                label="Period of Performance"
+                value={displayPop}
+                action={!displayPop ? { text: 'Add PoP', onClick: handleEdit } : undefined}
+              />
+            )}
+            <MetadataField 
+              label="Operational Status" 
+              value="Active"
+              operationalStatus={{ type: 'active' }}
+            />
+            {isEditing ? (
+              <EditableField label="Task Type">
+                <TaskTypeRadio
+                  value={formState.taskType}
+                  onChange={v => updateField('taskType', v)}
+                />
+              </EditableField>
+            ) : (
+              <MetadataField label="Task Type" value={displayTaskType} badge="status" />
             )}
           </div>
         </div>
@@ -865,16 +873,9 @@ export function TaskSummarySection({ taskId, currentTier, onOpenTierAssessment, 
         {/* Divider */}
         <div className="border-t border-solid border-[#e0e1e6]" />
 
-        {/* Row 3 — People, Status & Lineage */}
+        {/* Row 3 — Lineage, Program Context & Objective */}
         <div className="px-[8px] py-[12px]">
           <div style={ROW_3_GRID_STYLE}>
-            <MetadataField label="Project Lead" value="Sarah Mitchell" />
-            <MetadataField label="Activity Lead" value="James O'Connor" />
-            <MetadataField 
-              label="Operational Status" 
-              value="Active"
-              operationalStatus={{ type: 'active' }}
-            />
             {isEditing ? (
               <EditableField label="Previous Task">
                 <InlineSearchableDropdown
@@ -884,7 +885,11 @@ export function TaskSummarySection({ taskId, currentTier, onOpenTierAssessment, 
                 />
               </EditableField>
             ) : (
-              <MetadataField label="Previous Task" value={savedState.previousTask} />
+              <MetadataField
+                label="Previous Task"
+                value=""
+                action={{ text: savedState.previousTask, onClick: handleEdit }}
+              />
             )}
             {isEditing ? (
               <EditableField label="Associated Tasks">
@@ -895,7 +900,11 @@ export function TaskSummarySection({ taskId, currentTier, onOpenTierAssessment, 
                 />
               </EditableField>
             ) : (
-              <MetadataField label="Associated Tasks" value={savedState.associatedTasks} />
+              <MetadataField
+                label="Associated Tasks"
+                value=""
+                action={{ text: savedState.associatedTasks, onClick: handleEdit }}
+              />
             )}
             {isEditing ? (
               <EditableField label="Next Task">
@@ -906,26 +915,11 @@ export function TaskSummarySection({ taskId, currentTier, onOpenTierAssessment, 
                 />
               </EditableField>
             ) : (
-              <MetadataField label="Next Task" value={savedState.nextTask} />
-            )}
-          </div>
-        </div>
-
-        {/* Divider */}
-        <div className="border-t border-solid border-[#e0e1e6]" />
-
-        {/* Row 4 — Task Type, Requirement Lineage & Objective */}
-        <div className="px-[8px] py-[12px]">
-          <div style={ROW_4_GRID_STYLE}>
-            {isEditing ? (
-              <EditableField label="Task Type">
-                <TaskTypeRadio
-                  value={formState.taskType}
-                  onChange={v => updateField('taskType', v)}
-                />
-              </EditableField>
-            ) : (
-              <MetadataField label="Task Type" value={savedState.taskType} badge="status" />
+              <MetadataField
+                label="Next Task"
+                value=""
+                action={{ text: savedState.nextTask, onClick: handleEdit }}
+              />
             )}
             <MetadataField
               label="Program Initiative"
@@ -959,6 +953,7 @@ export function TaskSummarySection({ taskId, currentTier, onOpenTierAssessment, 
             )}
           </div>
         </div>
+
       </div>
     </CollapsibleFilterSection>
   );

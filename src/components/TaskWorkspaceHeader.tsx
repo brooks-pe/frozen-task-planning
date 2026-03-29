@@ -4,11 +4,13 @@ import { useParams, useNavigate } from 'react-router';
 import { TASKS_DATA } from './TaskPlanningData';
 import { CloneTaskFlyout } from './CloneTaskFlyout';
 import { SyncPointBreadcrumb } from './SyncPointBreadcrumb';
-import { TaskSummarySection } from './TaskSummarySection';
+import { TaskSummarySection, TASK_SUMMARY_PROJECT_OPTIONS } from './TaskSummarySection';
 import { TierAssessmentFlyout } from './TierAssessmentFlyout';
 import { TaskWorkspaceOverview } from './TaskWorkspaceOverview';
 import { WorkflowFooter } from './WorkflowFooter';
 import { BOESubtasksSection } from './BOESubtasksSection';
+import { SearchableFilterDropdown } from './SearchableFilterDropdown';
+import { EXECUTING_ACTIVITY_OPTIONS } from './TaskPlanningData';
 
 function PencilIcon() {
   return (
@@ -41,6 +43,12 @@ export default function TaskWorkspaceHeader() {
   // Title state — initialized from task data, kept in sync with saved value
   const [taskTitle, setTaskTitle] = React.useState(() => task?.title ?? '');
   const [savedTaskTitle, setSavedTaskTitle] = React.useState(() => task?.title ?? '');
+  const initialExecutingActivity = task?.executingActivity ?? '';
+  const initialProject = taskId === '41-0279' ? 'Coastal Surveillance Modernization' : (task?.project ?? '');
+  const [executingActivity, setExecutingActivity] = React.useState(initialExecutingActivity);
+  const [savedExecutingActivity, setSavedExecutingActivity] = React.useState(initialExecutingActivity);
+  const [project, setProject] = React.useState(initialProject);
+  const [savedProject, setSavedProject] = React.useState(initialProject);
 
   // Draft state: all tasks shown in this workspace are currently in Draft
   const isDraftState = true;
@@ -109,12 +117,16 @@ export default function TaskWorkspaceHeader() {
   // Save: persist title + exit edit mode (TaskSummarySection persists its own formState)
   const handleSaveEdit = () => {
     setSavedTaskTitle(taskTitle);
+    setSavedExecutingActivity(executingActivity);
+    setSavedProject(project);
     setIsEditing(false);
   };
 
   // Cancel: restore title + exit edit mode (TaskSummarySection restores its own formState)
   const handleCancelEdit = () => {
     setTaskTitle(savedTaskTitle);
+    setExecutingActivity(savedExecutingActivity);
+    setProject(savedProject);
     setIsEditing(false);
   };
 
@@ -209,9 +221,47 @@ export default function TaskWorkspaceHeader() {
                   </>
                 )}
               </div>
-              <p className="font-['Inter:Regular',sans-serif] font-normal text-[18px] leading-[24px] text-[#60646C]">
-                {taskId} Task Summary
-              </p>
+              {isEditing ? (
+                <div className="flex items-center gap-[8px] min-w-0 flex-wrap">
+                  <span className="font-['Inter:Regular',sans-serif] font-normal text-[18px] leading-[24px] text-[#1C2024] whitespace-nowrap">
+                    {taskId}
+                  </span>
+                  <span className="font-['Inter:Regular',sans-serif] font-normal text-[18px] leading-[24px] text-[#60646C] shrink-0">
+                    •
+                  </span>
+                  <span className="font-['Inter:Regular',sans-serif] font-normal text-[18px] leading-[24px] text-[#1C2024] whitespace-nowrap">
+                    Executing Activity:
+                  </span>
+                  <div className="w-[160px] min-w-0">
+                    <SearchableFilterDropdown
+                      value={executingActivity}
+                      onChange={setExecutingActivity}
+                      options={EXECUTING_ACTIVITY_OPTIONS.filter(option => option !== 'All')}
+                      className="w-full"
+                      triggerStyle={{ width: '100%', minWidth: 0 }}
+                    />
+                  </div>
+                  <span className="font-['Inter:Regular',sans-serif] font-normal text-[18px] leading-[24px] text-[#60646C] shrink-0">
+                    •
+                  </span>
+                  <span className="font-['Inter:Regular',sans-serif] font-normal text-[18px] leading-[24px] text-[#1C2024] whitespace-nowrap">
+                    Project:
+                  </span>
+                  <div className="w-[260px] min-w-0">
+                    <SearchableFilterDropdown
+                      value={project}
+                      onChange={setProject}
+                      options={TASK_SUMMARY_PROJECT_OPTIONS}
+                      className="w-full"
+                      triggerStyle={{ width: '100%', minWidth: 0 }}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <p className="font-['Inter:Regular',sans-serif] font-normal text-[18px] leading-[24px] text-[#60646C]">
+                  <span className="text-[#1C2024]">{taskId}</span> • <span className="text-[#1C2024]">Executing Activity:</span> {savedExecutingActivity} • <span className="text-[#1C2024]">Project:</span> {savedProject}
+                </p>
+              )}
             </div>
 
             {/* Breadcrumbs */}
