@@ -17,7 +17,7 @@ function PeAvatar() {
 function Item() {
   return (
     <div className="content-stretch flex gap-[8px] items-center relative shrink-0" data-name="item #1">
-      <div className="css-g0mm18 font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#1c2024] text-[0px] text-[14px]">
+      <div className="css-g0mm18 font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#1c2024] text-[14px]">
         <p className="css-ew64yg font-['Inter:Bold',sans-serif] font-bold mb-0">John Smith</p>
         <p className="css-ew64yg">john.p.smith@navy.mil</p>
       </div>

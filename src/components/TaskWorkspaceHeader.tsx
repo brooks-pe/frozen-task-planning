@@ -250,9 +250,9 @@ export default function TaskWorkspaceHeader() {
               <p className="flex-1 font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#00749e]">
                 {currentTier
                   ? isTier0
-                    ? <>Complete <button onClick={handleDefineSubtasksClick} className="font-['Inter:Bold',sans-serif] font-bold text-[14px] leading-[20px] text-[#147DB9] bg-transparent border-none cursor-pointer hover:underline p-0 inline">Tier 0 BOE</button> to submit directly to Project Allocation, or proceed to BOE Build-Up.</>
-                    : <><button onClick={handleDefineSubtasksClick} className="font-['Inter:Bold',sans-serif] font-bold text-[14px] leading-[20px] text-[#147DB9] bg-transparent border-none cursor-pointer hover:underline p-0 inline">Define subtasks</button> to organize work and prepare for BOE Build-Up. Subtasks are optional in Draft but required during BOE Build-Up.</>
-                  : <>Complete the <button onClick={handleOpenTierAssessment} className="font-['Inter:Bold',sans-serif] font-bold text-[14px] leading-[20px] text-[#147DB9] bg-transparent border-none cursor-pointer hover:underline p-0 inline">Tier Assessment</button> to establish the planning estimate and BOE tier before building this task.</>
+                    ? <>Complete <button type="button" onClick={handleDefineSubtasksClick} className="font-['Inter:Bold',sans-serif] font-bold text-[14px] leading-[20px] text-[#147DB9] bg-transparent border-none cursor-pointer hover:underline p-0 inline">Tier 0 BOE</button> to submit directly to Project Allocation, or proceed to BOE Build-Up.</>
+                    : <><button type="button" onClick={handleDefineSubtasksClick} className="font-['Inter:Bold',sans-serif] font-bold text-[14px] leading-[20px] text-[#147DB9] bg-transparent border-none cursor-pointer hover:underline p-0 inline">Define subtasks</button> to organize work and prepare for BOE Build-Up. Subtasks are optional in Draft but required during BOE Build-Up.</>
+                  : <>Complete the <button type="button" onClick={handleOpenTierAssessment} className="font-['Inter:Bold',sans-serif] font-bold text-[14px] leading-[20px] text-[#147DB9] bg-transparent border-none cursor-pointer hover:underline p-0 inline">Tier Assessment</button> to establish the planning estimate and BOE tier before building this task.</>
                 }
               </p>
             </div>

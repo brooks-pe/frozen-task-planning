@@ -41,7 +41,7 @@ function PeFooter() {
 function Text() {
   return (
     <div className="bg-[rgba(255,255,255,0)] content-stretch flex items-start relative shrink-0" data-name="Text">
-      <div className="css-g0mm18 font-['Inter:Regular',sans-serif] font-normal leading-[0] not-italic relative shrink-0 text-[#1c2024] text-[0px] text-[12px] tracking-[0.04px]">
+      <div className="css-g0mm18 font-['Inter:Regular',sans-serif] font-normal leading-[0] not-italic relative shrink-0 text-[#1c2024] text-[12px] tracking-[0.04px]">
         <p className="css-ew64yg mb-0">
           <span className="leading-[16px]">{`This site is CUI — `}</span>
           <span className="leading-[16px] tracking-[0.04px]">{`Mandatory DoD Notice and Consent Banner `}</span>

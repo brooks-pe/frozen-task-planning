@@ -343,7 +343,7 @@ function KPICard({ data }: { data: KPICardData }) {
       <div className="h-full rounded-bl-[5px] rounded-tl-[5px] shrink-0 w-[8px]" style={{ backgroundColor: data.railColor }} />
       <div className="flex flex-1 w-full min-w-0 flex-col gap-[8px] items-start p-[20px] relative">
         <div className="flex items-center gap-[6px]">
-          <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#60646c] font-bold text-[16px]">
+          <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#60646c] text-[16px]">
             {data.label}
           </p>
           <InfoTooltip text={data.tooltip} />

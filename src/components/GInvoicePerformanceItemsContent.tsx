@@ -770,7 +770,7 @@ function FilterDropdown({
         {label}
       </p>
       <div
-        className={`bg-white h-[32px] relative rounded-[4px] w-full ${isInteractive ? 'cursor-pointer' : 'cursor-pointer'}`}
+        className="bg-white h-[32px] relative rounded-[4px] w-full cursor-pointer"
         onClick={isInteractive ? () => setIsOpen((prev) => !prev) : undefined}
         onKeyDown={handleKeyDown}
         tabIndex={isInteractive ? 0 : undefined}
