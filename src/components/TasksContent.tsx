@@ -29,7 +29,7 @@ type TaskColumnKey = 'taskId' | 'executingActivity' | 'project' | 'title' | 'wor
 
 // ─── Column Definitions ─────────────────────────────────────────────
 
-const TASK_TABLE_GRID = 'minmax(80px, 0.8fr) minmax(90px, 1fr) minmax(130px, 1.6fr) minmax(160px, 2.3fr) minmax(120px, 1.1fr) minmax(72px, 0.75fr) minmax(72px, 0.75fr) minmax(68px, 0.7fr) 48px';
+const TASK_TABLE_GRID = 'minmax(84px, 0.78fr) minmax(96px, 0.95fr) minmax(128px, 1.35fr) minmax(150px, 1.6fr) minmax(128px, 1.1fr) minmax(108px, 0.95fr) minmax(108px, 0.95fr) minmax(96px, 0.85fr) 48px';
 
 const COLUMNS: { key: TaskColumnKey; label: string; displayName: string; headerLines?: [string, string]; sortType: 'string' | 'number' }[] = [
   { key: 'taskId',            label: 'TASK ID',            displayName: 'Task ID',            sortType: 'string' },
@@ -73,7 +73,7 @@ function StatusFocusDot({ tag }: { tag: string }) {
 
 // ─── Clamped Cell with Truncation Tooltip ───────────────────────────────
 
-function ClampedCell({ value, textColor = '#1c2024' }: { value: string; textColor?: string }) {
+function ClampedCell({ value, textColor = '#1c2024', lines = 2 }: { value: string; textColor?: string; lines?: number }) {
   const textRef = useRef<HTMLParagraphElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [isTruncated, setIsTruncated] = useState(false);
@@ -112,7 +112,7 @@ function ClampedCell({ value, textColor = '#1c2024' }: { value: string; textColo
           color: textColor,
           display: '-webkit-box',
           WebkitBoxOrient: 'vertical',
-          WebkitLineClamp: 2,
+          WebkitLineClamp: lines,
           overflow: 'hidden',
         }}
       >
@@ -680,7 +680,7 @@ export default function TasksContent() {
                 </div>
                 {/* Title */}
                 <div className={`px-[12px] py-[12px] flex items-center min-w-0`}>
-                  <ClampedCell value={task.title} />
+                  <ClampedCell value={task.title} lines={1} />
                 </div>
                 {/* Workflow State */}
                 <div className={`px-[12px] py-[12px] flex items-center min-w-0`}>
