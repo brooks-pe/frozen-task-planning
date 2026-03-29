@@ -12,6 +12,8 @@ interface TierAssessmentFlyoutProps {
   onTierSaved?: (taskId: string, tier: string) => void;
 }
 
+type TaskType = 'CODB' | 'Standard';
+
 // Mock appropriation mapping (reuse from CloneTaskFlyout pattern)
 const ACTIVITY_APPROPRIATION: Record<string, string> = {
   'PMS 420 – Program Office': 'O&MN',
@@ -27,7 +29,15 @@ const ACTIVITY_APPROPRIATION: Record<string, string> = {
 // Tier 0 = lowest, Tier 1 = moderate, Tier 2 = highest
 // Major Deliverable → automatic Tier 2
 
-function deriveTier(directLabor: string, hasMajorDeliverable: string | null): { tier: string; reasons: string[] } | null {
+function getTaskType(task: TaskRow): TaskType {
+  return task.project === 'CODB' ? 'CODB' : 'Standard';
+}
+
+function deriveTier(taskType: TaskType, directLabor: string, hasMajorDeliverable: string | null): { tier: string; reasons: string[] } | null {
+  if (taskType === 'CODB') {
+    return { tier: 'Tier 0', reasons: ['CODB tasks are assigned Tier 0 by rule.'] };
+  }
+
   const numericLabor = parseFloat(directLabor.replace(/[^0-9.]/g, ''));
   const laborValid = !isNaN(numericLabor) && numericLabor > 0;
   const deliverableAnswered = hasMajorDeliverable !== null;
@@ -57,8 +67,9 @@ function deriveTier(directLabor: string, hasMajorDeliverable: string | null): { 
     return { tier: 'Tier 1', reasons };
   }
 
-  reasons.push('Direct labor estimate is below Tier 1 threshold');
-  return { tier: 'Tier 0', reasons };
+  reasons.push('Direct labor estimate is below the Tier 2 threshold and no major deliverable is included');
+  reasons.push('Standard tasks default to Tier 1 when Tier 2 criteria are not met');
+  return { tier: 'Tier 1', reasons };
 }
 
 const TIER_DESCRIPTIONS: Record<string, string> = {
@@ -93,11 +104,12 @@ export function TierAssessmentFlyout({ open, onClose, task, onTierSaved }: TierA
   // Reset form when panel opens
   useEffect(() => {
     if (open && task) {
+      const taskType = getTaskType(task);
       setDirectLabor('');
       setTotalFunding('');
       setMajorDeliverable(null);
       setDecision('accept');
-      setOverrideTier('Tier 0');
+      setOverrideTier(taskType === 'Standard' ? 'Tier 2' : 'Tier 0');
       setOverrideReason('');
     }
   }, [open, task]);
@@ -141,7 +153,23 @@ export function TierAssessmentFlyout({ open, onClose, task, onTierSaved }: TierA
     onClose();
   };
 
-  const recommendation = deriveTier(directLabor, majorDeliverable);
+  const taskType: TaskType = task ? getTaskType(task) : 'Standard';
+  const recommendation = task ? deriveTier(taskType, directLabor, majorDeliverable) : null;
+  const standardOverrideTier = recommendation?.tier === 'Tier 1' ? 'Tier 2' : 'Tier 1';
+
+  useEffect(() => {
+    if (!task) {
+      return;
+    }
+
+    if (taskType === 'Standard' && recommendation) {
+      setOverrideTier(standardOverrideTier);
+    } else if (taskType === 'CODB') {
+      setOverrideTier('Tier 0');
+    }
+  }, [task, taskType, recommendation, standardOverrideTier]);
+
+  if (!visible || !task) return null;
 
   const handleSaveTier = () => {
     if (!task) return;
@@ -152,8 +180,6 @@ export function TierAssessmentFlyout({ open, onClose, task, onTierSaved }: TierA
 
   // Save button enabled logic
   const canSave = recommendation !== null && (decision === 'accept' || (decision === 'override' && overrideReason.trim().length > 0));
-
-  if (!visible || !task) return null;
 
   const appropriation = ACTIVITY_APPROPRIATION[task.executingActivity] ?? 'O&MN';
 
@@ -223,6 +249,7 @@ export function TierAssessmentFlyout({ open, onClose, task, onTierSaved }: TierA
                 <div className="flex flex-col gap-[4px]">
                   <SourceRow label="Executing Activity" value={task.executingActivity} />
                   <SourceRow label="Appropriation" value={appropriation} />
+                  <SourceRow label="Task Type" value={taskType} />
                   <SourceRow label="Current Tier" value="Not Assigned" isWarning />
                 </div>
               </div>
@@ -303,7 +330,9 @@ export function TierAssessmentFlyout({ open, onClose, task, onTierSaved }: TierA
                   </div>
                   <div className="flex flex-col gap-[4px]">
                     <p className="font-['Inter:Regular',sans-serif] font-normal text-[13px] leading-[18px] m-0 text-[#1c2024]">
-                      The system recommends {recommendation.tier} based on the following factors:
+                      {taskType === 'CODB'
+                        ? 'The system recommends Tier 0 based on the following rule:'
+                        : `The system recommends ${recommendation.tier} based on the following factors:`}
                     </p>
                     <ul className="m-0 pl-[18px] flex flex-col gap-[2px]">
                       {recommendation.reasons.map((reason, i) => (
@@ -316,30 +345,32 @@ export function TierAssessmentFlyout({ open, onClose, task, onTierSaved }: TierA
                 </div>
 
                 {/* Section 5: Accept or Override */}
-                <div className="flex flex-col gap-[10px]">
-                  <p className="font-['Inter:Medium',sans-serif] font-medium text-[13px] leading-[18px] text-[#1C2024] m-0">
-                    Accept or Override
-                  </p>
-                  <div className="flex flex-col gap-[8px]">
-                    <RadioOption
-                      name="tierDecision"
-                      value="accept"
-                      label={`Accept Recommendation (${recommendation.tier})`}
-                      checked={decision === 'accept'}
-                      onChange={() => setDecision('accept')}
-                    />
-                    <RadioOption
-                      name="tierDecision"
-                      value="override"
-                      label="Override Tier"
-                      checked={decision === 'override'}
-                      onChange={() => setDecision('override')}
-                    />
+                {taskType === 'Standard' && (
+                  <div className="flex flex-col gap-[10px]">
+                    <p className="font-['Inter:Medium',sans-serif] font-medium text-[13px] leading-[18px] text-[#1C2024] m-0">
+                      Accept or Override
+                    </p>
+                    <div className="flex flex-col gap-[8px]">
+                      <RadioOption
+                        name="tierDecision"
+                        value="accept"
+                        label={`Accept Recommendation (${recommendation.tier})`}
+                        checked={decision === 'accept'}
+                        onChange={() => setDecision('accept')}
+                      />
+                      <RadioOption
+                        name="tierDecision"
+                        value="override"
+                        label={`Override to ${standardOverrideTier}`}
+                        checked={decision === 'override'}
+                        onChange={() => setDecision('override')}
+                      />
+                    </div>
                   </div>
-                </div>
+                )}
 
                 {/* Acceptance feedback */}
-                {decision === 'accept' && (
+                {(decision === 'accept' || taskType === 'CODB') && (
                   <div className="bg-[rgba(48,164,108,0.12)] rounded-[6px]">
                     <div className="flex gap-[8px] items-start p-[12px]">
                       <div className="flex items-center shrink-0 h-[20px]">
@@ -353,7 +384,7 @@ export function TierAssessmentFlyout({ open, onClose, task, onTierSaved }: TierA
                 )}
 
                 {/* Override section */}
-                {decision === 'override' && (
+                {taskType === 'Standard' && decision === 'override' && (
                   <div className="flex flex-col gap-[12px]">
                     {/* Warning banner */}
                     <div className="bg-[rgba(255,222,0,0.24)] rounded-[6px]">
@@ -367,14 +398,11 @@ export function TierAssessmentFlyout({ open, onClose, task, onTierSaved }: TierA
                       </div>
                     </div>
 
-                    {/* Override tier select */}
+                    {/* Override tier display */}
                     <FieldGroup label="Selected Tier">
-                      <SelectInput
-                        value={overrideTier}
-                        onChange={setOverrideTier}
-                        placeholder="Select tier..."
-                        options={TIER_OPTIONS}
-                      />
+                      <div className="h-[36px] px-[10px] bg-[#f9f9fb] rounded-[4px] border border-[rgba(0,6,46,0.2)] flex items-center font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024]">
+                        {overrideTier}
+                      </div>
                     </FieldGroup>
 
                     {/* Override reason */}
