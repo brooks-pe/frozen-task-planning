@@ -9,7 +9,15 @@ interface TierAssessmentFlyoutProps {
   open: boolean;
   onClose: () => void;
   task: TaskRow | null;
-  onTierSaved?: (taskId: string, tier: string) => void;
+  onTierSaved?: (result: TierAssessmentResult) => void;
+}
+
+export interface TierAssessmentResult {
+  taskId: string;
+  assignedTier: string;
+  recommendedTier: string;
+  wasOverride: boolean;
+  overrideReason: string;
 }
 
 type TaskType = 'CODB' | 'Standard';
@@ -174,7 +182,13 @@ export function TierAssessmentFlyout({ open, onClose, task, onTierSaved }: TierA
   const handleSaveTier = () => {
     if (!task) return;
     const finalTier = decision === 'override' ? overrideTier : (recommendation?.tier ?? 'Tier 0');
-    onTierSaved?.(task.taskId, finalTier);
+    onTierSaved?.({
+      taskId: task.taskId,
+      assignedTier: finalTier,
+      recommendedTier: recommendation?.tier ?? finalTier,
+      wasOverride: decision === 'override',
+      overrideReason: decision === 'override' ? overrideReason.trim() : '',
+    });
     onClose();
   };
 

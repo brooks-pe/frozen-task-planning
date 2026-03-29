@@ -3,6 +3,8 @@ import { createPortal } from 'react-dom';
 import { CollapsibleFilterSection } from './CollapsibleFilterSection';
 import { SearchableFilterDropdown } from './SearchableFilterDropdown';
 import { AppropriationBadge } from './AppropriationBadge';
+import type { TierAssessmentResult } from './TierAssessmentFlyout';
+import { HoverCard, HoverCardTrigger, HoverCardContent } from './ui/hover-card';
 
 type OperationalStatusType = 'active' | 'suspended' | 'completed';
 
@@ -243,6 +245,92 @@ function MetadataField({ label, value, badge, action, showPulse, operationalStat
           )}
         </>
       )}
+    </div>
+  );
+}
+
+function TierField({
+  currentTier,
+  overrideMetadata,
+  onOpenTierAssessment,
+  showPulse,
+}: {
+  currentTier?: string | null;
+  overrideMetadata?: TierAssessmentResult | null;
+  onOpenTierAssessment?: () => void;
+  showPulse?: boolean;
+}) {
+  const hasOverrideMetadata = !!(
+    currentTier &&
+    overrideMetadata?.wasOverride &&
+    overrideMetadata.assignedTier === currentTier
+  );
+
+  if (!currentTier) {
+    return (
+      <MetadataField
+        label="Tier"
+        value="Not Assigned"
+        badge="not-assigned"
+        action={{ text: 'Assign Tier', onClick: onOpenTierAssessment }}
+        showPulse={showPulse}
+      />
+    );
+  }
+
+  if (!hasOverrideMetadata) {
+    return <MetadataField label="Tier" value={currentTier} showPulse={showPulse} />;
+  }
+
+  return (
+    <div className={`flex flex-col gap-[4px] min-w-0 ${showPulse ? 'tier-field-pulse' : ''}`}>
+      <span className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[18px] text-[#60646c] text-[14px]">
+        Tier
+      </span>
+      <HoverCard openDelay={150} closeDelay={100}>
+        <HoverCardTrigger asChild>
+          <button
+            type="button"
+            className="inline-flex w-fit items-center gap-[6px] rounded-[4px] border-none bg-transparent p-0 text-left cursor-help"
+          >
+            <span className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024]">
+              {currentTier}
+            </span>
+            <svg
+              aria-hidden="true"
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              className="shrink-0 text-[#ab6400]"
+            >
+              <circle cx="8" cy="8" r="6.5" stroke="currentColor" strokeWidth="1.5" />
+              <path d="M8 4.6V8.4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+              <circle cx="8" cy="11.2" r="0.9" fill="currentColor" />
+            </svg>
+          </button>
+        </HoverCardTrigger>
+        <HoverCardContent
+          align="start"
+          side="top"
+          className="w-[320px] rounded-[6px] border border-[#E0E1E6] bg-white p-[12px] shadow-[0_8px_24px_rgba(0,0,0,0.12)]"
+        >
+          <div className="flex flex-col gap-[6px]">
+            <p className="m-0 font-['Inter:Semi_Bold',sans-serif] font-semibold text-[13px] leading-[18px] text-[#1C2024]">
+              Tier recommendation overridden
+            </p>
+            <p className="m-0 font-['Inter:Regular',sans-serif] font-normal text-[13px] leading-[18px] text-[#1C2024]">
+              Recommended Tier: {overrideMetadata?.recommendedTier}
+            </p>
+            <p className="m-0 font-['Inter:Regular',sans-serif] font-normal text-[13px] leading-[18px] text-[#1C2024]">
+              Assigned Tier: {overrideMetadata?.assignedTier}
+            </p>
+            <p className="m-0 font-['Inter:Regular',sans-serif] font-normal text-[13px] leading-[18px] text-[#1C2024]">
+              Reason: {overrideMetadata?.overrideReason}
+            </p>
+          </div>
+        </HoverCardContent>
+      </HoverCard>
     </div>
   );
 }
@@ -637,6 +725,7 @@ interface EditFormState {
 interface TaskSummarySectionProps {
   taskId: string;
   currentTier?: string | null;
+  tierAssessmentResult?: TierAssessmentResult | null;
   onOpenTierAssessment?: () => void;
   showPulse?: boolean;
   isEditing: boolean;
@@ -645,7 +734,7 @@ interface TaskSummarySectionProps {
   onCancel: () => void;
 }
 
-export function TaskSummarySection({ taskId, currentTier, onOpenTierAssessment, showPulse, isEditing, onEnterEditMode, onSave, onCancel }: TaskSummarySectionProps) {
+export function TaskSummarySection({ taskId, currentTier, tierAssessmentResult, onOpenTierAssessment, showPulse, isEditing, onEnterEditMode, onSave, onCancel }: TaskSummarySectionProps) {
   const defaultESId = 'ES-005'; // "Maritime ISR Modernization Program"
   const defaultES = EXECUTION_STATEMENTS.find(es => es.id === defaultESId)!;
   const isNewlyCreatedTask = taskId === '41-0279';
@@ -817,12 +906,11 @@ export function TaskSummarySection({ taskId, currentTier, onOpenTierAssessment, 
             ) : (
               <MetadataField label="Planning Year" value={savedState.planningYear} />
             )}
-            <MetadataField 
-              label="Tier" 
-              value={currentTier || 'Not Assigned'} 
-              badge={currentTier ? undefined : 'not-assigned'} 
-              action={currentTier ? undefined : { text: 'Assign Tier', onClick: onOpenTierAssessment }} 
-              showPulse={showPulse} 
+            <TierField
+              currentTier={currentTier}
+              overrideMetadata={tierAssessmentResult}
+              onOpenTierAssessment={onOpenTierAssessment}
+              showPulse={showPulse}
             />
           </div>
         </div>

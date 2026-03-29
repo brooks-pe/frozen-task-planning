@@ -5,7 +5,7 @@ import { TASKS_DATA } from './TaskPlanningData';
 import { CloneTaskFlyout } from './CloneTaskFlyout';
 import { SyncPointBreadcrumb } from './SyncPointBreadcrumb';
 import { TaskSummarySection, TASK_SUMMARY_PROJECT_OPTIONS } from './TaskSummarySection';
-import { TierAssessmentFlyout } from './TierAssessmentFlyout';
+import { TierAssessmentFlyout, type TierAssessmentResult } from './TierAssessmentFlyout';
 import { TaskWorkspaceOverview } from './TaskWorkspaceOverview';
 import { WorkflowFooter } from './WorkflowFooter';
 import { BOESubtasksSection } from './BOESubtasksSection';
@@ -33,6 +33,7 @@ export default function TaskWorkspaceHeader() {
   const [reimbursableTotal, setReimbursableTotal] = React.useState('');
   const [directCiteTotal, setDirectCiteTotal] = React.useState('');
   const [showStickyContextHeader, setShowStickyContextHeader] = React.useState(false);
+  const [tierAssessmentResult, setTierAssessmentResult] = React.useState<TierAssessmentResult | null>(null);
 
   const task = TASKS_DATA.find(t => t.taskId === taskId);
 
@@ -85,8 +86,9 @@ export default function TaskWorkspaceHeader() {
     setTierFlyoutOpen(true);
   };
 
-  const handleTierSaved = (taskId: string, tier: string) => {
-    setCurrentTier(tier);
+  const handleTierSaved = (result: TierAssessmentResult) => {
+    setCurrentTier(result.assignedTier);
+    setTierAssessmentResult(result);
     setShowSuccessToast(true);
     setShowTierPulse(true);
     setTimeout(() => setShowSuccessToast(false), 6000);
@@ -344,6 +346,7 @@ export default function TaskWorkspaceHeader() {
           <TaskSummarySection
             taskId={taskId || ''}
             currentTier={currentTier}
+            tierAssessmentResult={tierAssessmentResult}
             onOpenTierAssessment={handleOpenTierAssessment}
             showPulse={showTierPulse}
             isEditing={isEditing}
