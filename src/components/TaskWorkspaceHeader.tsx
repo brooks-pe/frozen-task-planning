@@ -32,6 +32,7 @@ export default function TaskWorkspaceHeader() {
   const [activeTab, setActiveTab] = React.useState<'overview' | 'boe'>('overview');
   const [reimbursableTotal, setReimbursableTotal] = React.useState('');
   const [directCiteTotal, setDirectCiteTotal] = React.useState('');
+  const [showStickyContextHeader, setShowStickyContextHeader] = React.useState(false);
 
   const task = TASKS_DATA.find(t => t.taskId === taskId);
 
@@ -39,6 +40,7 @@ export default function TaskWorkspaceHeader() {
   const [isEditing, setIsEditing] = React.useState(false);
   const titleInputRef = React.useRef<HTMLInputElement>(null);
   const boeContentRef = React.useRef<HTMLDivElement>(null);
+  const breadcrumbRef = React.useRef<HTMLDivElement>(null);
 
   // Title state — initialized from task data, kept in sync with saved value
   const [taskTitle, setTaskTitle] = React.useState(() => task?.title ?? '');
@@ -130,8 +132,67 @@ export default function TaskWorkspaceHeader() {
     setIsEditing(false);
   };
 
+  React.useEffect(() => {
+    const breadcrumbElement = breadcrumbRef.current;
+
+    if (!breadcrumbElement) {
+      return;
+    }
+
+    const scrollContainer = breadcrumbElement.closest('.overflow-y-auto') as HTMLElement | null;
+
+    if (!scrollContainer) {
+      return;
+    }
+
+    let frameId: number | null = null;
+
+    const updateStickyHeader = () => {
+      frameId = null;
+      const breadcrumbRect = breadcrumbElement.getBoundingClientRect();
+      const containerRect = scrollContainer.getBoundingClientRect();
+      setShowStickyContextHeader(breadcrumbRect.top <= containerRect.top + 1);
+    };
+
+    const requestUpdate = () => {
+      if (frameId !== null) {
+        return;
+      }
+
+      frameId = window.requestAnimationFrame(updateStickyHeader);
+    };
+
+    requestUpdate();
+    scrollContainer.addEventListener('scroll', requestUpdate, { passive: true });
+    window.addEventListener('resize', requestUpdate);
+
+    return () => {
+      if (frameId !== null) {
+        window.cancelAnimationFrame(frameId);
+      }
+      scrollContainer.removeEventListener('scroll', requestUpdate);
+      window.removeEventListener('resize', requestUpdate);
+    };
+  }, []);
+
   return (
     <>
+      <div className="sticky top-0 z-30 h-0">
+        <div
+          className={`pointer-events-none transition-all duration-200 ease-out ${
+            showStickyContextHeader ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
+          }`}
+        >
+          <div className="bg-white border-b border-[#e0e1e6] shadow-[0_2px_8px_rgba(0,0,0,0.08)]">
+            <div className="px-[24px] py-[12px]">
+              <p className="font-['Inter:Regular',sans-serif] font-normal text-[18px] leading-[24px] text-[#1C2024] overflow-hidden text-ellipsis whitespace-nowrap">
+                {savedTaskTitle} • {taskId} • {savedExecutingActivity} • {savedProject}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="bg-white px-[24px] pt-[24px] pb-0">
         <div className="flex flex-col gap-[16px]">
           {/* Row 1: Action Row - Back button, Dev Override, and Clone Task */}
@@ -265,12 +326,14 @@ export default function TaskWorkspaceHeader() {
             </div>
 
             {/* Breadcrumbs */}
-            <SyncPointBreadcrumb items={[
-              { label: 'Home', path: '/' },
-              { label: 'Task Planning', path: '/task-planning/dashboard' },
-              { label: 'Tasks', path: '/task-planning/tasks' },
-              { label: taskId || '' },
-            ]} />
+            <div ref={breadcrumbRef}>
+              <SyncPointBreadcrumb items={[
+                { label: 'Home', path: '/' },
+                { label: 'Task Planning', path: '/task-planning/dashboard' },
+                { label: 'Tasks', path: '/task-planning/tasks' },
+                { label: taskId || '' },
+              ]} />
+            </div>
           </div>
         </div>
       </div>
