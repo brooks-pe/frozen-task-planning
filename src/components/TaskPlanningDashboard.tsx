@@ -544,12 +544,12 @@ function PlanningMilestonesCard() {
           title="Scroll to see all milestones"
           aria-hidden="true"
         >
-          <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+          <svg width="16" height="16" viewBox="0 0 13 13" fill="none">
             <path d="M6.5 2L4.5 4.5H8.5L6.5 2Z" fill="#a0a4af" />
             <path d="M6.5 11L4.5 8.5H8.5L6.5 11Z" fill="#a0a4af" />
             <line x1="6.5" y1="4.5" x2="6.5" y2="8.5" stroke="#a0a4af" strokeWidth="1" />
           </svg>
-          <span className="font-['Inter:Regular',sans-serif] font-normal text-[11px] leading-[16px] text-[#1c2024]">
+          <span className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1c2024]">
             Scroll
           </span>
         </span>
@@ -580,9 +580,9 @@ function PlanningMilestonesCard() {
                   isNextUp
                     ? {
                         borderLeft: '4px solid #92400E',
-                        borderTop: '1px solid #D97706',
-                        borderRight: '1px solid #D97706',
-                        borderBottom: '1px solid #D97706',
+                        borderTop: '1px solid #92400E',
+                        borderRight: '1px solid #92400E',
+                        borderBottom: '1px solid #92400E',
                         ...(showPulse ? { animation: 'milestonePulse 1.5s ease-in-out 2' } : {}),
                       }
                     : {
