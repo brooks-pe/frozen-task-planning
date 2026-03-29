@@ -8,7 +8,7 @@ import { TaskSummarySection, TASK_SUMMARY_PROJECT_OPTIONS } from './TaskSummaryS
 import { TierAssessmentFlyout, type TierAssessmentResult } from './TierAssessmentFlyout';
 import { TaskWorkspaceOverview } from './TaskWorkspaceOverview';
 import { WorkflowFooter } from './WorkflowFooter';
-import { BOESubtasksSection } from './BOESubtasksSection';
+import { BOESubtaskForm, BOESubtaskView, createEmptySubtaskDraft, type SubtaskDraft } from './BOESubtasksSection';
 import { SearchableFilterDropdown } from './SearchableFilterDropdown';
 import { EXECUTING_ACTIVITY_OPTIONS } from './TaskPlanningData';
 
@@ -29,11 +29,12 @@ export default function TaskWorkspaceHeader() {
   const [showSuccessToast, setShowSuccessToast] = React.useState(false);
   const [showTierPulse, setShowTierPulse] = React.useState(false);
   const [showCloneToast, setShowCloneToast] = React.useState(false);
-  const [activeTab, setActiveTab] = React.useState<'overview' | 'boe'>('overview');
+  const [activeTab, setActiveTab] = React.useState<string>('overview');
   const [reimbursableTotal, setReimbursableTotal] = React.useState('');
   const [directCiteTotal, setDirectCiteTotal] = React.useState('');
   const [showStickyContextHeader, setShowStickyContextHeader] = React.useState(false);
   const [tierAssessmentResult, setTierAssessmentResult] = React.useState<TierAssessmentResult | null>(null);
+  const [subtasks, setSubtasks] = React.useState<SubtaskDraft[]>([]);
 
   const task = TASKS_DATA.find(t => t.taskId === taskId);
 
@@ -42,6 +43,8 @@ export default function TaskWorkspaceHeader() {
   const titleInputRef = React.useRef<HTMLInputElement>(null);
   const boeContentRef = React.useRef<HTMLDivElement>(null);
   const breadcrumbRef = React.useRef<HTMLDivElement>(null);
+  const subtaskTitleRef = React.useRef<HTMLInputElement>(null);
+  const [pendingSubtaskFocusId, setPendingSubtaskFocusId] = React.useState<string | null>(null);
 
   // Title state — initialized from task data, kept in sync with saved value
   const [taskTitle, setTaskTitle] = React.useState(() => task?.title ?? '');
@@ -58,9 +61,16 @@ export default function TaskWorkspaceHeader() {
 
   const isTier0 = currentTier === 'Tier 0';
   const tier0BoePopulated = parseFloat(reimbursableTotal) > 0 && parseFloat(directCiteTotal) > 0;
+  const activeSubtask = subtasks.find(subtask => subtask.id === activeTab) ?? null;
 
   function handleDefineSubtasksClick() {
-    setActiveTab('boe');
+    if (isTier0) {
+      setActiveTab('tier0');
+    } else if (subtasks.length > 0) {
+      setActiveTab(subtasks[0].id);
+    } else {
+      handleAddSubtaskTab();
+    }
     requestAnimationFrame(() => {
       boeContentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     });
@@ -107,7 +117,7 @@ export default function TaskWorkspaceHeader() {
   // Dev-only: override tier for UI testing
   const handleDevTierChange = (tier: string | null) => {
     setCurrentTier(tier);
-    if (!tier) setActiveTab('overview');
+    if (!tier || tier === 'Tier 0') setActiveTab('overview');
   };
 
   // Enter edit mode. If focusTitle=true, auto-focus the title input on the next tick.
@@ -133,6 +143,113 @@ export default function TaskWorkspaceHeader() {
     setProject(savedProject);
     setIsEditing(false);
   };
+
+  const handleAddSubtaskTab = React.useCallback(() => {
+    const newSubtask = createEmptySubtaskDraft();
+    setSubtasks(prev => [...prev, newSubtask]);
+    setActiveTab(newSubtask.id);
+    setPendingSubtaskFocusId(newSubtask.id);
+  }, []);
+
+  const handleUpdateSubtask = React.useCallback((id: string, patch: Partial<SubtaskDraft>) => {
+    setSubtasks(prev => prev.map(subtask => (subtask.id === id ? { ...subtask, ...patch } : subtask)));
+  }, []);
+
+  const handleSaveSubtask = React.useCallback((id: string) => {
+    setSubtasks(prev =>
+      prev.map(subtask =>
+        subtask.id === id
+          ? {
+              ...subtask,
+              savedTitle: subtask.title.trim(),
+              savedDescription: subtask.description,
+              savedPopStart: subtask.popStart,
+              savedPopEnd: subtask.popEnd,
+              isEditing: false,
+            }
+          : subtask
+      )
+    );
+  }, []);
+
+  const handleEditSubtask = React.useCallback((id: string) => {
+    setSubtasks(prev =>
+      prev.map(subtask =>
+        subtask.id === id
+          ? { ...subtask, isEditing: true }
+          : subtask
+      )
+    );
+  }, []);
+
+  const handleCancelSubtaskEdit = React.useCallback((id: string) => {
+    setSubtasks(prev => {
+      const target = prev.find(subtask => subtask.id === id);
+
+      if (!target) {
+        return prev;
+      }
+
+      if (!target.savedTitle) {
+        const currentIndex = prev.findIndex(subtask => subtask.id === id);
+        const next = prev.filter(subtask => subtask.id !== id);
+        if (activeTab === id) {
+          const fallbackSubtask = next[Math.max(0, currentIndex - 1)] ?? next[0] ?? null;
+          setActiveTab(fallbackSubtask ? fallbackSubtask.id : 'overview');
+        }
+        return next;
+      }
+
+      return prev.map(subtask =>
+        subtask.id === id
+          ? {
+              ...subtask,
+              title: subtask.savedTitle,
+              description: subtask.savedDescription,
+              popStart: subtask.savedPopStart,
+              popEnd: subtask.savedPopEnd,
+              isEditing: false,
+            }
+          : subtask
+      );
+    });
+  }, [activeTab]);
+
+  const handleRemoveSubtask = React.useCallback((id: string) => {
+    setSubtasks(prev => {
+      const currentIndex = prev.findIndex(subtask => subtask.id === id);
+      const next = prev.filter(subtask => subtask.id !== id);
+
+      if (activeTab === id) {
+        const fallbackSubtask = next[Math.max(0, currentIndex - 1)] ?? next[0] ?? null;
+        setActiveTab(fallbackSubtask ? fallbackSubtask.id : 'overview');
+      }
+
+      return next;
+    });
+  }, [activeTab]);
+
+  React.useEffect(() => {
+    if (pendingSubtaskFocusId) {
+      setTimeout(() => subtaskTitleRef.current?.focus(), 0);
+      setPendingSubtaskFocusId(null);
+    }
+  }, [pendingSubtaskFocusId]);
+
+  React.useEffect(() => {
+    if (!currentTier) {
+      setActiveTab('overview');
+      return;
+    }
+
+    if (currentTier === 'Tier 0' && activeTab !== 'overview' && activeTab !== 'tier0') {
+      setActiveTab('overview');
+    }
+
+    if (currentTier !== 'Tier 0' && activeTab === 'tier0') {
+      setActiveTab('overview');
+    }
+  }, [activeTab, currentTier]);
 
   React.useEffect(() => {
     const breadcrumbElement = breadcrumbRef.current;
@@ -384,12 +501,29 @@ export default function TaskWorkspaceHeader() {
               >
                 Overview
               </button>
-              {!!currentTier && (
+              {!!currentTier && isTier0 && (
                 <button
-                  onClick={() => setActiveTab('boe')}
-                  className={`px-[16px] py-[10px] font-['Inter:Medium',sans-serif] font-medium leading-[20px] border-b-[2px] transition-colors cursor-pointer bg-transparent ${ activeTab === 'boe' ? 'border-[#004B72] text-[#004B72]' : 'border-transparent text-[#60646C] hover:text-[#1C2024]' } text-[16px]`}
+                  onClick={() => setActiveTab('tier0')}
+                  className={`px-[16px] py-[10px] font-['Inter:Medium',sans-serif] font-medium leading-[20px] border-b-[2px] transition-colors cursor-pointer bg-transparent ${ activeTab === 'tier0' ? 'border-[#004B72] text-[#004B72]' : 'border-transparent text-[#60646C] hover:text-[#1C2024]' } text-[16px]`}
                 >
-                  {isTier0 ? 'Tier 0 BOE' : 'Add Subtasks'}
+                  Tier 0 BOE
+                </button>
+              )}
+              {!!currentTier && !isTier0 && subtasks.map((subtask, index) => (
+                <button
+                  key={subtask.id}
+                  onClick={() => setActiveTab(subtask.id)}
+                  className={`px-[16px] py-[10px] font-['Inter:Medium',sans-serif] font-medium leading-[20px] border-b-[2px] transition-colors cursor-pointer bg-transparent text-[16px] ${ activeTab === subtask.id ? 'border-[#004B72] text-[#004B72]' : 'border-transparent text-[#60646C] hover:text-[#1C2024]' }`}
+                >
+                  {subtask.savedTitle || `Untitled Subtask ${index + 1}`}
+                </button>
+              ))}
+              {!!currentTier && !isTier0 && (
+                <button
+                  onClick={handleAddSubtaskTab}
+                  className="px-[16px] py-[10px] font-['Inter:Medium',sans-serif] font-medium leading-[20px] border-b-[2px] border-transparent transition-colors cursor-pointer bg-transparent text-[#006496] hover:text-[#004B72] text-[16px]"
+                >
+                  + Add Subtask
                 </button>
               )}
             </div>
@@ -399,7 +533,7 @@ export default function TaskWorkspaceHeader() {
               {activeTab === 'overview' && (
                 <TaskWorkspaceOverview currentTier={currentTier} onOpenTierAssessment={handleOpenTierAssessment} />
               )}
-              {activeTab === 'boe' && (
+              {activeTab === 'tier0' && (
                 isTier0 ? (
                   /* Tier 0 minimal BOE form */
                   <div className="border border-[#e0e1e6] rounded-[8px] bg-white px-[24px] py-[24px]">
@@ -465,11 +599,34 @@ export default function TaskWorkspaceHeader() {
                     </div>
                   </div>
                 ) : (
-                  /* Non-Tier-0: Subtasks section for Draft */
-                  <div className="border border-[#e0e1e6] rounded-[8px] bg-white px-[24px] py-[24px]">
-                    <BOESubtasksSection />
-                  </div>
+                  null
                 )
+              )}
+              {!isTier0 && !!currentTier && activeSubtask && (
+                <div className="flex flex-col gap-[16px]">
+                  <h3 className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[24px] text-[#1C2024] text-[18px]">
+                    Define Subtask Shell
+                  </h3>
+                  <p className="font-['Inter:Regular',sans-serif] font-normal leading-[18px] text-[#80838D] text-[14px]">
+                    Define this subtask shell to structure the work for later BOE Build-Up. Capture the subtask title, supporting context, and period of performance so this workstream is ready for downstream estimating.
+                  </p>
+                  {activeSubtask.isEditing ? (
+                    <BOESubtaskForm
+                      subtask={activeSubtask}
+                      onUpdate={patch => handleUpdateSubtask(activeSubtask.id, patch)}
+                      onSave={() => handleSaveSubtask(activeSubtask.id)}
+                      onCancel={() => handleCancelSubtaskEdit(activeSubtask.id)}
+                      onRemove={() => handleRemoveSubtask(activeSubtask.id)}
+                      titleRef={activeSubtask.id === pendingSubtaskFocusId ? subtaskTitleRef : undefined}
+                    />
+                  ) : (
+                    <BOESubtaskView
+                      subtask={activeSubtask}
+                      onEdit={() => handleEditSubtask(activeSubtask.id)}
+                      onRemove={() => handleRemoveSubtask(activeSubtask.id)}
+                    />
+                  )}
+                </div>
               )}
             </div>
           </div>

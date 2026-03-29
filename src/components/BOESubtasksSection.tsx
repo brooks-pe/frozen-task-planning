@@ -1,16 +1,20 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { ChevronDown, ChevronRight, Trash2, Plus } from 'lucide-react';
+import { Trash2, Plus } from 'lucide-react';
 
 // ── Types ───────────────────────────────────────────────────────────────────
 
-interface Subtask {
+export interface SubtaskDraft {
   id: string;
   title: string;
+  savedTitle: string;
   description: string;
+  savedDescription: string;
   popStart: string;
+  savedPopStart: string;
   popEnd: string;
-  expanded: boolean;
+  savedPopEnd: string;
+  isEditing: boolean;
 }
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
@@ -20,33 +24,49 @@ function uid() {
   return `st-${Date.now()}-${nextId++}`;
 }
 
+export function createEmptySubtaskDraft(): SubtaskDraft {
+  return {
+    id: uid(),
+    title: '',
+    savedTitle: '',
+    description: '',
+    savedDescription: '',
+    popStart: '',
+    savedPopStart: '',
+    popEnd: '',
+    savedPopEnd: '',
+    isEditing: true,
+  };
+}
+
 // ── Sub-components ──────────────────────────────────────────────────────────
 
-function SubtaskPanel({
+export function BOESubtaskForm({
   subtask,
-  onToggle,
   onUpdate,
+  onSave,
+  onCancel,
   onRemove,
   titleRef,
 }: {
-  subtask: Subtask;
-  onToggle: () => void;
-  onUpdate: (patch: Partial<Subtask>) => void;
+  subtask: SubtaskDraft;
+  onUpdate: (patch: Partial<SubtaskDraft>) => void;
+  onSave: () => void;
+  onCancel: () => void;
   onRemove: () => void;
   titleRef?: React.RefObject<HTMLInputElement | null>;
 }) {
+  const canSave = subtask.title.trim().length > 0;
+
   return (
     <div className="border border-[#e0e1e6] rounded-[8px] bg-white overflow-hidden">
-      {/* Header row */}
-      <div className="flex items-center gap-[8px] px-[16px] py-[12px] bg-[#f9f9fb] cursor-pointer select-none" onClick={onToggle}>
-        <div className="flex items-center justify-center w-[20px] h-[20px] shrink-0 text-[#60646C]">
-          {subtask.expanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
-        </div>
-        <span className="flex-1 font-['Inter:Medium',sans-serif] font-medium leading-[20px] text-[#1C2024] truncate text-[16px]">
-          {subtask.title || 'Untitled Subtask'}
+      <div className="flex items-center justify-between gap-[12px] px-[16px] py-[12px] bg-[#f9f9fb] border-b border-[#e0e1e6]">
+        <span className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] text-[#1C2024] text-[16px]">
+          {subtask.savedTitle || 'Subtask Draft'}
         </span>
         <button
-          onClick={e => { e.stopPropagation(); onRemove(); }}
+          type="button"
+          onClick={onRemove}
           className="flex items-center justify-center w-[28px] h-[28px] rounded-[4px] bg-transparent border-none cursor-pointer text-[#80838D] hover:text-[#e5484d] hover:bg-[#fff0f0] transition-colors shrink-0"
           aria-label="Remove subtask"
         >
@@ -54,63 +74,155 @@ function SubtaskPanel({
         </button>
       </div>
 
-      {/* Expanded body */}
-      {subtask.expanded && (
-        <div className="px-[16px] py-[16px] flex flex-col gap-[16px]">
-          {/* Subtask Title */}
-          <div className="flex flex-col gap-[6px]">
-            <label className="font-['Inter:Medium',sans-serif] font-medium leading-[18px] text-[#60646C] text-[14px]">
-              Subtask Title
-            </label>
-            <input
-              ref={titleRef}
-              type="text"
-              value={subtask.title}
-              onChange={e => onUpdate({ title: e.target.value })}
-              placeholder="Enter subtask title"
-              className="w-full h-[36px] px-[10px] border border-[rgba(0,6,46,0.2)] rounded-[4px] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] placeholder:text-[#80838D] focus:outline-none focus:border-[#004B72] focus:ring-1 focus:ring-[#004B72] bg-white"
-            />
-          </div>
+      <div className="px-[16px] py-[16px] flex flex-col gap-[16px]">
+        {/* Subtask Title */}
+        <div className="flex flex-col gap-[6px]">
+          <label className="font-['Inter:Medium',sans-serif] font-medium leading-[18px] text-[#60646C] text-[14px]">
+            Subtask Title
+          </label>
+          <input
+            ref={titleRef}
+            type="text"
+            value={subtask.title}
+            onChange={e => onUpdate({ title: e.target.value })}
+            placeholder="Enter subtask title"
+            className="w-full h-[36px] px-[10px] border border-[rgba(0,6,46,0.2)] rounded-[4px] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] placeholder:text-[#80838D] focus:outline-none focus:border-[#004B72] focus:ring-1 focus:ring-[#004B72] bg-white"
+          />
+        </div>
 
-          {/* Description (optional) */}
-          <div className="flex flex-col gap-[6px]">
-            <label className="font-['Inter:Medium',sans-serif] font-medium leading-[18px] text-[#60646C] text-[14px]">
-              Description <span className="text-[#80838D]">(optional)</span>
-            </label>
-            <textarea
-              value={subtask.description}
-              onChange={e => onUpdate({ description: e.target.value })}
-              placeholder="Describe the subtask"
-              rows={3}
-              className="w-full px-[10px] py-[8px] border border-[rgba(0,6,46,0.2)] rounded-[4px] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] placeholder:text-[#80838D] focus:outline-none focus:border-[#004B72] focus:ring-1 focus:ring-[#004B72] bg-white resize-vertical"
-            />
-          </div>
+        {/* Description (optional) */}
+        <div className="flex flex-col gap-[6px]">
+          <label className="font-['Inter:Medium',sans-serif] font-medium leading-[18px] text-[#60646C] text-[14px]">
+            Description <span className="text-[#80838D]">(optional)</span>
+          </label>
+          <textarea
+            value={subtask.description}
+            onChange={e => onUpdate({ description: e.target.value })}
+            placeholder="Describe the subtask"
+            rows={3}
+            className="w-full px-[10px] py-[8px] border border-[rgba(0,6,46,0.2)] rounded-[4px] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] placeholder:text-[#80838D] focus:outline-none focus:border-[#004B72] focus:ring-1 focus:ring-[#004B72] bg-white resize-vertical"
+          />
+        </div>
 
-          {/* Period of Performance (optional) */}
-          <div className="flex flex-col gap-[6px]">
-            <label className="font-['Inter:Medium',sans-serif] font-medium leading-[18px] text-[#60646C] text-[14px]">
-              Period of Performance <span className="text-[#80838D]">(optional)</span>
-            </label>
-            <div className="flex items-center gap-[8px]">
-              <div className="w-[200px] shrink-0">
-                <DatePickerInput
-                  value={subtask.popStart}
-                  onChange={v => onUpdate({ popStart: v })}
-                  placeholder="mm/dd/yyyy"
-                />
-              </div>
-              <span className="font-['Inter:Regular',sans-serif] font-normal text-[13px] leading-[18px] text-[#80838D] shrink-0">to</span>
-              <div className="w-[200px] shrink-0">
-                <DatePickerInput
-                  value={subtask.popEnd}
-                  onChange={v => onUpdate({ popEnd: v })}
-                  placeholder="mm/dd/yyyy"
-                />
-              </div>
+        {/* Period of Performance (optional) */}
+        <div className="flex flex-col gap-[6px]">
+          <label className="font-['Inter:Medium',sans-serif] font-medium leading-[18px] text-[#60646C] text-[14px]">
+            Period of Performance <span className="text-[#80838D]">(optional)</span>
+          </label>
+          <div className="flex items-center gap-[8px]">
+            <div className="w-[200px] shrink-0">
+              <DatePickerInput
+                value={subtask.popStart}
+                onChange={v => onUpdate({ popStart: v })}
+                placeholder="mm/dd/yyyy"
+              />
+            </div>
+            <span className="font-['Inter:Regular',sans-serif] font-normal text-[13px] leading-[18px] text-[#80838D] shrink-0">to</span>
+            <div className="w-[200px] shrink-0">
+              <DatePickerInput
+                value={subtask.popEnd}
+                onChange={v => onUpdate({ popEnd: v })}
+                placeholder="mm/dd/yyyy"
+              />
             </div>
           </div>
         </div>
-      )}
+
+        <div className="flex justify-start gap-[8px]">
+          <button
+            type="button"
+            onClick={onCancel}
+            className="h-[32px] px-[12px] rounded-[4px] border border-[rgba(0,8,48,0.27)] bg-white cursor-pointer hover:bg-[#f5f5f5] transition-colors font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] text-[#1C2024]"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            onClick={onSave}
+            disabled={!canSave}
+            className={`flex items-center gap-[6px] h-[32px] px-[12px] rounded-[4px] font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] border-none transition-colors ${
+              canSave
+                ? 'bg-[#004B72] text-white cursor-pointer hover:bg-[#003a5c]'
+                : 'bg-[#004B72]/40 text-white cursor-not-allowed'
+            }`}
+          >
+            Save Subtask
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function BOESubtaskView({
+  subtask,
+  onEdit,
+  onRemove,
+}: {
+  subtask: SubtaskDraft;
+  onEdit: () => void;
+  onRemove: () => void;
+}) {
+  const displayTitle = subtask.savedTitle || subtask.title || 'Untitled Subtask';
+  const displayPop = subtask.savedPopStart && subtask.savedPopEnd
+    ? `${subtask.savedPopStart} to ${subtask.savedPopEnd}`
+    : 'Not yet set';
+
+  return (
+    <div className="border border-[#e0e1e6] rounded-[8px] bg-white overflow-hidden">
+      <div className="flex items-center justify-between gap-[12px] px-[16px] py-[12px] bg-[#f9f9fb] border-b border-[#e0e1e6]">
+        <span className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] text-[#1C2024] text-[16px]">
+          {displayTitle}
+        </span>
+        <button
+          type="button"
+          onClick={onRemove}
+          className="flex items-center justify-center w-[28px] h-[28px] rounded-[4px] bg-transparent border-none cursor-pointer text-[#80838D] hover:text-[#e5484d] hover:bg-[#fff0f0] transition-colors shrink-0"
+          aria-label="Remove subtask"
+        >
+          <Trash2 size={14} />
+        </button>
+      </div>
+
+      <div className="px-[16px] py-[16px] flex flex-col gap-[16px]">
+        <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-[24px]">
+          <div className="flex flex-col gap-[4px] min-w-0">
+            <span className="font-['Inter:Semi_Bold',sans-serif] font-semibold text-[13px] leading-[18px] text-[#60646C]">
+              Subtask Title
+            </span>
+            <span className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024]">
+              {displayTitle}
+            </span>
+          </div>
+          <div className="flex flex-col gap-[4px] min-w-0">
+            <span className="font-['Inter:Semi_Bold',sans-serif] font-semibold text-[13px] leading-[18px] text-[#60646C]">
+              Period of Performance
+            </span>
+            <span className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024]">
+              {displayPop}
+            </span>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-[4px] min-w-0">
+          <span className="font-['Inter:Semi_Bold',sans-serif] font-semibold text-[13px] leading-[18px] text-[#60646C]">
+            Description
+          </span>
+          <span className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] whitespace-pre-wrap">
+            {subtask.savedDescription || 'No description provided.'}
+          </span>
+        </div>
+
+        <div className="flex justify-start">
+          <button
+            type="button"
+            onClick={onEdit}
+            className="flex gap-[8px] h-[32px] items-center justify-center px-[12px] rounded-[4px] shrink-0 cursor-pointer bg-[#004B72] border-none text-white hover:bg-[#003a5a] transition-colors font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px]"
+          >
+            Edit
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
@@ -320,9 +432,10 @@ function DatePickerInput({
 // ── Main Component ──────────────────────────────────────────────────────────
 
 export function BOESubtasksSection() {
-  const [subtasks, setSubtasks] = React.useState<Subtask[]>([]);
+  const [subtasks, setSubtasks] = React.useState<SubtaskDraft[]>([]);
   const newTitleRef = React.useRef<HTMLInputElement | null>(null);
   const [pendingFocusId, setPendingFocusId] = React.useState<string | null>(null);
+  const [activeSubtaskId, setActiveSubtaskId] = React.useState<string | null>(null);
 
   // Focus newly-created subtask title
   React.useEffect(() => {
@@ -336,24 +449,47 @@ export function BOESubtasksSection() {
     const id = uid();
     setSubtasks(prev => [
       ...prev,
-      { id, title: '', description: '', popStart: '', popEnd: '', expanded: true },
+      { id, title: '', savedTitle: '', description: '', popStart: '', popEnd: '' },
     ]);
+    setActiveSubtaskId(id);
     setPendingFocusId(id);
   };
 
-  const toggleSubtask = (id: string) => {
-    setSubtasks(prev => prev.map(s => (s.id === id ? { ...s, expanded: !s.expanded } : s)));
-  };
-
-  const updateSubtask = (id: string, patch: Partial<Subtask>) => {
+  const updateSubtask = (id: string, patch: Partial<SubtaskDraft>) => {
     setSubtasks(prev => prev.map(s => (s.id === id ? { ...s, ...patch } : s)));
   };
 
-  const removeSubtask = (id: string) => {
-    setSubtasks(prev => prev.filter(s => s.id !== id));
+  const saveSubtask = (id: string) => {
+    setSubtasks(prev =>
+      prev.map(s =>
+        s.id === id
+          ? { ...s, savedTitle: s.title.trim() }
+          : s
+      )
+    );
   };
 
-  const hasSubtasks = subtasks.length > 0;
+  const removeSubtask = (id: string) => {
+    setSubtasks(prev => {
+      const next = prev.filter(s => s.id !== id);
+      if (activeSubtaskId === id) {
+        setActiveSubtaskId(next.length > 0 ? next[Math.max(0, prev.findIndex(s => s.id === id) - 1)]?.id ?? next[0].id : null);
+      }
+      return next;
+    });
+  };
+
+  const activeSubtask = subtasks.find(s => s.id === activeSubtaskId) ?? null;
+
+  React.useEffect(() => {
+    if (!activeSubtaskId && subtasks.length > 0) {
+      setActiveSubtaskId(subtasks[0].id);
+    }
+  }, [activeSubtaskId, subtasks]);
+
+  const getTabLabel = (subtask: Subtask, index: number) => {
+    return subtask.savedTitle || `Untitled Subtask ${index + 1}`;
+  };
 
   return (
     <div className="flex flex-col gap-[16px]">
@@ -365,37 +501,50 @@ export function BOESubtasksSection() {
         Subtasks break the work into manageable pieces for BOE development. Add high-level subtasks now; detailed costing can be completed during BOE Build-Up.
       </p>
 
-      {/* Subtask list or empty state */}
-      {hasSubtasks ? (
-        <div className="flex flex-col gap-[12px]">
-          {subtasks.map(s => (
-            <SubtaskPanel
-              key={s.id}
-              subtask={s}
-              onToggle={() => toggleSubtask(s.id)}
-              onUpdate={patch => updateSubtask(s.id, patch)}
-              onRemove={() => removeSubtask(s.id)}
-              titleRef={s.id === pendingFocusId || (subtasks[subtasks.length - 1]?.id === s.id && pendingFocusId === null && s.title === '') ? newTitleRef : undefined}
-            />
-          ))}
+      <div className="flex flex-col gap-[12px]">
+        <div className="flex items-end gap-[4px] overflow-x-auto pb-[2px]">
+          {subtasks.map((subtask, index) => {
+            const isActive = subtask.id === activeSubtaskId;
+            return (
+              <button
+                key={subtask.id}
+                type="button"
+                onClick={() => setActiveSubtaskId(subtask.id)}
+                className={`h-[36px] px-[12px] rounded-t-[8px] border border-b-0 font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] whitespace-nowrap transition-colors ${
+                  isActive
+                    ? 'bg-white border-[#e0e1e6] text-[#1C2024]'
+                    : 'bg-[#f9f9fb] border-[#d9dade] text-[#60646C] hover:bg-white'
+                }`}
+              >
+                {getTabLabel(subtask, index)}
+              </button>
+            );
+          })}
+          <button
+            type="button"
+            onClick={addSubtask}
+            className="h-[36px] px-[12px] rounded-t-[8px] border border-b-0 border-dashed border-[#d9dade] bg-[#f9f9fb] font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] text-[#006496] whitespace-nowrap hover:bg-white transition-colors inline-flex items-center gap-[6px]"
+          >
+            <Plus size={14} />
+            Add Subtask
+          </button>
         </div>
-      ) : (
-        <div className="border border-[#e0e1e6] rounded-[8px] bg-[#f9f9fb] px-[24px] py-[40px] flex flex-col items-center justify-center gap-[16px]">
-          <p className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#80838D]">
-            No subtasks yet.
-          </p>
-        </div>
-      )}
 
-      {/* Primary CTA */}
-      <div className="flex gap-[8px]">
-        <button
-          onClick={addSubtask}
-          className="flex items-center gap-[6px] h-[32px] px-[12px] rounded-[4px] bg-[#004B72] font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] text-white border-none cursor-pointer hover:bg-[#003a5c] transition-colors"
-        >
-          <Plus size={14} />
-          Add Subtask
-        </button>
+        {activeSubtask ? (
+          <BOESubtaskForm
+            subtask={activeSubtask}
+            onUpdate={patch => updateSubtask(activeSubtask.id, patch)}
+            onSave={() => saveSubtask(activeSubtask.id)}
+            onRemove={() => removeSubtask(activeSubtask.id)}
+            titleRef={activeSubtask.id === pendingFocusId ? newTitleRef : undefined}
+          />
+        ) : (
+          <div className="border border-[#e0e1e6] rounded-[8px] bg-[#f9f9fb] px-[24px] py-[40px] flex flex-col items-center justify-center gap-[16px]">
+            <p className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#80838D]">
+              Click + Add Subtask to create the first subtask draft.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
