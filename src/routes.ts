@@ -138,4 +138,6 @@ export const router = createBrowserRouter([
     path: "/audit-log",
     Component: App,
   },
-]);
+], {
+  basename: "/syncpoint-prototype",
+});
