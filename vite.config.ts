@@ -3,9 +3,11 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import path from "path";
 
+const githubPagesBase = "/syncpoint-prototype/";
+
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  base: "/syncpoint-prototype/",
+  base: githubPagesBase,
   resolve: {
     extensions: [".js", ".jsx", ".ts", ".tsx", ".json"],
     alias: {
