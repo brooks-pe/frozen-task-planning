@@ -8,7 +8,7 @@ import { TaskSummarySection, TASK_SUMMARY_PROJECT_OPTIONS } from './TaskSummaryS
 import { TierAssessmentFlyout, type TierAssessmentResult } from './TierAssessmentFlyout';
 import { TaskWorkspaceOverview } from './TaskWorkspaceOverview';
 import { WorkflowFooter } from './WorkflowFooter';
-import { BOESubtaskForm, BOESubtaskView, createEmptySubtaskDraft, type SubtaskDraft } from './BOESubtasksSection';
+import { BOESubtaskForm, BOESubtaskView, createEmptySubtaskDraft, isSubtaskDirty, restoreSubtaskFromSaved, snapshotSubtaskForSave, validateBoeForTier, type SubtaskDraft, type WorkflowState } from './BOESubtasksSection';
 import { SearchableFilterDropdown } from './SearchableFilterDropdown';
 import { EXECUTING_ACTIVITY_OPTIONS } from './TaskPlanningData';
 
@@ -37,6 +37,8 @@ export default function TaskWorkspaceHeader() {
   const [subtasks, setSubtasks] = React.useState<SubtaskDraft[]>([]);
 
   const task = TASKS_DATA.find(t => t.taskId === taskId);
+  const initialWorkflowState: WorkflowState = task?.workflowState === 'BOE Build-Up' ? 'BOE_BUILD_UP' : 'Draft';
+  const [workflowState, setWorkflowState] = React.useState<WorkflowState>(initialWorkflowState);
 
   // ── Edit mode state (shared by Task Title + Task Summary) ────────────────
   const [isEditing, setIsEditing] = React.useState(false);
@@ -56,12 +58,15 @@ export default function TaskWorkspaceHeader() {
   const [project, setProject] = React.useState(initialProject);
   const [savedProject, setSavedProject] = React.useState(initialProject);
 
-  // Draft state: all tasks shown in this workspace are currently in Draft
-  const isDraftState = true;
+  const isDraftState = workflowState === 'Draft';
+  const isBoeBuildUpState = workflowState === 'BOE_BUILD_UP';
 
   const isTier0 = currentTier === 'Tier 0';
   const tier0BoePopulated = parseFloat(reimbursableTotal) > 0 && parseFloat(directCiteTotal) > 0;
   const activeSubtask = subtasks.find(subtask => subtask.id === activeTab) ?? null;
+  const isTier1Or2 = !!currentTier && !isTier0;
+  const hasBoeDraftChanges = subtasks.some(isSubtaskDirty);
+  const canSubmitToActivityAccept = isTier1Or2 && validateBoeForTier(subtasks, currentTier);
 
   function handleDefineSubtasksClick() {
     if (isTier0) {
@@ -99,6 +104,9 @@ export default function TaskWorkspaceHeader() {
   const handleTierSaved = (result: TierAssessmentResult) => {
     setCurrentTier(result.assignedTier);
     setTierAssessmentResult(result);
+    if (result.assignedTier === 'Tier 0') {
+      setWorkflowState('Draft');
+    }
     setShowSuccessToast(true);
     setShowTierPulse(true);
     setTimeout(() => setShowSuccessToast(false), 6000);
@@ -117,7 +125,10 @@ export default function TaskWorkspaceHeader() {
   // Dev-only: override tier for UI testing
   const handleDevTierChange = (tier: string | null) => {
     setCurrentTier(tier);
-    if (!tier || tier === 'Tier 0') setActiveTab('overview');
+    if (!tier || tier === 'Tier 0') {
+      setActiveTab('overview');
+      setWorkflowState('Draft');
+    }
   };
 
   // Enter edit mode. If focusTitle=true, auto-focus the title input on the next tick.
@@ -159,14 +170,7 @@ export default function TaskWorkspaceHeader() {
     setSubtasks(prev =>
       prev.map(subtask =>
         subtask.id === id
-          ? {
-              ...subtask,
-              savedTitle: subtask.title.trim(),
-              savedDescription: subtask.description,
-              savedPopStart: subtask.popStart,
-              savedPopEnd: subtask.popEnd,
-              isEditing: false,
-            }
+          ? snapshotSubtaskForSave(subtask)
           : subtask
       )
     );
@@ -202,14 +206,7 @@ export default function TaskWorkspaceHeader() {
 
       return prev.map(subtask =>
         subtask.id === id
-          ? {
-              ...subtask,
-              title: subtask.savedTitle,
-              description: subtask.savedDescription,
-              popStart: subtask.savedPopStart,
-              popEnd: subtask.savedPopEnd,
-              isEditing: false,
-            }
+          ? restoreSubtaskFromSaved(subtask)
           : subtask
       );
     });
@@ -293,6 +290,17 @@ export default function TaskWorkspaceHeader() {
       window.removeEventListener('resize', requestUpdate);
     };
   }, []);
+
+  const handleSubmitToBoeBuild = () => {
+    setWorkflowState('BOE_BUILD_UP');
+    if (!isTier0 && subtasks.length === 0) {
+      handleAddSubtaskTab();
+    }
+  };
+
+  const handleSaveBoeBuild = () => {
+    setSubtasks(prev => prev.map(snapshotSubtaskForSave));
+  };
 
   return (
     <>
@@ -484,7 +492,9 @@ export default function TaskWorkspaceHeader() {
                 {currentTier
                   ? isTier0
                     ? <>Complete <button type="button" onClick={handleDefineSubtasksClick} className="font-['Inter:Bold',sans-serif] font-bold text-[14px] leading-[20px] text-[#147DB9] bg-transparent border-none cursor-pointer hover:underline p-0 inline">Tier 0 BOE</button> to submit directly to Project Allocation, or proceed to BOE Build-Up.</>
-                    : <><button type="button" onClick={handleDefineSubtasksClick} className="font-['Inter:Bold',sans-serif] font-bold text-[14px] leading-[20px] text-[#147DB9] bg-transparent border-none cursor-pointer hover:underline p-0 inline">Define subtasks</button> to organize work and prepare for BOE Build-Up. Subtasks are optional in Draft but required during BOE Build-Up.</>
+                    : isBoeBuildUpState
+                      ? <><button type="button" onClick={handleDefineSubtasksClick} className="font-['Inter:Bold',sans-serif] font-bold text-[14px] leading-[20px] text-[#147DB9] bg-transparent border-none cursor-pointer hover:underline p-0 inline">Complete subtask BOE details</button> to finish this BOE Build-Up package and unlock Activity Acceptance.</>
+                      : <><button type="button" onClick={handleDefineSubtasksClick} className="font-['Inter:Bold',sans-serif] font-bold text-[14px] leading-[20px] text-[#147DB9] bg-transparent border-none cursor-pointer hover:underline p-0 inline">Define subtasks</button> to organize work and prepare for BOE Build-Up. Subtasks are optional in Draft but required during BOE Build-Up.</>
                   : <>Complete the <button type="button" onClick={handleOpenTierAssessment} className="font-['Inter:Bold',sans-serif] font-bold text-[14px] leading-[20px] text-[#147DB9] bg-transparent border-none cursor-pointer hover:underline p-0 inline">Tier Assessment</button> to establish the planning estimate and BOE tier before building this task.</>
                 }
               </p>
@@ -605,14 +615,18 @@ export default function TaskWorkspaceHeader() {
               {!isTier0 && !!currentTier && activeSubtask && (
                 <div className="flex flex-col gap-[16px]">
                   <h3 className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[24px] text-[#1C2024] text-[18px]">
-                    Define Subtask Shell
+                    {isBoeBuildUpState ? 'BOE Build-Up' : 'Define Subtask Shell'}
                   </h3>
                   <p className="font-['Inter:Regular',sans-serif] font-normal leading-[18px] text-[#80838D] text-[14px]">
-                    Define this subtask shell to structure the work for later BOE Build-Up. Capture the subtask title, supporting context, and period of performance so this workstream is ready for downstream estimating.
+                    {isBoeBuildUpState
+                      ? 'Use this subtask workspace to complete the first-pass BOE details for this workstream. Capture the required estimating fields so the task can move forward to Activity Acceptance.'
+                      : 'Define this subtask shell to structure the work for later BOE Build-Up. Capture the subtask title, supporting context, and period of performance so this workstream is ready for downstream estimating.'}
                   </p>
                   {activeSubtask.isEditing ? (
                     <BOESubtaskForm
                       subtask={activeSubtask}
+                      workflowState={workflowState}
+                      currentTier={currentTier}
                       onUpdate={patch => handleUpdateSubtask(activeSubtask.id, patch)}
                       onSave={() => handleSaveSubtask(activeSubtask.id)}
                       onCancel={() => handleCancelSubtaskEdit(activeSubtask.id)}
@@ -622,6 +636,8 @@ export default function TaskWorkspaceHeader() {
                   ) : (
                     <BOESubtaskView
                       subtask={activeSubtask}
+                      workflowState={workflowState}
+                      currentTier={currentTier}
                       onEdit={() => handleEditSubtask(activeSubtask.id)}
                       onRemove={() => handleRemoveSubtask(activeSubtask.id)}
                     />
@@ -634,7 +650,16 @@ export default function TaskWorkspaceHeader() {
       </div>
 
       {/* Sticky Workflow Footer */}
-      <WorkflowFooter tierAssigned={!!currentTier} isTier0={isTier0} tier0BoePopulated={tier0BoePopulated} />
+      <WorkflowFooter
+        tierAssigned={!!currentTier}
+        isTier0={isTier0}
+        tier0BoePopulated={tier0BoePopulated}
+        workflowState={workflowState}
+        hasBoeDraftChanges={hasBoeDraftChanges}
+        canSubmitToActivityAccept={canSubmitToActivityAccept}
+        onSubmitToBoeBuild={handleSubmitToBoeBuild}
+        onSaveBoeBuild={handleSaveBoeBuild}
+      />
 
       {/* Success Toast */}
       {showSuccessToast && (
