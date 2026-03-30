@@ -8,7 +8,7 @@ import { TaskSummarySection, TASK_SUMMARY_PROJECT_OPTIONS } from './TaskSummaryS
 import { TierAssessmentFlyout, type TierAssessmentResult } from './TierAssessmentFlyout';
 import { TaskWorkspaceOverview } from './TaskWorkspaceOverview';
 import { WorkflowFooter } from './WorkflowFooter';
-import { BOESubtaskForm, BOESubtaskView, createEmptySubtaskDraft, isSubtaskDirty, restoreSubtaskFromSaved, snapshotSubtaskForSave, validateBoeForTier, type SubtaskDraft, type WorkflowState } from './BOESubtasksSection';
+import { BOESubtaskForm, BOESubtaskView, createEmptySubtaskDraft, isGovernmentExecutingActivity, requiresAcquisitionFee, restoreSubtaskFromSaved, snapshotSubtaskForSave, validateBoeForTier, type SubtaskDraft, type WorkflowState } from './BOESubtasksSection';
 import { SearchableFilterDropdown } from './SearchableFilterDropdown';
 import { EXECUTING_ACTIVITY_OPTIONS } from './TaskPlanningData';
 
@@ -32,6 +32,7 @@ export default function TaskWorkspaceHeader() {
   const [activeTab, setActiveTab] = React.useState<string>('overview');
   const [reimbursableTotal, setReimbursableTotal] = React.useState('');
   const [directCiteTotal, setDirectCiteTotal] = React.useState('');
+  const [acquisitionFee, setAcquisitionFee] = React.useState('');
   const [showStickyContextHeader, setShowStickyContextHeader] = React.useState(false);
   const [tierAssessmentResult, setTierAssessmentResult] = React.useState<TierAssessmentResult | null>(null);
   const [subtasks, setSubtasks] = React.useState<SubtaskDraft[]>([]);
@@ -65,8 +66,10 @@ export default function TaskWorkspaceHeader() {
   const tier0BoePopulated = parseFloat(reimbursableTotal) > 0 && parseFloat(directCiteTotal) > 0;
   const activeSubtask = subtasks.find(subtask => subtask.id === activeTab) ?? null;
   const isTier1Or2 = !!currentTier && !isTier0;
-  const hasBoeDraftChanges = subtasks.some(isSubtaskDirty);
-  const canSubmitToActivityAccept = isTier1Or2 && validateBoeForTier(subtasks, currentTier);
+  const isAnySubtaskEditing = subtasks.some(subtask => subtask.isEditing);
+  const isGovernmentEA = isGovernmentExecutingActivity(executingActivity);
+  const acquisitionFeeRequired = requiresAcquisitionFee(subtasks, isGovernmentEA);
+  const canSubmitToActivityAccept = isTier1Or2 && !isAnySubtaskEditing && validateBoeForTier(subtasks, currentTier, isGovernmentEA, acquisitionFee);
 
   function handleDefineSubtasksClick() {
     if (isTier0) {
@@ -298,10 +301,6 @@ export default function TaskWorkspaceHeader() {
     }
   };
 
-  const handleSaveBoeBuild = () => {
-    setSubtasks(prev => prev.map(snapshotSubtaskForSave));
-  };
-
   return (
     <>
       <div className="sticky top-0 z-30 h-0">
@@ -493,7 +492,9 @@ export default function TaskWorkspaceHeader() {
                   ? isTier0
                     ? <>Complete <button type="button" onClick={handleDefineSubtasksClick} className="font-['Inter:Bold',sans-serif] font-bold text-[14px] leading-[20px] text-[#147DB9] bg-transparent border-none cursor-pointer hover:underline p-0 inline">Tier 0 BOE</button> to submit directly to Project Allocation, or proceed to BOE Build-Up.</>
                     : isBoeBuildUpState
-                      ? <><button type="button" onClick={handleDefineSubtasksClick} className="font-['Inter:Bold',sans-serif] font-bold text-[14px] leading-[20px] text-[#147DB9] bg-transparent border-none cursor-pointer hover:underline p-0 inline">Complete subtask BOE details</button> to finish this BOE Build-Up package and unlock Activity Acceptance.</>
+                      ? currentTier === 'Tier 2'
+                        ? <>BOE Build-Up is in progress. Complete detailed deliverables and BOE items for each subtask to unlock Activity Acceptance.</>
+                        : <>BOE Build-Up is in progress. Complete at least one deliverable and one BOE item for each subtask to unlock Activity Acceptance.</>
                       : <><button type="button" onClick={handleDefineSubtasksClick} className="font-['Inter:Bold',sans-serif] font-bold text-[14px] leading-[20px] text-[#147DB9] bg-transparent border-none cursor-pointer hover:underline p-0 inline">Define subtasks</button> to organize work and prepare for BOE Build-Up. Subtasks are optional in Draft but required during BOE Build-Up.</>
                   : <>Complete the <button type="button" onClick={handleOpenTierAssessment} className="font-['Inter:Bold',sans-serif] font-bold text-[14px] leading-[20px] text-[#147DB9] bg-transparent border-none cursor-pointer hover:underline p-0 inline">Tier Assessment</button> to establish the planning estimate and BOE tier before building this task.</>
                 }
@@ -619,14 +620,39 @@ export default function TaskWorkspaceHeader() {
                   </h3>
                   <p className="font-['Inter:Regular',sans-serif] font-normal leading-[18px] text-[#80838D] text-[14px]">
                     {isBoeBuildUpState
-                      ? 'Use this subtask workspace to complete the first-pass BOE details for this workstream. Capture the required estimating fields so the task can move forward to Activity Acceptance.'
+                      ? currentTier === 'Tier 2'
+                        ? 'You are completing a Tier 2 BOE. Detailed deliverables and BOE items are required for this subtask, including acceptance criteria and major deliverable designation where applicable.'
+                        : 'You are completing a Tier 1 BOE. Provide at least one deliverable and one BOE item for this subtask to complete the minimum BOE structure.'
                       : 'Define this subtask shell to structure the work for later BOE Build-Up. Capture the subtask title, supporting context, and period of performance so this workstream is ready for downstream estimating.'}
                   </p>
+                  {isBoeBuildUpState && acquisitionFeeRequired && (
+                    <div className="max-w-[360px] flex flex-col gap-[6px]">
+                      <label className="font-['Inter:Medium',sans-serif] font-medium leading-[18px] text-[#60646C] text-[14px]">
+                        Acquisition Fee *
+                      </label>
+                      <div className="relative">
+                        <span className="absolute left-[8px] top-1/2 -translate-y-1/2 font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] pointer-events-none">
+                          $
+                        </span>
+                        <input
+                          type="text"
+                          value={acquisitionFee}
+                          onChange={e => setAcquisitionFee(e.target.value)}
+                          placeholder="0.00"
+                          className="w-full h-[36px] pl-[20px] pr-[10px] border border-[rgba(0,6,46,0.2)] rounded-[4px] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] placeholder:text-[#80838D] focus:outline-none focus:border-[#004B72] focus:ring-1 focus:ring-[#004B72] bg-white"
+                        />
+                      </div>
+                      <p className="font-['Inter:Regular',sans-serif] font-normal text-[12px] leading-[16px] text-[#80838D]">
+                        Required because this Government-executed task currently contains only Direct Cite BOE items.
+                      </p>
+                    </div>
+                  )}
                   {activeSubtask.isEditing ? (
                     <BOESubtaskForm
                       subtask={activeSubtask}
                       workflowState={workflowState}
                       currentTier={currentTier}
+                      isGovernmentExecutingActivity={isGovernmentEA}
                       onUpdate={patch => handleUpdateSubtask(activeSubtask.id, patch)}
                       onSave={() => handleSaveSubtask(activeSubtask.id)}
                       onCancel={() => handleCancelSubtaskEdit(activeSubtask.id)}
@@ -638,6 +664,7 @@ export default function TaskWorkspaceHeader() {
                       subtask={activeSubtask}
                       workflowState={workflowState}
                       currentTier={currentTier}
+                      isGovernmentExecutingActivity={isGovernmentEA}
                       onEdit={() => handleEditSubtask(activeSubtask.id)}
                       onRemove={() => handleRemoveSubtask(activeSubtask.id)}
                     />
@@ -655,10 +682,8 @@ export default function TaskWorkspaceHeader() {
         isTier0={isTier0}
         tier0BoePopulated={tier0BoePopulated}
         workflowState={workflowState}
-        hasBoeDraftChanges={hasBoeDraftChanges}
         canSubmitToActivityAccept={canSubmitToActivityAccept}
         onSubmitToBoeBuild={handleSubmitToBoeBuild}
-        onSaveBoeBuild={handleSaveBoeBuild}
       />
 
       {/* Success Toast */}
