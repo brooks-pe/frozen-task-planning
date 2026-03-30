@@ -1042,6 +1042,19 @@ export function TaskSummarySection({ taskId, currentTier, tierAssessmentResult, 
           </div>
         </div>
 
+        {/* Divider */}
+        <div className="border-t border-solid border-[#e0e1e6]" />
+
+        {/* Row 4 - People & Ownership Metadata */}
+        <div className="px-[8px] py-[12px]">
+          <div style={ROW_4_GRID_STYLE}>
+            <MetadataField label="Project Lead" value="Jordan Blake" />
+            <MetadataField label="Activity Lead" value="Taylor Morgan" />
+            <MetadataField label="Created By" value="Alex Carter" />
+            <MetadataField label="Last Updated By" value="Riley Chen" />
+          </div>
+        </div>
+
       </div>
     </CollapsibleFilterSection>
   );
