@@ -62,19 +62,15 @@ export function WorkflowFooter({
   isTier0 = false,
   tier0BoePopulated = false,
   workflowState = 'Draft',
-  hasBoeDraftChanges = false,
   canSubmitToActivityAccept = false,
   onSubmitToBoeBuild,
-  onSaveBoeBuild,
 }: {
   tierAssigned?: boolean;
   isTier0?: boolean;
   tier0BoePopulated?: boolean;
   workflowState?: WorkflowState;
-  hasBoeDraftChanges?: boolean;
   canSubmitToActivityAccept?: boolean;
   onSubmitToBoeBuild?: () => void;
-  onSaveBoeBuild?: () => void;
 }) {
   const isT0Skip = tierAssigned && isTier0 && tier0BoePopulated;
   const steps = buildWorkflowSteps(workflowState);
@@ -129,21 +125,11 @@ export function WorkflowFooter({
                     Submit to BOE Build
                   </button>
                 ) : isBoeBuildUpState ? (
-                  hasBoeDraftChanges ? (
-                    <button
-                      type="button"
-                      onClick={onSaveBoeBuild}
-                      className="bg-[#004B72] text-white h-[32px] px-[12px] rounded-[4px] font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] cursor-pointer hover:bg-[#003a5c] transition-colors whitespace-nowrap shrink-0 border-none"
-                    >
-                      Save BOE Build-Up
-                    </button>
-                  ) : (
-                    <button
-                      className="bg-white h-[32px] px-[12px] rounded-[4px] border border-[#004B72] font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] text-[#004B72] cursor-default whitespace-nowrap shrink-0"
-                    >
-                      BOE Build-Up
-                    </button>
-                  )
+                  <button
+                    className="bg-white h-[32px] px-[12px] rounded-[4px] border border-[#004B72] font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] text-[#004B72] cursor-default whitespace-nowrap shrink-0"
+                  >
+                    BOE Build-Up
+                  </button>
                 ) : (
                   <button
                     type="button"
