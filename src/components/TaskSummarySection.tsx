@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+﻿import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { CollapsibleFilterSection } from './CollapsibleFilterSection';
 import { SearchableFilterDropdown } from './SearchableFilterDropdown';
@@ -8,67 +8,118 @@ import { HoverCard, HoverCardTrigger, HoverCardContent } from './ui/hover-card';
 
 type OperationalStatusType = 'active' | 'suspended' | 'completed';
 
-// ─── Execution Statement data (matches CreateTaskFlyout) ──────────────────
+// Requirement profile data
 
-interface ExecutionStatementOption {
+export interface RequirementProfile {
   id: string;
-  label: string;
   project: string;
+  programContext: string;
   appropriation: string;
   activities: string[];
-  programInitiative: string;
   l1Requirement: string;
+  l2Requirement?: string;
+  wbsAttribute: string;
+  fundingSource: string;
+  isCODB?: boolean;
 }
 
-const EXECUTION_STATEMENTS: ExecutionStatementOption[] = [
+const REQUIREMENT_PROFILES: RequirementProfile[] = [
   {
-    id: 'ES-001',
-    label: 'ES-2026-0041 – Surface Ship Undersea Warfare',
-    project: 'Littoral Combat Ship Mission Modules',
+    id: 'REQ-001',
+    project: 'MCM Mission Package Sustainment',
+    programContext: 'Mission Package (MP) Fleet Maintenance and Operations',
     appropriation: 'O&MN',
-    activities: ['PMS 420 – Program Office', 'NSWC PCD – Panama City Division', 'NSWC DD – Dahlgren Division'],
-    programInitiative: 'MCM Mission Package Readiness',
-    l1Requirement: 'Ensure deployment-ready MCM mission packages for surface and unmanned platforms',
+    activities: ['PMS 420', 'NSWC PC'],
+    l1Requirement: 'Execute maintenance and waterfront sustainment support for MCM mission packages in CONUS and OCONUS',
+    l2Requirement: 'Issue materials, transport equipment, and support waterfront execution for deployed mission packages',
+    wbsAttribute: '1.1.1.6 - Training',
+    fundingSource: '0603596N/3129 - LCS MM Common Equipment - 2026',
   },
   {
-    id: 'ES-002',
-    label: 'ES-2026-0078 – Mine Warfare Systems',
-    project: 'Unmanned Surface Vehicle Program',
-    appropriation: 'RDTEN',
-    activities: ['NSWC PCD – Panama City Division', 'NSWC DD – Dahlgren Division', 'Naval AI Systems – AI/ML Division'],
-    programInitiative: 'Unmanned Surface Vehicle (USV) Capability Development',
-    l1Requirement: 'Develop and integrate USV systems for mine countermeasures and maritime security operations',
-  },
-  {
-    id: 'ES-003',
-    label: 'ES-2026-0112 – Undersea Sensors & Processing',
-    project: 'Undersea Warfare Sensor Integration',
-    appropriation: 'RDTEN',
-    activities: ['Naval AI Systems – AI/ML Division', 'Undersea Warfare Lab – Acoustic Systems', 'Cyber Systems Division – Network Ops'],
-    programInitiative: 'Fleet Readiness and Sustainment',
-    l1Requirement: 'Maintain operational availability of mission-critical systems through lifecycle support and logistics readiness',
-  },
-  {
-    id: 'ES-004',
-    label: 'ES-2026-0156 – Maritime Surveillance Integration',
-    project: 'Maritime Domain Awareness Systems',
+    id: 'REQ-002',
+    project: 'MCM MP Training',
+    programContext: 'MCM Mission Package Training',
     appropriation: 'OPN',
-    activities: ['Maritime Systems Lab – Integration Branch', 'PMS 420 – Program Office'],
-    programInitiative: 'Maritime Surveillance Modernization',
-    l1Requirement: 'Integrate multi-domain surveillance capabilities to enhance maritime domain awareness and threat detection',
+    activities: ['PMS 420', 'NUWC NPT'],
+    l1Requirement: 'Focus on sailors operating and maintaining their systems through training, technical manuals, and readiness benchmarks',
+    l2Requirement: 'Formal PMA training modules, technical manual delivery, and operator proficiency sustainment',
+    wbsAttribute: '1.1.2.6 - Training',
+    fundingSource: 'BLI 1600/LM008 - MPCE - 2026',
   },
   {
-    id: 'ES-005',
-    label: 'Maritime ISR Modernization Program',
-    project: 'Coastal Surveillance Modernization',
+    id: 'REQ-003',
+    project: 'Mission Package Integration',
+    programContext: 'Mission Package Integration and C5I Modernization',
+    appropriation: 'RDT&EN',
+    activities: ['NSWC PC', 'NSWC DD'],
+    l1Requirement: 'Provide C5I-focused ISEA and SSA technical support, system enhancements, and sustainment',
+    l2Requirement: 'Mission Package Computing Environment and communications integration support',
+    wbsAttribute: '1.4.1.1 - Mission Package Computing Environment (MPCE)',
+    fundingSource: 'BLI 1600/LM008 - MPCE - 2026',
+  },
+  {
+    id: 'REQ-004',
+    project: 'Maritime ISR Modernization Program',
+    programContext: 'Maritime ISR Surveillance and Radar Modernization',
+    appropriation: 'OPN',
+    activities: ['PMS 420', 'NSWC PHD'],
+    l1Requirement: 'Modernize maritime ISR surveillance and radar capability',
+    l2Requirement: 'Coastal surveillance radar modernization package',
+    wbsAttribute: '1.4.2.1 - MVCS',
+    fundingSource: 'BLI 1600/LM016 - MVCS - 2026',
+  },
+  {
+    id: 'REQ-005',
+    project: 'sUSV Engineering',
+    programContext: 'sUSV Force Objective Sustainment and Engineering',
+    appropriation: 'RDT&EN',
+    activities: ['NSWC Carderock', 'PMS 420'],
+    l1Requirement: 'Mature, deliver, and sustain the sUSV FoS capabilities aligned to fleet and combatant command objectives',
+    l2Requirement: 'Payload maturation, engineering support, and T&E for sUSV capability delivery',
+    wbsAttribute: '3.1.2 - MCM USV',
+    fundingSource: 'BLI 1601/MC002 - MCM USV - 2026',
+  },
+  {
+    id: 'REQ-006',
+    project: 'CODB',
+    programContext: 'CODB Planning and Reconciliation',
     appropriation: 'O&MN',
-    activities: ['PMS 420', 'NSWC PCD – Panama City Division'],
-    programInitiative: 'MCM Mission Package Readiness',
-    l1Requirement: 'Ensure deployment-ready MCM mission packages for surface and unmanned platforms',
+    activities: ['PMS 420'],
+    l1Requirement: 'For CODB: Minimize complexity and maximize efficiency through cost reduction, digital transformation, and value-driven operations',
+    l2Requirement: 'Baseline planning and funding-source reconciliation by task and appropriation',
+    wbsAttribute: '1.1.5 - MCM Mission Package Production',
+    fundingSource: '0603596N/3129 - LCS MM Common Equipment - 2026',
+    isCODB: true,
   },
 ];
 
-// ─── Sub-components ──────────────────────────────────────────────────────────
+const DEFAULT_REQUIREMENT_PROFILE_ID = 'REQ-004';
+
+const TASK_REQUIREMENT_PROFILE_BY_TASK_ID: Record<string, string> = {
+  '41-0279': 'REQ-004',
+  '41-0847': 'REQ-001',
+  '41-1103': 'REQ-001',
+  '41-0614': 'REQ-005',
+  '41-0938': 'REQ-003',
+  '41-1256': 'REQ-001',
+  '41-0731': 'REQ-003',
+  '41-0482': 'REQ-003',
+  '41-1074': 'REQ-004',
+};
+
+export function getRequirementProfile(profileId: string): RequirementProfile {
+  return REQUIREMENT_PROFILES.find(profile => profile.id === profileId) ?? REQUIREMENT_PROFILES.find(profile => profile.id === DEFAULT_REQUIREMENT_PROFILE_ID)!;
+}
+
+export function getTaskRequirementProfileId(taskId: string): string {
+  return TASK_REQUIREMENT_PROFILE_BY_TASK_ID[taskId] ?? DEFAULT_REQUIREMENT_PROFILE_ID;
+}
+
+export function getTaskRequirementProfile(taskId: string): RequirementProfile {
+  return getRequirementProfile(getTaskRequirementProfileId(taskId));
+}
+
+// â”€â”€â”€ Sub-components â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 interface OperationalStatusBadgeProps {
   status: OperationalStatusType;
@@ -368,7 +419,7 @@ function InlineSearchableDropdown({ value, onChange, options }: { value: string;
   );
 }
 
-/** Radio option — matches CreateTaskFlyout RadioOption pattern exactly */
+/** Radio option â€” matches CreateTaskFlyout RadioOption pattern exactly */
 function RadioOption({ label, checked, onChange, name }: { label: string; checked: boolean; onChange: () => void; name: string }) {
   return (
     <label className="flex items-center gap-[8px] cursor-pointer select-none">
@@ -409,7 +460,7 @@ function TaskTypeRadio({ value, onChange }: { value: string; onChange: (v: strin
   );
 }
 
-/** DatePickerInput — matches CreateTaskFlyout calendar pattern exactly */
+/** DatePickerInput â€” matches CreateTaskFlyout calendar pattern exactly */
 function InlineDatePickerInput({ value, onChange }: { value: string; onChange: (v: string) => void }) {
   const [calendarOpen, setCalendarOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -635,7 +686,7 @@ function DateRangeInput({ startDate, endDate, onStartChange, onEndChange }: {
   return (
     <div className="flex items-center gap-[8px]">
       <InlineDatePickerInput value={startDate} onChange={onStartChange} />
-      <span className="font-['Inter:Regular',sans-serif] font-normal text-[13px] leading-[18px] text-[#8b8d98] shrink-0">–</span>
+      <span className="font-['Inter:Regular',sans-serif] font-normal text-[13px] leading-[18px] text-[#8b8d98] shrink-0">â€“</span>
       <InlineDatePickerInput value={endDate} onChange={onEndChange} />
     </div>
   );
@@ -661,32 +712,35 @@ const ROW_4_GRID_STYLE: React.CSSProperties = {
 
 // Sample options for dropdowns
 const WBS_OPTIONS = [
-  '5.1 — Combat Systems Integration',
-  '5.2 — Sensor Fusion Systems',
-  '5.3 — Weapons Integration',
-  '5.4 — C4I Systems',
-  '5.5 — Hull & Mechanical',
-  '5.6 — Electronic Warfare',
+  '1.1.1.6 - Training',
+  '1.1.1.6.2 - Services',
+  '1.1.2.6 - Training',
+  '1.1.5 - MCM Mission Package Production',
+  '1.4.1.1 - Mission Package Computing Environment (MPCE)',
+  '1.4.2.1 - MVCS',
+  '1.7.5.1 - MVCS Replacement/Attrition/Tech Refresh',
+  '3.1.2 - MCM USV',
 ];
 
 const FUNDING_SOURCE_OPTIONS = [
-  'BLI 0721/RU004562',
-  'BLI 0722/RU005123',
-  'BLI 0730/RU006789',
-  'BLI 0740/RU007890',
-  'BLI 0750/RU008901',
+  '0603596N/3129 - LCS MM Common Equipment - 2026',
+  'BLI 1600/LM008 - MPCE - 2026',
+  'BLI 1600/LM016 - MVCS - 2026',
+  'BLI 1600/LM015 - Containers - 2026',
+  'BLI 1601/MC002 - MCM USV - 2026',
 ];
 
 const EXECUTING_ACTIVITY_OPTIONS = [
   'PMS 420',
-  'PMS 401',
-  'PMS 450',
-  'PMS 505',
-  'PMS 340',
+  'NSWC PC',
+  'NSWC DD',
+  'NSWC PHD',
+  'NSWC Carderock',
+  'NUWC NPT',
 ];
 
 export const TASK_SUMMARY_PROJECT_OPTIONS = Array.from(
-  new Set(EXECUTION_STATEMENTS.map(es => es.project))
+  new Set(REQUIREMENT_PROFILES.map(profile => profile.project))
 );
 
 const PLANNING_YEAR_OPTIONS = [
@@ -701,14 +755,13 @@ const TASK_LINK_OPTIONS = [
   'Not Yet Linked',
   'Not Yet Created',
   'None linked',
-  'TSK-2024-0412 — Radar Calibration',
-  'TSK-2024-0413 — Sensor Array Testing',
-  'TSK-2025-0101 — Platform Integration',
-  'TSK-2025-0102 — Software Validation',
+  'TSK-2024-0412 â€” Radar Calibration',
+  'TSK-2024-0413 â€” Sensor Array Testing',
+  'TSK-2025-0101 â€” Platform Integration',
+  'TSK-2025-0102 â€” Software Validation',
 ];
 
 interface EditFormState {
-  executionStatementId: string;
   executingActivity: string;
   wbsAttribute: string;
   fundingSource: string;
@@ -735,15 +788,13 @@ interface TaskSummarySectionProps {
 }
 
 export function TaskSummarySection({ taskId, currentTier, tierAssessmentResult, onOpenTierAssessment, showPulse, isEditing, onEnterEditMode, onSave, onCancel }: TaskSummarySectionProps) {
-  const defaultESId = 'ES-005'; // "Maritime ISR Modernization Program"
-  const defaultES = EXECUTION_STATEMENTS.find(es => es.id === defaultESId)!;
+  const requirementProfile = getTaskRequirementProfile(taskId);
   const isNewlyCreatedTask = taskId === '41-0279';
 
   const [formState, setFormState] = useState<EditFormState>(() => ({
-    executionStatementId: defaultESId,
-    executingActivity: 'PMS 420',
-    wbsAttribute: '5.2 — Sensor Fusion Systems',
-    fundingSource: 'BLI 0721/RU004562',
+    executingActivity: requirementProfile.activities[0] ?? 'PMS 420',
+    wbsAttribute: requirementProfile.wbsAttribute,
+    fundingSource: requirementProfile.fundingSource,
     planningYear: 'FY2026',
     popStart: isNewlyCreatedTask ? '' : '03/03/2026',
     popEnd: isNewlyCreatedTask ? '' : '10/30/2027',
@@ -751,15 +802,10 @@ export function TaskSummarySection({ taskId, currentTier, tierAssessmentResult, 
     associatedTasks: 'None linked',
     nextTask: 'Not Yet Created',
     objective: '',
-    taskType: 'Non-CODB',
+    taskType: requirementProfile.isCODB ? 'CODB' : 'Non-CODB',
   }));
 
   const [savedState, setSavedState] = useState<EditFormState>(() => ({ ...formState }));
-
-  // Derived fields from selected Execution Statement
-  const getSelectedES = (id: string) => EXECUTION_STATEMENTS.find(es => es.id === id);
-  const editES = getSelectedES(formState.executionStatementId);
-  const savedES = getSelectedES(savedState.executionStatementId);
 
   const handleEdit = () => {
     setFormState({ ...savedState });
@@ -778,17 +824,6 @@ export function TaskSummarySection({ taskId, currentTier, tierAssessmentResult, 
 
   const updateField = <K extends keyof EditFormState>(field: K, value: EditFormState[K]) => {
     setFormState(prev => ({ ...prev, [field]: value }));
-  };
-
-  // When Execution Statement changes, update derived fields
-  const handleExecutionStatementChange = (esLabel: string) => {
-    const es = EXECUTION_STATEMENTS.find(e => e.label === esLabel);
-    if (es) {
-      setFormState(prev => ({
-        ...prev,
-        executionStatementId: es.id,
-      }));
-    }
   };
 
   // Format mm/dd/yyyy to display format "3 Mar 2026"
@@ -843,8 +878,7 @@ export function TaskSummarySection({ taskId, currentTier, tierAssessmentResult, 
     </button>
   );
 
-  // Execution Statement dropdown options (labels)
-  const esOptions = EXECUTION_STATEMENTS.map(es => es.label);
+  const requirementContext = `${requirementProfile.project} - ${requirementProfile.programContext}`;
 
   return (
     <CollapsibleFilterSection
@@ -854,24 +888,15 @@ export function TaskSummarySection({ taskId, currentTier, tierAssessmentResult, 
     >
       {/* Single white content surface */}
       <div className="bg-white rounded-[5px] relative">
-        {/* Row 1 — Structural Task Context */}
+        {/* Row 1 â€” Structural Task Context */}
         <div className="px-[8px] py-[12px]">
           <div style={ROW_GRID_STYLE}>
-            {isEditing ? (
-              <EditableField label="Execution Statement">
-                <InlineSearchableDropdown
-                  value={editES?.label ?? ''}
-                  onChange={handleExecutionStatementChange}
-                  options={esOptions}
-                />
-              </EditableField>
-            ) : (
-              <MetadataField
-                label="Execution Statement"
-                value={savedES?.label ?? 'Maritime ISR Modernization Program'}
-                longText
-              />
-            )}
+            <MetadataField
+              label="Project / Program Context"
+              value={requirementContext}
+              muted={isEditing}
+              longText
+            />
             {isEditing ? (
               <EditableField label="WBS Attribute">
                 <InlineSearchableDropdown
@@ -883,7 +908,7 @@ export function TaskSummarySection({ taskId, currentTier, tierAssessmentResult, 
             ) : (
               <MetadataField label="WBS Attribute" value={savedState.wbsAttribute} />
             )}
-            <MetadataField label="Appropriation" value={isEditing ? (editES?.appropriation ?? '') : (savedES?.appropriation ?? 'O&MN')} badge="appropriation" />
+            <MetadataField label="Appropriation" value={requirementProfile.appropriation} badge="appropriation" />
             {isEditing ? (
               <EditableField label="Funding Source">
                 <InlineSearchableDropdown
@@ -893,7 +918,7 @@ export function TaskSummarySection({ taskId, currentTier, tierAssessmentResult, 
                 />
               </EditableField>
             ) : (
-              <MetadataField label="Funding Source" value={savedState.fundingSource} tooltip={`${savedState.fundingSource} – Maritime ISR Radar Modernization (FY2026)`} />
+              <MetadataField label="Funding Source" value={savedState.fundingSource} tooltip={`${savedState.fundingSource} - ${requirementProfile.project} (FY2026)`} />
             )}
             {isEditing ? (
               <EditableField label="Planning Year">
@@ -918,7 +943,7 @@ export function TaskSummarySection({ taskId, currentTier, tierAssessmentResult, 
         {/* Divider */}
         <div className="border-t border-solid border-[#e0e1e6]" />
 
-        {/* Row 2 — Planning, Funding & Timeframe */}
+        {/* Row 2 â€” Planning, Funding & Timeframe */}
         <div className="px-[8px] py-[12px]">
           <div style={ROW_GRID_STYLE}>
             <MetadataField label="Requested" value="Not Yet Estimated" />
@@ -961,7 +986,7 @@ export function TaskSummarySection({ taskId, currentTier, tierAssessmentResult, 
         {/* Divider */}
         <div className="border-t border-solid border-[#e0e1e6]" />
 
-        {/* Row 3 — Lineage, Program Context & Objective */}
+        {/* Row 3 â€” Lineage, Program Context & Objective */}
         <div className="px-[8px] py-[12px]">
           <div style={ROW_3_GRID_STYLE}>
             {isEditing ? (
@@ -1010,14 +1035,14 @@ export function TaskSummarySection({ taskId, currentTier, tierAssessmentResult, 
               />
             )}
             <MetadataField
-              label="Program Initiative"
-              value={isEditing ? (editES?.programInitiative ?? '') : (savedES?.programInitiative ?? 'MCM Mission Package Readiness')}
+              label="L1 Requirement"
+              value={requirementProfile.l1Requirement}
               muted={isEditing}
               longText
             />
             <MetadataField
-              label="L1 Requirement"
-              value={isEditing ? (editES?.l1Requirement ?? '') : (savedES?.l1Requirement ?? 'Ensure deployment-ready MCM mission packages for surface and unmanned platforms')}
+              label="L2 Requirement"
+              value={requirementProfile.l2Requirement ?? 'Not specified'}
               muted={isEditing}
               longText
             />
@@ -1059,3 +1084,4 @@ export function TaskSummarySection({ taskId, currentTier, tierAssessmentResult, 
     </CollapsibleFilterSection>
   );
 }
+

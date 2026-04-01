@@ -219,6 +219,10 @@ function SelectInput({
   searchable = false,
   optionDetailsMap,
   optionBadgeMap,
+  optionIndentMap,
+  optionPrefixMap,
+  optionMutedMap,
+  optionContextLabelMap,
   specialFooterOption,
 }: {
   value: string;
@@ -230,6 +234,10 @@ function SelectInput({
   searchable?: boolean;
   optionDetailsMap?: Record<string, string>;
   optionBadgeMap?: Record<string, OptionBadge>;
+  optionIndentMap?: Record<string, number>;
+  optionPrefixMap?: Record<string, string>;
+  optionMutedMap?: Record<string, boolean>;
+  optionContextLabelMap?: Record<string, string>;
   specialFooterOption?: { value: string; label: string };
 }) {
   const [open, setOpen] = useState(false);
@@ -426,6 +434,9 @@ function SelectInput({
                 {filteredOptions.map(opt => {
                   const badge = optionBadgeMap?.[opt.value];
                   const badgeColors = badge ? BADGE_COLORS[badge.style] : null;
+                  const indentLevel = optionIndentMap?.[opt.value] ?? 0;
+                  const prefix = optionPrefixMap?.[opt.value] ?? '';
+                  const muted = optionMutedMap?.[opt.value] ?? false;
                   return (
                     <div
                       key={opt.value}
@@ -440,7 +451,15 @@ function SelectInput({
                       {optionDetailsMap?.[opt.value] && (
                         <Info size={14} className="shrink-0 text-[#8b8d98]" strokeWidth={1.75} />
                       )}
-                      <span className="truncate flex-1">{opt.label}</span>
+                      <span
+                        className="truncate flex-1"
+                        style={{
+                          paddingLeft: `${indentLevel * 18}px`,
+                          color: muted ? '#60646c' : '#1C2024',
+                        }}
+                      >
+                        {prefix}{opt.label}
+                      </span>
                       {badge && badgeColors && (
                         <span
                           className="shrink-0 inline-flex items-center justify-center rounded-[4px] px-[6px] py-[2px]"
@@ -495,6 +514,11 @@ function SelectInput({
               }}
             >
               <p className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] m-0 whitespace-normal">
+                {optionContextLabelMap?.[hoveredOption] && (
+                  <span className="block font-['Inter:Medium',sans-serif] font-medium text-[12px] leading-[16px] text-[#60646c] mb-[4px]">
+                    {optionContextLabelMap[hoveredOption]}
+                  </span>
+                )}
                 {optionDetailsMap[hoveredOption]}
               </p>
             </div>,
@@ -586,12 +610,92 @@ export function CreateTaskFlyout({ open, onClose, onTaskCreated, onTaskCreatedAn
   const availableFundingSources = appropriation
     ? FUNDING_SOURCE_DATA.filter(fs => fs.appropriation === appropriation)
     : [];
+  const requirementSelectionValue = l2Requirement ? `l2:${l2Requirement}` : l1Requirement ? `l1:${l1Requirement}` : '';
+  const requirementOptions = useMemo<SelectOption[]>(() => {
+    return filteredL1Requirements.flatMap(req => {
+      const childOptions = L2_REQUIREMENTS
+        .filter(child => child.l1RequirementId === req.id)
+        .map(child => ({ value: `l2:${child.id}`, label: child.label }));
+      return [{ value: `l1:${req.id}`, label: req.label }, ...childOptions];
+    });
+  }, [filteredL1Requirements]);
+  const requirementDetailsMap = useMemo<Record<string, string>>(() => {
+    const entries: Array<[string, string]> = [];
+    filteredL1Requirements.forEach(req => {
+      entries.push([`l1:${req.id}`, req.details]);
+      L2_REQUIREMENTS
+        .filter(child => child.l1RequirementId === req.id)
+        .forEach(child => entries.push([`l2:${child.id}`, child.details]));
+    });
+    return Object.fromEntries(entries);
+  }, [filteredL1Requirements]);
+  const requirementBadgeMap = useMemo<Record<string, OptionBadge>>(
+    () => Object.fromEntries(filteredL1Requirements.map(req => [`l1:${req.id}`, { label: req.badge, style: req.badgeStyle }])),
+    [filteredL1Requirements]
+  );
+  const requirementIndentMap = useMemo<Record<string, number>>(() => {
+    const entries: Array<[string, number]> = [];
+    filteredL1Requirements.forEach(req => {
+      entries.push([`l1:${req.id}`, 0]);
+      L2_REQUIREMENTS
+        .filter(child => child.l1RequirementId === req.id)
+        .forEach(child => entries.push([`l2:${child.id}`, 1]));
+    });
+    return Object.fromEntries(entries);
+  }, [filteredL1Requirements]);
+  const requirementPrefixMap = useMemo<Record<string, string>>(() => {
+    const entries: Array<[string, string]> = [];
+    filteredL1Requirements.forEach(req => {
+      entries.push([`l1:${req.id}`, '']);
+      L2_REQUIREMENTS
+        .filter(child => child.l1RequirementId === req.id)
+        .forEach(child => entries.push([`l2:${child.id}`, '↳ ']));
+    });
+    return Object.fromEntries(entries);
+  }, [filteredL1Requirements]);
+  const requirementMutedMap = useMemo<Record<string, boolean>>(() => {
+    const entries: Array<[string, boolean]> = [];
+    filteredL1Requirements.forEach(req => {
+      entries.push([`l1:${req.id}`, false]);
+      L2_REQUIREMENTS
+        .filter(child => child.l1RequirementId === req.id)
+        .forEach(child => entries.push([`l2:${child.id}`, true]));
+    });
+    return Object.fromEntries(entries);
+  }, [filteredL1Requirements]);
+  const requirementContextLabelMap = useMemo<Record<string, string>>(() => {
+    const entries: Array<[string, string]> = [];
+    filteredL1Requirements.forEach(req => {
+      entries.push([`l1:${req.id}`, 'L1 Requirement']);
+      L2_REQUIREMENTS
+        .filter(child => child.l1RequirementId === req.id)
+        .forEach(child => entries.push([`l2:${child.id}`, 'L2 Requirement']));
+    });
+    return Object.fromEntries(entries);
+  }, [filteredL1Requirements]);
 
   const fundingSourceOptions = availableFundingSources.length > 0
     ? availableFundingSources
     : fundingSource === 'fs-placeholder'
     ? [PLACEHOLDER_FUNDING_SOURCE]
     : availableFundingSources;
+
+  const handleRequirementSelectionChange = useCallback((value: string) => {
+    if (value.startsWith('l2:')) {
+      const selectedL2Id = value.slice(3);
+      const selectedL2 = L2_REQUIREMENTS.find(req => req.id === selectedL2Id);
+      setL1Requirement(selectedL2?.l1RequirementId ?? '');
+      setL2Requirement(selectedL2Id);
+      return;
+    }
+    if (value.startsWith('l1:')) {
+      setL1Requirement(value.slice(3));
+      setL2Requirement('');
+      return;
+    }
+    setL1Requirement('');
+    setL2Requirement('');
+  }, []);
 
   // Cascade resets
   const prevProject = useRef('');
@@ -863,43 +967,28 @@ export function CreateTaskFlyout({ open, onClose, onTaskCreated, onTaskCreatedAn
             </label>
           )}
 
-                    {/* 3. L1 Requirement */}
+          {/* 3. Requirement */}
           <FieldGroup
-            label="L1 Requirement"
+            label="Requirement"
             required
             attempted={attempted}
             invalid={!l1Requirement}
             helperText={!project ? 'Select a Project to enable' : undefined}
           >
             <SelectInput
-              value={l1Requirement}
-              onChange={setL1Requirement}
-              placeholder={project ? 'Select L1 requirement...' : 'Select a Project first...'}
+              value={requirementSelectionValue}
+              onChange={handleRequirementSelectionChange}
+              placeholder={project ? 'Select requirement...' : 'Select a Project first...'}
               disabled={!project}
-              options={filteredL1Requirements.map(req => ({ value: req.id, label: req.label }))}
+              options={requirementOptions}
               error={attempted && !l1Requirement}
               searchable
-              optionDetailsMap={Object.fromEntries(filteredL1Requirements.map(req => [req.id, req.details]))}
-              optionBadgeMap={Object.fromEntries(filteredL1Requirements.map(req => [req.id, { label: req.badge, style: req.badgeStyle }]))}
-            />
-          </FieldGroup>
-
-          {/* 3b. L2 Requirement (optional) */}
-          <FieldGroup
-            label="L2 Requirement"
-            attempted={attempted}
-            invalid={false}
-            noteText="Optional"
-            helperText={!l1Requirement ? 'Select an L1 Requirement to enable' : undefined}
-          >
-            <SelectInput
-              value={l2Requirement}
-              onChange={setL2Requirement}
-              placeholder={l1Requirement ? 'Select L2 requirement...' : 'Select an L1 Requirement first...'}
-              disabled={!l1Requirement}
-              options={filteredL2Requirements.map(req => ({ value: req.id, label: req.label }))}
-              searchable
-              optionDetailsMap={Object.fromEntries(filteredL2Requirements.map(req => [req.id, req.details]))}
+              optionDetailsMap={requirementDetailsMap}
+              optionBadgeMap={requirementBadgeMap}
+              optionIndentMap={requirementIndentMap}
+              optionPrefixMap={requirementPrefixMap}
+              optionMutedMap={requirementMutedMap}
+              optionContextLabelMap={requirementContextLabelMap}
             />
           </FieldGroup>
 
@@ -918,7 +1007,26 @@ export function CreateTaskFlyout({ open, onClose, onTaskCreated, onTaskCreatedAn
                   color: selectedL2Requirement || selectedL1Requirement ? '#1C2024' : '#8b8d98',
                 }}
               >
-                {selectedL2Requirement?.details || selectedL1Requirement?.details || 'Select a requirement to view details'}
+                {selectedL2Requirement ? (
+                  <div className="flex flex-col gap-[4px]">
+                    <p className="m-0 text-[12px] leading-[16px] text-[#60646c]">
+                      <span className="font-['Inter:Medium',sans-serif] font-medium">L1 Requirement:</span> {selectedL1Requirement?.label}
+                    </p>
+                    <p className="m-0 text-[12px] leading-[16px] text-[#60646c]">
+                      <span className="font-['Inter:Medium',sans-serif] font-medium">L2 Requirement:</span> {selectedL2Requirement.label}
+                    </p>
+                    <p className="m-0">{selectedL2Requirement.details}</p>
+                  </div>
+                ) : selectedL1Requirement ? (
+                  <div className="flex flex-col gap-[4px]">
+                    <p className="m-0 text-[12px] leading-[16px] text-[#60646c]">
+                      <span className="font-['Inter:Medium',sans-serif] font-medium">L1 Requirement:</span> {selectedL1Requirement.label}
+                    </p>
+                    <p className="m-0">{selectedL1Requirement.details}</p>
+                  </div>
+                ) : (
+                  'Select a requirement to view details'
+                )}
               </div>
             </div>
           )}
@@ -939,12 +1047,12 @@ export function CreateTaskFlyout({ open, onClose, onTaskCreated, onTaskCreatedAn
             required
             attempted={attempted}
             invalid={!wbsAttribute}
-            helperText={!selectedL1Requirement ? 'Select an L1 Requirement to enable WBS selection' : undefined}
+            helperText={!selectedL1Requirement ? 'Select a Requirement to enable WBS selection' : undefined}
           >
             <SelectInput
               value={wbsAttribute}
               onChange={setWbsAttribute}
-              placeholder={selectedL1Requirement ? 'Select WBS attribute...' : 'Select an L1 Requirement first...'}
+              placeholder={selectedL1Requirement ? 'Select WBS attribute...' : 'Select a Requirement first...'}
               disabled={!selectedL1Requirement}
               options={availableWBS.map(wbs => ({ value: wbs.code, label: `${wbs.code} - ${wbs.description}` }))}
               error={attempted && !wbsAttribute}
@@ -958,12 +1066,12 @@ export function CreateTaskFlyout({ open, onClose, onTaskCreated, onTaskCreatedAn
             required
             attempted={attempted}
             invalid={!executingActivity}
-            helperText={!selectedL1Requirement ? 'Select an L1 Requirement to enable activity selection' : undefined}
+            helperText={!selectedL1Requirement ? 'Select a Requirement to enable activity selection' : undefined}
           >
             <SelectInput
               value={executingActivity}
               onChange={setExecutingActivity}
-              placeholder={selectedL1Requirement ? 'Select executing activity...' : 'Select an L1 Requirement first...'}
+              placeholder={selectedL1Requirement ? 'Select executing activity...' : 'Select a Requirement first...'}
               disabled={!selectedL1Requirement}
               options={availableActivities.map(a => ({ value: a, label: a }))}
               error={attempted && !executingActivity}
@@ -978,12 +1086,12 @@ export function CreateTaskFlyout({ open, onClose, onTaskCreated, onTaskCreatedAn
               required
               attempted={attempted}
               invalid={!appropriation}
-              helperText={!selectedL1Requirement ? 'Select an L1 Requirement to enable appropriation selection' : undefined}
+              helperText={!selectedL1Requirement ? 'Select a Requirement to enable appropriation selection' : undefined}
             >
               <SelectInput
                 value={appropriation}
                 onChange={setAppropriation}
-                placeholder={selectedL1Requirement ? 'Select appropriation...' : 'Select an L1 Requirement first...'}
+                placeholder={selectedL1Requirement ? 'Select appropriation...' : 'Select a Requirement first...'}
                 disabled={!selectedL1Requirement}
                 options={availableAppropriations.map(a => ({ value: a, label: a }))}
                 error={attempted && !appropriation}
@@ -999,7 +1107,7 @@ export function CreateTaskFlyout({ open, onClose, onTaskCreated, onTaskCreatedAn
               attempted={attempted}
               invalid={false}
               noteText="Optional"
-              helperText={!selectedL1Requirement ? 'Select an L1 Requirement and appropriation to enable funding source selection' : undefined}
+              helperText={!selectedL1Requirement ? 'Select a Requirement and appropriation to enable funding source selection' : undefined}
             >
               <SelectInput
                 value={fundingSource}
