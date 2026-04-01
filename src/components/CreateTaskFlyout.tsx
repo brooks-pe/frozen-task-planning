@@ -2,25 +2,31 @@ import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import { createPortal } from 'react-dom';
 import { Info } from 'lucide-react';
 
-// ─── Mock Data ──────────────────────────────────────────────────────────────
+// Mock data
 
 interface ProjectOption {
   id: string;
   label: string;
-  isCODB: boolean;
 }
 
-interface ExecutionStatementOption {
+interface L1RequirementOption {
   id: string;
   label: string;
   details: string;
   projectId: string;
   appropriations: string[];
   activities: string[];
-  /** Badge label shown in the ES dropdown option row */
+  /** Badge label shown in the L1 dropdown option row */
   badge: string;
   /** Badge color style: 'omn' | 'rdten' | 'opn' | 'none' */
   badgeStyle: 'omn' | 'rdten' | 'opn' | 'none';
+}
+
+interface L2RequirementOption {
+  id: string;
+  l1RequirementId: string;
+  label: string;
+  details: string;
 }
 
 interface WBSOption {
@@ -35,84 +41,74 @@ interface FundingSourceRecord {
 }
 
 const PROJECTS: ProjectOption[] = [
-  { id: 'proj-codb', label: 'CODB', isCODB: true },
-  { id: 'proj-001', label: 'Littoral Combat Ship Mission Modules', isCODB: true },
-  { id: 'proj-002', label: 'Unmanned Surface Vehicle Program', isCODB: true },
-  { id: 'proj-003', label: 'Undersea Warfare Sensor Integration', isCODB: false },
-  { id: 'proj-004', label: 'Maritime Domain Awareness Systems', isCODB: false },
+  { id: 'proj-codb', label: 'CODB' },
+  { id: 'proj-001', label: 'Surface Warfare Modernization Program' },
+  { id: 'proj-002', label: 'Mine Countermeasures Innovation Program' },
+  { id: 'proj-003', label: 'Undersea Warfare Systems Program' },
+  { id: 'proj-004', label: 'Maritime ISR Modernization Program' },
 ];
 
-const EXECUTION_STATEMENTS: ExecutionStatementOption[] = [
+const L1_REQUIREMENTS: L1RequirementOption[] = [
   {
-    id: 'ES-001',
-    label: 'Surface Ship Undersea Warfare Modernization',
-    details: 'Enhance surface ship undersea warfare capabilities through integration of advanced sonar systems, improved signal processing, and upgraded mission planning tools to support distributed maritime operations.',
+    id: 'L1-001',
+    label: 'Sustain surface warfare mission module integration readiness',
+    details: 'Maintain integration readiness for Littoral Combat Ship mission modules and associated modernization priorities across the current planning cycle.',
     projectId: 'proj-001',
     appropriations: ['O&MN'],
-    activities: ['PMS 420 – Program Office', 'NSWC PCD – Panama City Division', 'NSWC DD – Dahlgren Division'],
+    activities: ['PMS 420', 'NSWC DD'],
     badge: 'O&MN',
     badgeStyle: 'omn',
   },
   {
-    id: 'ES-002',
-    label: 'Autonomous Mine Detection Capability Expansion',
-    details: 'Develop and deploy autonomous systems capable of detecting and classifying naval mines using advanced sensor fusion, machine learning algorithms, and unmanned surface and underwater platforms.',
+    id: 'L1-002',
+    label: 'Grow autonomous mine countermeasures mission capability',
+    details: 'Advance mine detection, neutralization, and unmanned mission-package performance for the Mine Countermeasures Innovation Program.',
     projectId: 'proj-002',
     appropriations: ['RDTEN', 'O&MN'],
-    activities: ['NSWC PCD – Panama City Division', 'NSWC DD – Dahlgren Division', 'Naval AI Systems – AI/ML Division'],
+    activities: ['NSWC PCD', 'PMS 420'],
     badge: 'RDTEN',
     badgeStyle: 'rdten',
   },
   {
-    id: 'ES-003',
-    label: 'Maritime ISR Sensor Integration & Data Fusion',
-    details: 'Integrate multi-domain intelligence, surveillance, and reconnaissance sensors to enable real-time data fusion, improved situational awareness, and enhanced decision-making across maritime operations.',
+    id: 'L1-003',
+    label: 'Modernize undersea warfare tactical and acoustic capabilities',
+    details: 'Improve tactical networking, acoustic communications, and sensor performance within the Undersea Warfare Systems Program.',
     projectId: 'proj-003',
     appropriations: ['RDTEN'],
-    activities: ['Naval AI Systems – AI/ML Division', 'Undersea Warfare Lab – Acoustic Systems', 'Cyber Systems Division – Network Ops'],
+    activities: ['NSWC DD', 'NSWC PCD'],
     badge: 'RDTEN',
     badgeStyle: 'rdten',
   },
   {
-    id: 'ES-004',
-    label: 'Expeditionary Mine Countermeasure Mission Support',
-    details: 'Support expeditionary mine countermeasure missions by developing deployable systems, enhancing mission planning capabilities, and improving interoperability across joint forces.',
+    id: 'L1-004',
+    label: 'Modernize maritime ISR surveillance and radar capability',
+    details: 'Improve surveillance coverage, radar modernization, and obsolescence response for Maritime ISR Modernization Program priorities.',
     projectId: 'proj-004',
     appropriations: ['OPN', 'RDTEN'],
-    activities: ['Maritime Systems Lab – Integration Branch', 'PMS 420 – Program Office'],
+    activities: ['PMS 420', 'NSWC PCD'],
     badge: 'OPN',
     badgeStyle: 'opn',
   },
   {
-    id: 'ES-005',
-    label: 'Littoral Combat Systems Readiness Improvement',
-    details: 'Improve readiness and operational availability of littoral combat systems through targeted maintenance enhancements, system upgrades, and logistics optimization initiatives.',
-    projectId: 'proj-001',
-    appropriations: ['O&MN'],
-    activities: ['PMS 420 – Program Office', 'NSWC DD – Dahlgren Division'],
-    badge: 'BLI 0603',
-    badgeStyle: 'rdten',
+    id: 'L1-005',
+    label: 'Coordinate CODB baseline planning and reconciliation',
+    details: 'Coordinate CODB portfolio baseline planning, reconciliation, and cross-program alignment actions for PMS 420-managed priorities.',
+    projectId: 'proj-codb',
+    appropriations: ['O&MN', 'RDTEN'],
+    activities: ['PMS 420'],
+    badge: 'O&MN',
+    badgeStyle: 'omn',
   },
-  {
-    id: 'ES-006',
-    label: 'Unmanned Surface Vehicle Payload Integration',
-    details: 'Design and integrate modular payload systems for unmanned surface vehicles to support surveillance, mine detection, and electronic warfare missions in contested environments.',
-    projectId: 'proj-002',
-    appropriations: ['RDTEN'],
-    activities: ['Naval AI Systems – AI/ML Division', 'NSWC PCD – Panama City Division'],
-    badge: 'RDTEN',
-    badgeStyle: 'rdten',
-  },
-  {
-    id: 'ES-007',
-    label: 'Expeditionary Mission Support Coordination',
-    details: 'Coordinate expeditionary mission support activities across program offices and field activities to ensure aligned resource planning, stakeholder engagement, and execution readiness.',
-    projectId: 'proj-001',
-    appropriations: [],
-    activities: ['PMS 420 – Program Office', 'Maritime Systems Lab – Integration Branch'],
-    badge: 'None',
-    badgeStyle: 'none',
-  },
+];
+
+const L2_REQUIREMENTS: L2RequirementOption[] = [
+  { id: 'L2-001', l1RequirementId: 'L1-001', label: 'LCS mission module integration event support', details: 'Support upcoming Littoral Combat Ship mission module integration events and close readiness blockers before BOE build-up.' },
+  { id: 'L2-002', l1RequirementId: 'L1-001', label: 'Propulsion health monitoring rollout prep', details: 'Prepare surface warfare modernization dependencies required for propulsion health monitoring dashboard rollout.' },
+  { id: 'L2-003', l1RequirementId: 'L1-002', label: 'Autonomous mine detection classifier maturation', details: 'Improve classifier performance for autonomous mine detection concepts and follow-on activity acceptance packages.' },
+  { id: 'L2-004', l1RequirementId: 'L1-002', label: 'USV sensor suite integration readiness', details: 'Align test planning and integration work for the Mine Countermeasures USV Sensor Suite effort.' },
+  { id: 'L2-005', l1RequirementId: 'L1-003', label: 'Underwater acoustic communications prototype support', details: 'Advance prototype development and acoustic performance analysis for undersea warfare communications improvements.' },
+  { id: 'L2-006', l1RequirementId: 'L1-004', label: 'Coastal surveillance radar modernization package', details: 'Package radar modernization work needed to address coastal surveillance coverage gaps and obsolescence risks.' },
+  { id: 'L2-007', l1RequirementId: 'L1-005', label: 'CODB funding reconciliation support', details: 'Support CODB funding reconciliation, baseline adjustments, and cross-program planning alignment.' },
 ];
 
 const WBS_OPTIONS: WBSOption[] = [
@@ -125,17 +121,17 @@ const WBS_OPTIONS: WBSOption[] = [
 
 const FUNDING_SOURCE_DATA: FundingSourceRecord[] = [
   // O&MN
-  { id: 'fs-omn-001', label: 'BLI 0721 — Surface Ship Maintenance (FY2026)',        appropriation: 'O&MN'  },
-  { id: 'fs-omn-002', label: 'BLI 0812 — Littoral Combat Ship Support (FY2026)',    appropriation: 'O&MN'  },
-  { id: 'fs-omn-003', label: 'BLI 0903 — Combat Systems Sustainment (FY2026)',      appropriation: 'O&MN'  },
-  { id: 'fs-omn-004', label: 'BLI 1105 — Expeditionary Warfare Support (FY2026)',   appropriation: 'O&MN'  },
+  { id: 'fs-omn-001', label: 'BLI 0721 - Surface Ship Maintenance (FY2026)',        appropriation: 'O&MN'  },
+  { id: 'fs-omn-002', label: 'BLI 0812 - Littoral Combat Ship Support (FY2026)',    appropriation: 'O&MN'  },
+  { id: 'fs-omn-003', label: 'BLI 0903 - Combat Systems Sustainment (FY2026)',      appropriation: 'O&MN'  },
+  { id: 'fs-omn-004', label: 'BLI 1105 - Expeditionary Warfare Support (FY2026)',   appropriation: 'O&MN'  },
   // RDTEN
-  { id: 'fs-rdt-001', label: 'BLI 0603 — Autonomous Systems R&D (FY2026)',          appropriation: 'RDTEN' },
-  { id: 'fs-rdt-002', label: 'BLI 0847 — Mine Countermeasures Development (FY2026)',appropriation: 'RDTEN' },
-  { id: 'fs-rdt-003', label: 'BLI 0721 — Undersea Sensor Integration (FY2026)',     appropriation: 'RDTEN' },
+  { id: 'fs-rdt-001', label: 'BLI 0603 - Autonomous Systems R&D (FY2026)',          appropriation: 'RDTEN' },
+  { id: 'fs-rdt-002', label: 'BLI 0847 - Mine Countermeasures Development (FY2026)',appropriation: 'RDTEN' },
+  { id: 'fs-rdt-003', label: 'BLI 0721 - Undersea Sensor Integration (FY2026)',     appropriation: 'RDTEN' },
   // OPN
-  { id: 'fs-opn-001', label: 'BLI 0554 — Maritime Surveillance Systems (FY2026)',   appropriation: 'OPN'   },
-  { id: 'fs-opn-002', label: 'BLI 0412 — C2 Infrastructure Procurement (FY2026)',  appropriation: 'OPN'   },
+  { id: 'fs-opn-001', label: 'BLI 0554 - Maritime Surveillance Systems (FY2026)',   appropriation: 'OPN'   },
+  { id: 'fs-opn-002', label: 'BLI 0412 - C2 Infrastructure Procurement (FY2026)',   appropriation: 'OPN'   },
 ];
 
 // Placeholder funding source for when no real sources exist for the selected appropriation
@@ -145,7 +141,7 @@ const PLACEHOLDER_FUNDING_SOURCE: FundingSourceRecord = {
   appropriation: '',
 };
 
-// ─── Badge helpers ────────────────────────────────────────────────────────────
+// Badge helpers
 
 type BadgeStyle = 'omn' | 'rdten' | 'opn' | 'none';
 
@@ -161,10 +157,8 @@ interface OptionBadge {
   style: BadgeStyle;
 }
 
-// Sentinel value for the "Add new execution statement" special option
-const ADD_NEW_ES = '__ADD_NEW_ES__';
 
-// ─── Sub-components ──────────────────────────────────────────────────────────
+// Sub-components
 
 function FieldGroup({
   label,
@@ -464,7 +458,7 @@ function SelectInput({
                     </div>
                   );
                 })}
-                {/* Special footer option — visually separated, always visible */}
+                {/* Special footer option - visually separated, always visible */}
                 {specialFooterOption && (
                   <>
                     <div className="mx-[8px] border-t border-[rgba(0,6,46,0.08)]" />
@@ -545,7 +539,7 @@ function TextInput({
   );
 }
 
-// ─── Main Component ──────────────────────────────────────────────────────────
+// Main component
 
 interface CreateTaskFlyoutProps {
   open: boolean;
@@ -568,37 +562,30 @@ export function CreateTaskFlyout({ open, onClose, onTaskCreated, onTaskCreatedAn
   const [animating, setAnimating] = useState(false);
   const [visible, setVisible] = useState(false);
 
-  // ── Form state ────────────────────────────────────────────────────────────
+  // Form state
   const [project, setProject] = useState('');
   const [isCODB, setIsCODB] = useState(false);
-  const [executionStatement, setExecutionStatement] = useState('');
+  const [l1Requirement, setL1Requirement] = useState('');
+  const [l2Requirement, setL2Requirement] = useState('');
   const [taskTitle, setTaskTitle] = useState('');
   const [wbsAttribute, setWbsAttribute] = useState('');
   const [executingActivity, setExecutingActivity] = useState('');
   const [appropriation, setAppropriation] = useState('');
   const [fundingSource, setFundingSource] = useState('');
   const [attempted, setAttempted] = useState(false);
-  // ── "Add new ES" mode state ────────────────────────────────────────────────
-  const [newESText, setNewESText] = useState('');
-  const isAddingNewES = executionStatement === ADD_NEW_ES;
 
-  // ── Derived values ────────────────────────────────────────────────────────
-  const selectedProject = PROJECTS.find(p => p.id === project) ?? null;
-  const filteredES      = EXECUTION_STATEMENTS.filter(es => es.projectId === project);
-  const selectedES      = EXECUTION_STATEMENTS.find(es => es.id === executionStatement) ?? null;
+  // Derived values
+  const filteredL1Requirements = L1_REQUIREMENTS.filter(req => req.projectId === project);
+  const filteredL2Requirements = L2_REQUIREMENTS.filter(req => req.l1RequirementId === l1Requirement);
+  const selectedL1Requirement = L1_REQUIREMENTS.find(req => req.id === l1Requirement) ?? null;
+  const selectedL2Requirement = L2_REQUIREMENTS.find(req => req.id === l2Requirement) ?? null;
 
-  // All unique activities and appropriations across all execution statements (for CODB mode)
-  const allActivities = useMemo(() =>
-    [...new Set(EXECUTION_STATEMENTS.flatMap(es => es.activities))], []);
-  const allAppropriations = useMemo(() =>
-    [...new Set(EXECUTION_STATEMENTS.flatMap(es => es.appropriations))], []);
-
-  const availableAppropriations = isCODB ? allAppropriations : (selectedES?.appropriations ?? []);
-  const availableActivities     = isCODB ? allActivities : (selectedES?.activities ?? []);
-  const availableWBS            = (isCODB || executionStatement) ? WBS_OPTIONS : [];
+  const availableAppropriations = selectedL1Requirement?.appropriations ?? [];
+  const availableActivities     = selectedL1Requirement?.activities ?? [];
+  const availableWBS            = l1Requirement ? WBS_OPTIONS : [];
   const availableFundingSources = appropriation
     ? FUNDING_SOURCE_DATA.filter(fs => fs.appropriation === appropriation)
-    : isCODB ? FUNDING_SOURCE_DATA : [];
+    : [];
 
   const fundingSourceOptions = availableFundingSources.length > 0
     ? availableFundingSources
@@ -606,42 +593,41 @@ export function CreateTaskFlyout({ open, onClose, onTaskCreated, onTaskCreatedAn
     ? [PLACEHOLDER_FUNDING_SOURCE]
     : availableFundingSources;
 
-  // ── Cascade resets ────────────────────────────────────────────────────────
+  // Cascade resets
   const prevProject = useRef('');
   useEffect(() => {
     if (prevProject.current === project) return;
     prevProject.current = project;
     setIsCODB(false);
-    setExecutionStatement('');
+    setL1Requirement('');
+    setL2Requirement('');
     setWbsAttribute('');
     setExecutingActivity('');
     setAppropriation('');
     setFundingSource('');
   }, [project]);
 
-  // Unified ES effect: cascade clear + APPN auto-select + FS chain resolved
-  // atomically in one render pass, eliminating the cross-render race where
-  // setAppropriation() in render N causes FS to only evaluate in render N+1,
-  // and React silently skips that render when the APPN string is unchanged.
-  const prevES = useRef('');
+  // Requirement effect: cascade clear + APPN auto-select + funding source chain
+  // in one place so dependent fields stay in sync with the selected requirement.
+  const prevL1Requirement = useRef('');
   useEffect(() => {
-    if (prevES.current === executionStatement) return;
-    prevES.current = executionStatement;
+    if (prevL1Requirement.current === l1Requirement) return;
+    prevL1Requirement.current = l1Requirement;
 
+    setL2Requirement('');
     setWbsAttribute('');
     setExecutingActivity('');
 
-    if (!executionStatement) {
+    if (!l1Requirement) {
       setAppropriation('');
       setFundingSource('');
       return;
     }
 
-    const es = EXECUTION_STATEMENTS.find(e => e.id === executionStatement);
-    const appns = es?.appropriations ?? [];
+    const requirement = L1_REQUIREMENTS.find(r => r.id === l1Requirement);
+    const appns = requirement?.appropriations ?? [];
 
     if (appns.length === 1) {
-      // Auto-select APPN and immediately evaluate FS in the same setState batch
       setAppropriation(appns[0]);
       const sources = FUNDING_SOURCE_DATA.filter(fs => fs.appropriation === appns[0]);
       if (sources.length >= 1) {
@@ -650,11 +636,10 @@ export function CreateTaskFlyout({ open, onClose, onTaskCreated, onTaskCreatedAn
         setFundingSource('fs-placeholder');
       }
     } else {
-      // Multiple or no valid APPNs — clear both, user must choose
       setAppropriation('');
       setFundingSource('');
     }
-  }, [executionStatement]); // eslint-disable-line
+  }, [l1Requirement]); // eslint-disable-line
 
   // APPN effect: handles user-driven APPN changes and re-evaluates FS
   const prevAppn = useRef('');
@@ -674,44 +659,45 @@ export function CreateTaskFlyout({ open, onClose, onTaskCreated, onTaskCreatedAn
     }
   }, [appropriation]); // eslint-disable-line
 
-  // ── Auto-select single options ────────────────────────────────────────────
+  // Auto-select single options
 
-  // ES: auto-select when project yields exactly one statement
+  // L1 Requirement: auto-select when project yields exactly one option
   useEffect(() => {
-    if (filteredES.length === 1 && !executionStatement) {
-      setExecutionStatement(filteredES[0].id);
+    if (filteredL1Requirements.length === 1 && !l1Requirement) {
+      setL1Requirement(filteredL1Requirements[0].id);
     }
-  }, [filteredES.length]); // eslint-disable-line
+  }, [filteredL1Requirements.length]); // eslint-disable-line
 
-  // Activities: auto-select when ES resolves exactly one activity
+  // L2 Requirement: auto-select when selected L1 yields exactly one option
+  useEffect(() => {
+    if (filteredL2Requirements.length === 1 && !l2Requirement) {
+      setL2Requirement(filteredL2Requirements[0].id);
+    }
+  }, [filteredL2Requirements.length]); // eslint-disable-line
+
+  // Activities: auto-select when the selected requirement yields exactly one activity
   useEffect(() => {
     if (availableActivities.length === 1 && !executingActivity) {
       setExecutingActivity(availableActivities[0]);
     }
   }, [availableActivities.length]); // eslint-disable-line
 
-  // ── Validation ────────────────────────────────────────────────────────────
+  // Validation
   const isFormValid = useMemo(() => {
     if (!project) return false;
+    if (!l1Requirement) return false;
     if (!taskTitle.trim()) return false;
+    if (!wbsAttribute) return false;
+    if (!executingActivity) return false;
+
     if (isCODB) {
-      if (!wbsAttribute) return false;
-      if (!executingActivity) return false;
       if (!appropriation) return false;
       // fundingSource is optional in CODB mode
-    } else if (isAddingNewES) {
-      // "Add new ES" mode: only require the new ES text (task is created in draft)
-      if (!newESText.trim()) return false;
-    } else {
-      // Non-CODB: Appropriation and Funding Source are derived/hidden; not user-validated
-      if (!executionStatement) return false;
-      if (!wbsAttribute) return false;
-      if (!executingActivity) return false;
     }
     return true;
-  }, [project, taskTitle, isCODB, isAddingNewES, newESText, executionStatement, wbsAttribute, executingActivity, appropriation, fundingSource]);
+  }, [project, l1Requirement, taskTitle, isCODB, wbsAttribute, executingActivity, appropriation, fundingSource]);
 
-  // ── Animation ─────────────────────────────────────────────────────────────
+  // Animation
   useEffect(() => {
     if (open) {
       setAnimating(true);
@@ -724,20 +710,20 @@ export function CreateTaskFlyout({ open, onClose, onTaskCreated, onTaskCreatedAn
     }
   }, [open]);
 
-  // ── Helpers ───────────────────────────────────────────────────────────────
+  // Helpers
   const resetForm = useCallback(() => {
     setProject('');
     setIsCODB(false);
-    setExecutionStatement('');
+    setL1Requirement('');
+    setL2Requirement('');
     setTaskTitle('');
     setWbsAttribute('');
     setExecutingActivity('');
     setAppropriation('');
     setFundingSource('');
-    setNewESText('');
     setAttempted(false);
     prevProject.current = '';
-    prevES.current = '';
+    prevL1Requirement.current = '';
     prevAppn.current = '';
   }, []);
 
@@ -840,7 +826,7 @@ export function CreateTaskFlyout({ open, onClose, onTaskCreated, onTaskCreatedAn
             />
           </FieldGroup>
 
-          {/* 2. CODB checkbox — only when the exact "CODB" project is selected */}
+          {/* 2. CODB checkbox - only when the exact "CODB" project is selected */}
           {project === 'proj-codb' && (
             <label
               className="flex items-center gap-[8px] cursor-pointer select-none"
@@ -877,96 +863,65 @@ export function CreateTaskFlyout({ open, onClose, onTaskCreated, onTaskCreatedAn
             </label>
           )}
 
-          {/* 3. Execution Statement — hidden in CODB mode */}
-          {!isCODB && (
-            <FieldGroup
-              label="Execution Statement"
-              required={!isCODB}
-              attempted={attempted}
-              invalid={!isCODB && !executionStatement}
-              helperText={!project ? 'Select a Project to enable' : undefined}
-            >
-              <SelectInput
-                value={executionStatement}
-                onChange={setExecutionStatement}
-                placeholder={project ? 'Select execution statement...' : 'Select a Project first...'}
-                disabled={!project}
-                options={filteredES.map(es => ({ value: es.id, label: es.label }))}
-                error={!isCODB && attempted && !executionStatement}
-                searchable
-                optionDetailsMap={Object.fromEntries(filteredES.map(es => [es.id, es.details]))}
-                optionBadgeMap={Object.fromEntries(filteredES.map(es => [es.id, { label: es.badge, style: es.badgeStyle }]))}
-                specialFooterOption={{ value: ADD_NEW_ES, label: 'Add new execution statement' }}
-              />
-            </FieldGroup>
-          )}
+                    {/* 3. L1 Requirement */}
+          <FieldGroup
+            label="L1 Requirement"
+            required
+            attempted={attempted}
+            invalid={!l1Requirement}
+            helperText={!project ? 'Select a Project to enable' : undefined}
+          >
+            <SelectInput
+              value={l1Requirement}
+              onChange={setL1Requirement}
+              placeholder={project ? 'Select L1 requirement...' : 'Select a Project first...'}
+              disabled={!project}
+              options={filteredL1Requirements.map(req => ({ value: req.id, label: req.label }))}
+              error={attempted && !l1Requirement}
+              searchable
+              optionDetailsMap={Object.fromEntries(filteredL1Requirements.map(req => [req.id, req.details]))}
+              optionBadgeMap={Object.fromEntries(filteredL1Requirements.map(req => [req.id, { label: req.badge, style: req.badgeStyle }]))}
+            />
+          </FieldGroup>
 
-          {/* 3b. Execution Statement Details — transforms when "Add new ES" is selected */}
-          {!isCODB && (isAddingNewES ? (
+          {/* 3b. L2 Requirement (optional) */}
+          <FieldGroup
+            label="L2 Requirement"
+            attempted={attempted}
+            invalid={false}
+            noteText="Optional"
+            helperText={!l1Requirement ? 'Select an L1 Requirement to enable' : undefined}
+          >
+            <SelectInput
+              value={l2Requirement}
+              onChange={setL2Requirement}
+              placeholder={l1Requirement ? 'Select L2 requirement...' : 'Select an L1 Requirement first...'}
+              disabled={!l1Requirement}
+              options={filteredL2Requirements.map(req => ({ value: req.id, label: req.label }))}
+              searchable
+              optionDetailsMap={Object.fromEntries(filteredL2Requirements.map(req => [req.id, req.details]))}
+            />
+          </FieldGroup>
+
+          {/* 3c. Requirement Details */}
+          {(selectedL2Requirement || selectedL1Requirement || project) && (
             <div className="flex flex-col gap-[6px]">
               <label className="font-['Inter:Medium',sans-serif] font-medium text-[13px] leading-[18px] text-[#1C2024] m-0">
-                Add New Execution Statement
-                <span className="text-[#d4183d] ml-[2px]">*</span>
-              </label>
-              <p className="font-['Inter:Regular',sans-serif] font-normal text-[12px] leading-[16px] text-[#8b8d98] m-0 -mt-[2px]">
-                Execution statement will be submitted for review and must be approved before this task can proceed from draft state.
-              </p>
-              <textarea
-                value={newESText}
-                onChange={e => setNewESText(e.target.value)}
-                placeholder="Enter an execution statement..."
-                rows={4}
-                className="w-full px-[10px] py-[7px] rounded-[4px] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] placeholder:text-[#8b8d98] outline-none transition-colors resize-none"
-                style={{
-                  border: attempted && !newESText.trim() ? '1px solid #d4183d' : '1px solid rgba(0,6,46,0.18)',
-                  background: attempted && !newESText.trim() ? '#fff0f2' : 'white',
-                }}
-                onFocus={e => {
-                  if (!(attempted && !newESText.trim())) e.currentTarget.style.border = '1px solid #004B72';
-                }}
-                onBlur={e => {
-                  if (!(attempted && !newESText.trim())) e.currentTarget.style.border = '1px solid rgba(0,6,46,0.18)';
-                }}
-              />
-              {attempted && !newESText.trim() && (
-                <p className="font-['Inter:Regular',sans-serif] font-normal text-[12px] leading-[16px] text-[#d4183d] m-0">
-                  Required
-                </p>
-              )}
-            </div>
-          ) : selectedES ? (
-            <div className="flex flex-col gap-[6px]">
-              <label className="font-['Inter:Medium',sans-serif] font-medium text-[13px] leading-[18px] text-[#1C2024] m-0">
-                Execution Statement Details
+                Requirement Details
               </label>
               <div
-                className="px-[10px] py-[7px] rounded-[4px] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] whitespace-normal"
+                className="px-[10px] py-[7px] rounded-[4px] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] whitespace-normal"
                 style={{
                   background: '#F9F9FB',
                   border: '1px solid rgba(0,6,46,0.12)',
                   minHeight: '34px',
+                  color: selectedL2Requirement || selectedL1Requirement ? '#1C2024' : '#8b8d98',
                 }}
               >
-                {selectedES.details}
+                {selectedL2Requirement?.details || selectedL1Requirement?.details || 'Select a requirement to view details'}
               </div>
             </div>
-          ) : project ? (
-            <div className="flex flex-col gap-[6px]">
-              <label className="font-['Inter:Medium',sans-serif] font-medium text-[13px] leading-[18px] text-[#1C2024] m-0">
-                Execution Statement Details
-              </label>
-              <div
-                className="px-[10px] py-[7px] rounded-[4px] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#8b8d98]"
-                style={{
-                  background: '#F9F9FB',
-                  border: '1px solid rgba(0,6,46,0.12)',
-                  minHeight: '34px',
-                }}
-              >
-                Select an execution statement to view details
-              </div>
-            </div>
-          ) : null)}
+          )}
 
           {/* 4. Task Title */}
           <FieldGroup label="Task Title" required attempted={attempted} invalid={!taskTitle.trim()}>
@@ -984,14 +939,14 @@ export function CreateTaskFlyout({ open, onClose, onTaskCreated, onTaskCreatedAn
             required
             attempted={attempted}
             invalid={!wbsAttribute}
-            helperText={!isCODB && !selectedES ? 'Select the Work Breakdown Structure element for this task.' : undefined}
+            helperText={!selectedL1Requirement ? 'Select an L1 Requirement to enable WBS selection' : undefined}
           >
             <SelectInput
               value={wbsAttribute}
               onChange={setWbsAttribute}
-              placeholder={isCODB || selectedES ? 'Select WBS attribute...' : 'Select an Execution Statement first...'}
-              disabled={!isCODB && !selectedES}
-              options={availableWBS.map(wbs => ({ value: wbs.code, label: `${wbs.code} — ${wbs.description}` }))}
+              placeholder={selectedL1Requirement ? 'Select WBS attribute...' : 'Select an L1 Requirement first...'}
+              disabled={!selectedL1Requirement}
+              options={availableWBS.map(wbs => ({ value: wbs.code, label: `${wbs.code} - ${wbs.description}` }))}
               error={attempted && !wbsAttribute}
               searchable
             />
@@ -1003,32 +958,33 @@ export function CreateTaskFlyout({ open, onClose, onTaskCreated, onTaskCreatedAn
             required
             attempted={attempted}
             invalid={!executingActivity}
-            helperText={!isCODB && !selectedES ? 'Select an Execution Statement to enable activity selection' : undefined}
+            helperText={!selectedL1Requirement ? 'Select an L1 Requirement to enable activity selection' : undefined}
           >
             <SelectInput
               value={executingActivity}
               onChange={setExecutingActivity}
-              placeholder={isCODB || selectedES ? 'Select executing activity...' : 'Select an Execution Statement first...'}
-              disabled={!isCODB && !selectedES}
+              placeholder={selectedL1Requirement ? 'Select executing activity...' : 'Select an L1 Requirement first...'}
+              disabled={!selectedL1Requirement}
               options={availableActivities.map(a => ({ value: a, label: a }))}
               error={attempted && !executingActivity}
               searchable
             />
           </FieldGroup>
 
-          {/* 7. Appropriation (APPN) — CODB mode only */}
+          {/* 7. Appropriation (APPN) - CODB mode only */}
           {isCODB && (
             <FieldGroup
               label="Appropriation (APPN)"
               required
               attempted={attempted}
               invalid={!appropriation}
+              helperText={!selectedL1Requirement ? 'Select an L1 Requirement to enable appropriation selection' : undefined}
             >
               <SelectInput
                 value={appropriation}
                 onChange={setAppropriation}
-                placeholder="Select appropriation..."
-                disabled={false}
+                placeholder={selectedL1Requirement ? 'Select appropriation...' : 'Select an L1 Requirement first...'}
+                disabled={!selectedL1Requirement}
                 options={availableAppropriations.map(a => ({ value: a, label: a }))}
                 error={attempted && !appropriation}
                 searchable
@@ -1036,18 +992,19 @@ export function CreateTaskFlyout({ open, onClose, onTaskCreated, onTaskCreatedAn
             </FieldGroup>
           )}
 
-          {/* 8. Funding Source — CODB mode only */}
+          {/* 8. Funding Source - CODB mode only */}
           {isCODB && (
             <FieldGroup
               label="Funding Source"
               attempted={attempted}
               invalid={false}
               noteText="Optional"
+              helperText={!selectedL1Requirement ? 'Select an L1 Requirement and appropriation to enable funding source selection' : undefined}
             >
               <SelectInput
                 value={fundingSource}
                 onChange={setFundingSource}
-                placeholder="Select funding source..."
+                placeholder={appropriation ? 'Select funding source...' : 'Select an appropriation first...'}
                 disabled={!appropriation}
                 options={fundingSourceOptions.map(fs => ({ value: fs.id, label: fs.label }))}
                 error={false}
