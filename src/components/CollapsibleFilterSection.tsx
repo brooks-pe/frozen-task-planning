@@ -89,9 +89,14 @@ export function CollapsibleFilterSection({
         }}
         onTransitionEnd={handleTransitionEnd}
       >
-        <div style={{ overflow: overflowVisible ? 'visible' : 'hidden' }}>
-          <div className="mx-[24px] border-t border-solid border-[#e0e1e6]" />
-          <div className="px-[24px] pt-[16px] pb-[24px]">
+        <div
+          className="w-full min-w-0 box-border"
+          style={{ overflow: overflowVisible ? 'visible' : 'hidden' }}
+        >
+          <div className="w-full box-border px-[24px]">
+            <div className="w-full border-t border-solid border-[#e0e1e6]" />
+          </div>
+          <div className="w-full box-border px-[24px] pt-[16px] pb-[24px]">
             {children}
           </div>
         </div>
