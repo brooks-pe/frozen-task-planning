@@ -419,47 +419,6 @@ function InlineSearchableDropdown({ value, onChange, options }: { value: string;
   );
 }
 
-/** Radio option â€” matches CreateTaskFlyout RadioOption pattern exactly */
-function RadioOption({ label, checked, onChange, name }: { label: string; checked: boolean; onChange: () => void; name: string }) {
-  return (
-    <label className="flex items-center gap-[8px] cursor-pointer select-none">
-      <span
-        className="inline-flex items-center justify-center w-[18px] h-[18px] rounded-full border-[2px] shrink-0 transition-colors"
-        style={{
-          borderColor: checked ? '#004b72' : '#8b8d98',
-          backgroundColor: 'white',
-        }}
-        onClick={onChange}
-      >
-        {checked && (
-          <span
-            className="w-[10px] h-[10px] rounded-full"
-            style={{ backgroundColor: '#004b72' }}
-          />
-        )}
-      </span>
-      <input
-        type="radio"
-        name={name}
-        checked={checked}
-        onChange={onChange}
-        className="sr-only"
-      />
-      <span className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024]">{label}</span>
-    </label>
-  );
-}
-
-/** Task Type radio group using correct RadioOption pattern */
-function TaskTypeRadio({ value, onChange }: { value: string; onChange: (v: string) => void }) {
-  return (
-    <div className="flex items-center gap-[20px] h-[32px]">
-      <RadioOption label="CODB" checked={value === 'CODB'} onChange={() => onChange('CODB')} name="taskTypeSummary" />
-      <RadioOption label="Standard" checked={value === 'Non-CODB'} onChange={() => onChange('Non-CODB')} name="taskTypeSummary" />
-    </div>
-  );
-}
-
 /** DatePickerInput â€” matches CreateTaskFlyout calendar pattern exactly */
 function InlineDatePickerInput({ value, onChange }: { value: string; onChange: (v: string) => void }) {
   const [calendarOpen, setCalendarOpen] = useState(false);
@@ -772,7 +731,6 @@ interface EditFormState {
   associatedTasks: string;
   nextTask: string;
   objective: string;
-  taskType: string;
 }
 
 interface TaskSummarySectionProps {
@@ -802,7 +760,6 @@ export function TaskSummarySection({ taskId, currentTier, tierAssessmentResult, 
     associatedTasks: 'None linked',
     nextTask: 'Not Yet Created',
     objective: '',
-    taskType: requirementProfile.isCODB ? 'CODB' : 'Non-CODB',
   }));
 
   const [savedState, setSavedState] = useState<EditFormState>(() => ({ ...formState }));
@@ -841,8 +798,6 @@ export function TaskSummarySection({ taskId, currentTier, tierAssessmentResult, 
   const displayPop = savedState.popStart && savedState.popEnd
     ? `${formatDisplayDate(savedState.popStart)} - ${formatDisplayDate(savedState.popEnd)}`
     : '';
-  const displayTaskType = savedState.taskType === 'Non-CODB' ? 'Standard' : savedState.taskType;
-
   const headerActions = isEditing ? (
     <div className="flex items-center gap-[8px]">
       <button
@@ -898,7 +853,7 @@ export function TaskSummarySection({ taskId, currentTier, tierAssessmentResult, 
               longText
             />
             {isEditing ? (
-              <EditableField label="WBS Attribute">
+              <EditableField label="WBS">
                 <InlineSearchableDropdown
                   value={formState.wbsAttribute}
                   onChange={v => updateField('wbsAttribute', v)}
@@ -906,7 +861,7 @@ export function TaskSummarySection({ taskId, currentTier, tierAssessmentResult, 
                 />
               </EditableField>
             ) : (
-              <MetadataField label="WBS Attribute" value={savedState.wbsAttribute} />
+              <MetadataField label="WBS" value={savedState.wbsAttribute} />
             )}
             <MetadataField label="Appropriation" value={requirementProfile.appropriation} badge="appropriation" />
             {isEditing ? (
@@ -965,21 +920,11 @@ export function TaskSummarySection({ taskId, currentTier, tierAssessmentResult, 
                 action={!displayPop ? { text: 'Add PoP', onClick: handleEdit } : undefined}
               />
             )}
-            <MetadataField 
+            <MetadataField
               label="Operational Status" 
               value="Active"
               operationalStatus={{ type: 'active' }}
             />
-            {isEditing ? (
-              <EditableField label="Task Type">
-                <TaskTypeRadio
-                  value={formState.taskType}
-                  onChange={v => updateField('taskType', v)}
-                />
-              </EditableField>
-            ) : (
-              <MetadataField label="Task Type" value={displayTaskType} badge="status" />
-            )}
           </div>
         </div>
 
