@@ -4,13 +4,14 @@ import { useParams, useNavigate } from 'react-router';
 import { TASKS_DATA } from './TaskPlanningData';
 import { CloneTaskFlyout } from './CloneTaskFlyout';
 import { SyncPointBreadcrumb } from './SyncPointBreadcrumb';
-import { TaskSummarySection, TASK_SUMMARY_PROJECT_OPTIONS } from './TaskSummarySection';
+import { TaskSummarySection, TASK_SUMMARY_PROJECT_OPTIONS, getTaskRequirementProfile } from './TaskSummarySection';
 import { TierAssessmentFlyout, type TierAssessmentResult } from './TierAssessmentFlyout';
 import { TaskWorkspaceOverview } from './TaskWorkspaceOverview';
 import { WorkflowFooter } from './WorkflowFooter';
 import { BOESubtaskForm, BOESubtaskView, createEmptySubtaskDraft, isGovernmentExecutingActivity, requiresAcquisitionFee, restoreSubtaskFromSaved, snapshotSubtaskForSave, validateBoeForTier, type SubtaskDraft, type WorkflowState } from './BOESubtasksSection';
 import { SearchableFilterDropdown } from './SearchableFilterDropdown';
 import { EXECUTING_ACTIVITY_OPTIONS } from './TaskPlanningData';
+import { HoverCard, HoverCardTrigger, HoverCardContent } from './ui/hover-card';
 
 function PencilIcon() {
   return (
@@ -41,7 +42,7 @@ export default function TaskWorkspaceHeader() {
   const initialWorkflowState: WorkflowState = task?.workflowState === 'BOE Build-Up' ? 'BOE_BUILD_UP' : 'Draft';
   const [workflowState, setWorkflowState] = React.useState<WorkflowState>(initialWorkflowState);
 
-  // ── Edit mode state (shared by Task Title + Task Summary) ────────────────
+  //  Edit mode state (shared by Task Title + Task Summary) 
   const [isEditing, setIsEditing] = React.useState(false);
   const titleInputRef = React.useRef<HTMLInputElement>(null);
   const boeContentRef = React.useRef<HTMLDivElement>(null);
@@ -49,15 +50,26 @@ export default function TaskWorkspaceHeader() {
   const subtaskTitleRef = React.useRef<HTMLInputElement>(null);
   const [pendingSubtaskFocusId, setPendingSubtaskFocusId] = React.useState<string | null>(null);
 
-  // Title state — initialized from task data, kept in sync with saved value
+  // Title state  initialized from task data, kept in sync with saved value
   const [taskTitle, setTaskTitle] = React.useState(() => task?.title ?? '');
   const [savedTaskTitle, setSavedTaskTitle] = React.useState(() => task?.title ?? '');
+  const requirementProfile = React.useMemo(() => getTaskRequirementProfile(taskId ?? ''), [taskId]);
   const initialExecutingActivity = task?.executingActivity ?? '';
-  const initialProject = taskId === '41-0279' ? 'Coastal Surveillance Modernization' : (task?.project ?? '');
+  const initialProject = requirementProfile.project;
   const [executingActivity, setExecutingActivity] = React.useState(initialExecutingActivity);
   const [savedExecutingActivity, setSavedExecutingActivity] = React.useState(initialExecutingActivity);
   const [project, setProject] = React.useState(initialProject);
   const [savedProject, setSavedProject] = React.useState(initialProject);
+
+  const visibleRequirement = React.useMemo(
+    () => requirementProfile.l2Requirement?.trim() || requirementProfile.l1Requirement,
+    [requirementProfile.l1Requirement, requirementProfile.l2Requirement]
+  );
+
+  const visibleRequirementAnchor = React.useMemo(() => {
+    if (visibleRequirement.length <= 72) return visibleRequirement;
+    return `${visibleRequirement.slice(0, 69)}...`;
+  }, [visibleRequirement]);
 
   const isDraftState = workflowState === 'Draft';
   const isBoeBuildUpState = workflowState === 'BOE_BUILD_UP';
@@ -301,6 +313,30 @@ export default function TaskWorkspaceHeader() {
     }
   };
 
+  const requirementHover = (
+    <HoverCard openDelay={120}>
+      <HoverCardTrigger asChild>
+        <span className="cursor-help whitespace-nowrap underline decoration-dotted underline-offset-[2px] decoration-[rgba(28,32,36,0.45)]">
+          {visibleRequirementAnchor}
+        </span>
+      </HoverCardTrigger>
+      <HoverCardContent align="start" className="w-[420px] bg-white border border-[rgba(0,6,46,0.14)] shadow-lg rounded-[6px] p-[12px]">
+        <div className="flex flex-col gap-[8px]">
+          <div className="flex flex-col gap-[2px]">
+            <span className="font-['Inter:Medium',sans-serif] font-medium text-[12px] leading-[16px] text-[#60646C]">L1 Requirement</span>
+            <span className="font-['Inter:Regular',sans-serif] font-normal text-[13px] leading-[18px] text-[#1C2024]">{requirementProfile.l1Requirement}</span>
+          </div>
+          {requirementProfile.l2Requirement && (
+            <div className="flex flex-col gap-[2px]">
+              <span className="font-['Inter:Medium',sans-serif] font-medium text-[12px] leading-[16px] text-[#60646C]">L2 Requirement</span>
+              <span className="font-['Inter:Regular',sans-serif] font-normal text-[13px] leading-[18px] text-[#1C2024]">{requirementProfile.l2Requirement}</span>
+            </div>
+          )}
+        </div>
+      </HoverCardContent>
+    </HoverCard>
+  );
+
   return (
     <>
       <div className="sticky top-0 z-30 h-0">
@@ -312,7 +348,7 @@ export default function TaskWorkspaceHeader() {
           <div className="bg-white border-b border-[#e0e1e6] shadow-[0_2px_8px_rgba(0,0,0,0.08)]">
             <div className="px-[24px] py-[12px]">
               <p className="font-['Inter:Regular',sans-serif] font-normal text-[18px] leading-[24px] text-[#1C2024] overflow-hidden text-ellipsis whitespace-nowrap">
-                {savedTaskTitle} • {taskId} • {savedExecutingActivity} • {savedProject}
+                {taskId} | {visibleRequirementAnchor} | {savedExecutingActivity}
               </p>
             </div>
           </div>
@@ -381,7 +417,7 @@ export default function TaskWorkspaceHeader() {
             <div aria-hidden="true" className="absolute border-[#004b72] border-b-[3px] border-solid border-t-[3px] inset-0 pointer-events-none" />
 
             <div className="flex flex-col gap-[4px]">
-              {/* Title row — inline edit in edit mode, pencil affordance in read mode (Draft only) */}
+              {/* Title row  inline edit in edit mode, pencil affordance in read mode (Draft only) */}
               <div className="flex items-center gap-[8px]">
                 {isEditing ? (
                   <input
@@ -413,12 +449,15 @@ export default function TaskWorkspaceHeader() {
                   <span className="font-['Inter:Regular',sans-serif] font-normal text-[18px] leading-[24px] text-[#1C2024] whitespace-nowrap">
                     {taskId}
                   </span>
-                  <span className="font-['Inter:Regular',sans-serif] font-normal text-[18px] leading-[24px] text-[#60646C] shrink-0">
-                    •
-                  </span>
-                  <span className="font-['Inter:Regular',sans-serif] font-normal text-[18px] leading-[24px] text-[#1C2024] whitespace-nowrap">
-                    Executing Activity:
-                  </span>
+                    <span className="font-['Inter:Regular',sans-serif] font-normal text-[18px] leading-[24px] text-[#60646C] shrink-0">
+                      |
+                    </span>
+                  <div className="min-w-0 max-w-[420px] text-[18px] leading-[24px] text-[#60646C]">
+                    {requirementHover}
+                  </div>
+                    <span className="font-['Inter:Regular',sans-serif] font-normal text-[18px] leading-[24px] text-[#60646C] shrink-0">
+                      |
+                    </span>
                   <div className="w-[160px] min-w-0">
                     <SearchableFilterDropdown
                       value={executingActivity}
@@ -428,12 +467,9 @@ export default function TaskWorkspaceHeader() {
                       triggerStyle={{ width: '100%', minWidth: 0 }}
                     />
                   </div>
-                  <span className="font-['Inter:Regular',sans-serif] font-normal text-[18px] leading-[24px] text-[#60646C] shrink-0">
-                    •
-                  </span>
-                  <span className="font-['Inter:Regular',sans-serif] font-normal text-[18px] leading-[24px] text-[#1C2024] whitespace-nowrap">
-                    Project:
-                  </span>
+                    <span className="font-['Inter:Regular',sans-serif] font-normal text-[18px] leading-[24px] text-[#60646C] shrink-0">
+                      |
+                    </span>
                   <div className="w-[260px] min-w-0">
                     <SearchableFilterDropdown
                       value={project}
@@ -446,7 +482,7 @@ export default function TaskWorkspaceHeader() {
                 </div>
               ) : (
                 <p className="font-['Inter:Regular',sans-serif] font-normal text-[18px] leading-[24px] text-[#60646C]">
-                  <span className="text-[#1C2024]">{taskId}</span> • <span className="text-[#1C2024]">Executing Activity:</span> {savedExecutingActivity} • <span className="text-[#1C2024]">Project:</span> {savedProject}
+                  <span className="text-[#1C2024]">{taskId}</span> | {requirementHover} | {savedExecutingActivity} | {savedProject}
                 </p>
               )}
             </div>
@@ -759,3 +795,4 @@ export default function TaskWorkspaceHeader() {
     </>
   );
 }
+
