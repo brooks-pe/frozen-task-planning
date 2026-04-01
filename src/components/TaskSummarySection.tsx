@@ -876,7 +876,17 @@ export function TaskSummarySection({ taskId, currentTier, tierAssessmentResult, 
   };
 
   const requirementOptions = getRequirementOptionsForProject(formState.project);
-  const requirementOptionValues = Array.from(new Set(requirementOptions.map(option => option.value)));
+  const requirementDisplayOptions = requirementOptions.map(option => ({
+    ...option,
+    // Compact hierarchy cue for the narrower right-side panel.
+    display: option.level === 'l2' ? `-> ${option.value}` : option.value,
+  }));
+  const requirementDropdownValue =
+    requirementDisplayOptions.find(
+      option => option.value === formState.requirement && option.level === formState.requirementLevel
+    )?.display ??
+    requirementDisplayOptions.find(option => option.value === formState.requirement)?.display ??
+    formState.requirement;
 
   const handleEdit = () => {
     setFormState({ ...savedState });
@@ -913,8 +923,8 @@ export function TaskSummarySection({ taskId, currentTier, tierAssessmentResult, 
     }));
   };
 
-  const handleRequirementChange = (requirement: string) => {
-    const selectedOption = requirementOptions.find(option => option.value === requirement);
+  const handleRequirementChange = (displayValue: string) => {
+    const selectedOption = requirementDisplayOptions.find(option => option.display === displayValue);
     if (!selectedOption) return;
     const selectedProfile = getRequirementProfile(selectedOption.profileId);
 
@@ -922,7 +932,7 @@ export function TaskSummarySection({ taskId, currentTier, tierAssessmentResult, 
       ...prev,
       project: selectedProfile.project,
       profileId: selectedProfile.id,
-      requirement,
+      requirement: selectedOption.value,
       requirementLevel: selectedOption.level,
       wbsAttribute: selectedProfile.wbsAttribute,
       fundingSource: selectedProfile.fundingSource,
@@ -1024,9 +1034,9 @@ export function TaskSummarySection({ taskId, currentTier, tierAssessmentResult, 
                     showRequiredIndicator={isEditing}
                   >
                     <InlineSearchableDropdown
-                      value={formState.requirement}
+                      value={requirementDropdownValue}
                       onChange={handleRequirementChange}
-                      options={requirementOptionValues}
+                      options={requirementDisplayOptions.map(option => option.display)}
                     />
                   </EditableField>
                 ) : (
@@ -1056,6 +1066,24 @@ export function TaskSummarySection({ taskId, currentTier, tierAssessmentResult, 
                   </EditableField>
                 ) : (
                   <MetadataField label="WBS" value={savedState.wbsAttribute} />
+                )}
+                {isEditing ? (
+                  <EditableField label="Objective">
+                    <textarea
+                      value={formState.objective}
+                      onChange={e => updateField('objective', e.target.value)}
+                      placeholder="Enter objective..."
+                      rows={2}
+                      className="block w-full min-w-0 max-w-full box-border px-[8px] py-[6px] rounded-[4px] border border-[rgba(0,6,46,0.2)] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] outline-none focus:border-[#004B72] focus:ring-[2px] focus:ring-[rgba(0,75,114,0.2)] resize-vertical min-h-[32px]"
+                    />
+                  </EditableField>
+                ) : (
+                  <MetadataField
+                    label="Objective"
+                    value={savedState.objective}
+                    longText={!!savedState.objective}
+                    action={!savedState.objective ? { text: 'Add Objective', onClick: handleEdit } : undefined}
+                  />
                 )}
               </div>
             </div>
@@ -1162,16 +1190,27 @@ export function TaskSummarySection({ taskId, currentTier, tierAssessmentResult, 
 
             <div className="border-t border-solid border-[#e0e1e6]" />
 
-            {/* 4. Ownership & Relationships */}
+            {/* 4. Ownership */}
             <div className="flex flex-col gap-[10px]">
               <p className="m-0 font-['Inter:Semi_Bold',sans-serif] font-semibold text-[12px] leading-[16px] text-[#004B72]">
-                Ownership &amp; Relationships
+                Ownership
               </p>
               <div className="flex flex-col gap-[12px]">
                 <MetadataField label="Project Lead" value="Jordan Blake" />
                 <MetadataField label="Activity Lead" value="Taylor Morgan" />
                 <MetadataField label="Created By" value="Alex Carter" />
                 <MetadataField label="Last Updated By" value="Riley Chen" />
+              </div>
+            </div>
+
+            <div className="border-t border-solid border-[#e0e1e6]" />
+
+            {/* 5. Task Relationships */}
+            <div className="flex flex-col gap-[10px]">
+              <p className="m-0 font-['Inter:Semi_Bold',sans-serif] font-semibold text-[12px] leading-[16px] text-[#004B72]">
+                Task Relationships
+              </p>
+              <div className="flex flex-col gap-[12px]">
                 {isEditing ? (
                   <EditableField label="Previous Task">
                     <InlineSearchableDropdown
@@ -1215,24 +1254,6 @@ export function TaskSummarySection({ taskId, currentTier, tierAssessmentResult, 
                     label="Next Task"
                     value=""
                     action={{ text: savedState.nextTask, onClick: handleEdit }}
-                  />
-                )}
-                {isEditing ? (
-                  <EditableField label="Objective">
-                    <textarea
-                      value={formState.objective}
-                      onChange={e => updateField('objective', e.target.value)}
-                      placeholder="Enter objective..."
-                      rows={2}
-                      className="block w-full min-w-0 max-w-full box-border px-[8px] py-[6px] rounded-[4px] border border-[rgba(0,6,46,0.2)] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] outline-none focus:border-[#004B72] focus:ring-[2px] focus:ring-[rgba(0,75,114,0.2)] resize-vertical min-h-[32px]"
-                    />
-                  </EditableField>
-                ) : (
-                  <MetadataField
-                    label="Objective"
-                    value={savedState.objective}
-                    longText={!!savedState.objective}
-                    action={!savedState.objective ? { text: 'Add Objective', onClick: handleEdit } : undefined}
                   />
                 )}
               </div>
