@@ -132,12 +132,20 @@ export function SearchableFilterDropdown({ value, onChange, options, className, 
       return;
     }
 
-    const rafId = requestAnimationFrame(updateDropdownPosition);
+    let rafId1 = 0;
+    let rafId2 = 0;
+    // First pass can run before portal size constraints fully settle.
+    // Run a second frame pass so initial open matches post-scroll alignment.
+    rafId1 = requestAnimationFrame(() => {
+      updateDropdownPosition();
+      rafId2 = requestAnimationFrame(updateDropdownPosition);
+    });
     window.addEventListener('resize', updateDropdownPosition);
     window.addEventListener('scroll', updateDropdownPosition, true);
 
     return () => {
-      cancelAnimationFrame(rafId);
+      cancelAnimationFrame(rafId1);
+      cancelAnimationFrame(rafId2);
       window.removeEventListener('resize', updateDropdownPosition);
       window.removeEventListener('scroll', updateDropdownPosition, true);
     };
