@@ -8,7 +8,8 @@ import { useNavigate } from 'react-router';
 // ─── Mock Data (same as flyout) ─────────────────────────────────────────────
 
 interface ProjectOption { id: string; label: string; isCODB: boolean; }
-interface ExecutionStatementOption { id: string; label: string; details: string; projectId: string; appropriations: string[]; activities: string[]; }
+interface L1RequirementOption { id: string; label: string; details: string; projectId: string; appropriations: string[]; activities: string[]; }
+interface L2RequirementOption { id: string; l1RequirementId: string; label: string; details: string; }
 interface WBSOption { code: string; description: string; }
 interface FundingSourceRecord { id: string; label: string; appropriation: string; }
 
@@ -20,13 +21,22 @@ const PROJECTS: ProjectOption[] = [
   { id: 'proj-004', label: 'Maritime Domain Awareness Systems', isCODB: false },
 ];
 
-const EXECUTION_STATEMENTS: ExecutionStatementOption[] = [
-  { id: 'ES-001', label: 'Surface Ship Undersea Warfare Modernization', details: 'Enhance surface ship undersea warfare capabilities through integration of advanced sonar systems, improved signal processing, and upgraded mission planning tools to support distributed maritime operations.', projectId: 'proj-001', appropriations: ['O&MN'], activities: ['PMS 420 – Program Office', 'NSWC PCD – Panama City Division', 'NSWC DD – Dahlgren Division'] },
-  { id: 'ES-002', label: 'Autonomous Mine Detection Capability Expansion', details: 'Develop and deploy autonomous systems capable of detecting and classifying naval mines using advanced sensor fusion, machine learning algorithms, and unmanned surface and underwater platforms.', projectId: 'proj-002', appropriations: ['RDTEN', 'O&MN'], activities: ['NSWC PCD – Panama City Division', 'NSWC DD – Dahlgren Division', 'Naval AI Systems – AI/ML Division'] },
-  { id: 'ES-003', label: 'Maritime ISR Sensor Integration & Data Fusion', details: 'Integrate multi-domain intelligence, surveillance, and reconnaissance sensors to enable real-time data fusion, improved situational awareness, and enhanced decision-making across maritime operations.', projectId: 'proj-003', appropriations: ['RDTEN'], activities: ['Naval AI Systems – AI/ML Division', 'Undersea Warfare Lab – Acoustic Systems', 'Cyber Systems Division – Network Ops'] },
-  { id: 'ES-004', label: 'Expeditionary Mine Countermeasure Mission Support', details: 'Support expeditionary mine countermeasure missions by developing deployable systems, enhancing mission planning capabilities, and improving interoperability across joint forces.', projectId: 'proj-004', appropriations: ['OPN', 'RDTEN'], activities: ['Maritime Systems Lab – Integration Branch', 'PMS 420 – Program Office'] },
-  { id: 'ES-005', label: 'Littoral Combat Systems Readiness Improvement', details: 'Improve readiness and operational availability of littoral combat systems through targeted maintenance enhancements, system upgrades, and logistics optimization initiatives.', projectId: 'proj-001', appropriations: ['O&MN'], activities: ['PMS 420 – Program Office', 'NSWC DD – Dahlgren Division'] },
-  { id: 'ES-006', label: 'Unmanned Surface Vehicle Payload Integration', details: 'Design and integrate modular payload systems for unmanned surface vehicles to support surveillance, mine detection, and electronic warfare missions in contested environments.', projectId: 'proj-002', appropriations: ['RDTEN'], activities: ['Naval AI Systems – AI/ML Division', 'NSWC PCD – Panama City Division'] },
+const L1_REQUIREMENTS: L1RequirementOption[] = [
+  { id: 'L1-001', label: 'USW Mission Package Readiness', details: 'Maintain deployable undersea warfare mission package readiness for near-term fleet operations.', projectId: 'proj-001', appropriations: ['O&MN'], activities: ['PMS 420 � Program Office', 'NSWC DD � Dahlgren Division'] },
+  { id: 'L1-002', label: 'Autonomous Mine Warfare Capability', details: 'Expand autonomous mine warfare mission capability for contested maritime environments.', projectId: 'proj-002', appropriations: ['RDTEN', 'O&MN'], activities: ['NSWC PCD � Panama City Division', 'Naval AI Systems � AI/ML Division'] },
+  { id: 'L1-003', label: 'Undersea Sensor Data Fusion', details: 'Improve sensor fusion and tactical processing for distributed undersea operations.', projectId: 'proj-003', appropriations: ['RDTEN'], activities: ['Undersea Warfare Lab � Acoustic Systems', 'Cyber Systems Division � Network Ops'] },
+  { id: 'L1-004', label: 'Maritime ISR Modernization', details: 'Modernize maritime ISR integration to improve operator awareness and threat response.', projectId: 'proj-004', appropriations: ['OPN', 'RDTEN'], activities: ['Maritime Systems Lab � Integration Branch', 'PMS 420 � Program Office'] },
+  { id: 'L1-005', label: 'CODB Baseline Portfolio Support', details: 'Support CODB portfolio baseline activities and cross-cutting sustainment priorities.', projectId: 'proj-codb', appropriations: ['O&MN', 'RDTEN'], activities: ['PMS 420 � Program Office'] },
+];
+
+const L2_REQUIREMENTS: L2RequirementOption[] = [
+  { id: 'L2-001', l1RequirementId: 'L1-001', label: 'Sonar Integration Sprint', details: 'Incrementally integrate and validate sonar data pipelines for mission package use.' },
+  { id: 'L2-002', l1RequirementId: 'L1-001', label: 'Fleet Readiness Defect Closure', details: 'Address known readiness defects required for deployment confidence.' },
+  { id: 'L2-003', l1RequirementId: 'L1-002', label: 'USV Mine Detection Classifier', details: 'Improve autonomous mine classifier performance across representative environments.' },
+  { id: 'L2-004', l1RequirementId: 'L1-002', label: 'Payload Integration Test Event', details: 'Execute payload integration event for unmanned mission package hardware/software.' },
+  { id: 'L2-005', l1RequirementId: 'L1-003', label: 'Acoustic Processing Optimization', details: 'Optimize acoustic processing throughput and latency for operational mission tempo.' },
+  { id: 'L2-006', l1RequirementId: 'L1-004', label: 'ISR Sensor Correlation Upgrade', details: 'Improve cross-sensor track correlation and mission-level display fidelity.' },
+  { id: 'L2-007', l1RequirementId: 'L1-005', label: 'CODB Funding Reconciliation Support', details: 'Track and reconcile CODB baseline funding actions for planning execution.' },
 ];
 
 const WBS_OPTIONS: WBSOption[] = [
@@ -227,7 +237,7 @@ function GridSelect({
 const GRID_TEMPLATE = '24px 90px minmax(160px,1.2fr) 52px minmax(160px,1.4fr) minmax(140px,1.6fr) minmax(110px,1fr) minmax(140px,1.2fr) minmax(100px,0.9fr) minmax(140px,1.2fr) 72px';
 
 const COL_HEADERS = [
-  '', 'TASK ID', 'PROJECT', 'CODB', 'EXECUTION STATEMENT', 'TASK TITLE',
+  '', 'TASK ID', 'PROJECT', 'CODB', 'REQUIREMENT (L1/L2)', 'TASK TITLE',
   'WBS ATTRIBUTE', 'EXECUTING ACTIVITY', 'APPN', 'FUNDING SOURCE', 'ACTIONS',
 ];
 
@@ -254,7 +264,8 @@ function generateTaskId() {
 interface RowValues {
   project: string;
   isCODB: boolean;
-  executionStatement: string;
+  l1Requirement: string;
+  l2Requirement: string;
   taskTitle: string;
   wbsAttribute: string;
   executingActivity: string;
@@ -263,7 +274,7 @@ interface RowValues {
 }
 
 const EMPTY_ROW_VALUES: RowValues = {
-  project: '', isCODB: false, executionStatement: '', taskTitle: '',
+  project: '', isCODB: false, l1Requirement: '', l2Requirement: '', taskTitle: '',
   wbsAttribute: '', executingActivity: '', appropriation: '', fundingSource: '',
 };
 
@@ -278,7 +289,8 @@ function CreateTaskRow({ previewId, defaultValues, onDuplicate, onDelete, onVali
   const dv = defaultValues ?? EMPTY_ROW_VALUES;
   const [project, setProject] = useState(dv.project);
   const [isCODB, setIsCODB] = useState(dv.isCODB);
-  const [executionStatement, setExecutionStatement] = useState(dv.executionStatement);
+  const [l1Requirement, setL1Requirement] = useState(dv.l1Requirement);
+  const [l2Requirement, setL2Requirement] = useState(dv.l2Requirement);
   const [taskTitle, setTaskTitle] = useState(dv.taskTitle);
   const [wbsAttribute, setWbsAttribute] = useState(dv.wbsAttribute);
   const [executingActivity, setExecutingActivity] = useState(dv.executingActivity);
@@ -286,17 +298,18 @@ function CreateTaskRow({ previewId, defaultValues, onDuplicate, onDelete, onVali
   const [fundingSource, setFundingSource] = useState(dv.fundingSource);
 
   // ── Touched tracking (validation only shows after blur) ──
-  type FieldName = 'project' | 'executionStatement' | 'taskTitle' | 'wbsAttribute' | 'executingActivity' | 'appropriation' | 'fundingSource';
+  type FieldName = 'project' | 'l1Requirement' | 'taskTitle' | 'wbsAttribute' | 'executingActivity' | 'appropriation' | 'fundingSource';
   const [touched, setTouched] = useState<Set<FieldName>>(new Set());
   const touch = useCallback((f: FieldName) => setTouched(prev => { if (prev.has(f)) return prev; const n = new Set(prev); n.add(f); return n; }), []);
   const untouch = useCallback((...fields: FieldName[]) => setTouched(prev => { const n = new Set(prev); fields.forEach(f => n.delete(f)); return n; }), []);
 
-  // Derived
-  const selectedES = EXECUTION_STATEMENTS.find(es => es.id === executionStatement) ?? null;
-  const filteredES = EXECUTION_STATEMENTS.filter(es => es.projectId === project);
-  const availableAppropriations = selectedES?.appropriations ?? [];
-  const availableActivities = selectedES?.activities ?? [];
-  const availableWBS = executionStatement ? WBS_OPTIONS : [];
+    // Derived
+  const selectedL1Requirement = L1_REQUIREMENTS.find(req => req.id === l1Requirement) ?? null;
+  const filteredL1Requirements = L1_REQUIREMENTS.filter(req => req.projectId === project);
+  const filteredL2Requirements = L2_REQUIREMENTS.filter(req => req.l1RequirementId === l1Requirement);
+  const availableAppropriations = selectedL1Requirement?.appropriations ?? [];
+  const availableActivities = selectedL1Requirement?.activities ?? [];
+  const availableWBS = l1Requirement ? WBS_OPTIONS : [];
   const availableFundingSources = FUNDING_SOURCE_DATA.filter(fs => fs.appropriation === appropriation);
   const fundingSourceOptions = availableFundingSources.length > 0
     ? availableFundingSources
@@ -308,7 +321,7 @@ function CreateTaskRow({ previewId, defaultValues, onDuplicate, onDelete, onVali
   const errors = useMemo(() => {
     const e: Record<FieldName, boolean> = {
       project: !project,
-      executionStatement: !isCODBRow && !executionStatement,
+      l1Requirement: !l1Requirement,
       taskTitle: !taskTitle.trim(),
       wbsAttribute: !isCODBRow && !wbsAttribute,
       executingActivity: !isCODBRow && !executingActivity,
@@ -316,7 +329,7 @@ function CreateTaskRow({ previewId, defaultValues, onDuplicate, onDelete, onVali
       fundingSource: !isCODBRow && !fundingSource,
     };
     return e;
-  }, [project, isCODBRow, executionStatement, taskTitle, wbsAttribute, executingActivity, appropriation, fundingSource]);
+  }, [project, isCODBRow, l1Requirement, taskTitle, wbsAttribute, executingActivity, appropriation, fundingSource]);
 
   const hasAnyTouched = touched.size > 0;
   const isComplete = !Object.values(errors).some(Boolean);
@@ -330,30 +343,32 @@ function CreateTaskRow({ previewId, defaultValues, onDuplicate, onDelete, onVali
     if (prevProject.current === project) return;
     prevProject.current = project;
     setIsCODB(false);
-    setExecutionStatement('');
+    setL1Requirement('');
+    setL2Requirement('');
     setWbsAttribute('');
     setExecutingActivity('');
     setAppropriation('');
     setFundingSource('');
-    untouch('executionStatement', 'wbsAttribute', 'executingActivity', 'appropriation', 'fundingSource');
+    untouch('l1Requirement', 'wbsAttribute', 'executingActivity', 'appropriation', 'fundingSource');
   }, [project]);
 
-  const prevES = useRef(dv.executionStatement);
+    const prevL1Requirement = useRef(dv.l1Requirement);
   useEffect(() => {
-    if (prevES.current === executionStatement) return;
-    prevES.current = executionStatement;
+    if (prevL1Requirement.current === l1Requirement) return;
+    prevL1Requirement.current = l1Requirement;
+    setL2Requirement('');
     setWbsAttribute('');
     setExecutingActivity('');
     untouch('wbsAttribute', 'executingActivity');
-    if (!executionStatement) { setAppropriation(''); setFundingSource(''); untouch('appropriation', 'fundingSource'); return; }
-    const es = EXECUTION_STATEMENTS.find(e => e.id === executionStatement);
-    const appns = es?.appropriations ?? [];
+    if (!l1Requirement) { setAppropriation(''); setFundingSource(''); untouch('appropriation', 'fundingSource'); return; }
+    const requirement = L1_REQUIREMENTS.find(r => r.id === l1Requirement);
+    const appns = requirement?.appropriations ?? [];
     if (appns.length === 1) {
       setAppropriation(appns[0]);
       const sources = FUNDING_SOURCE_DATA.filter(fs => fs.appropriation === appns[0]);
       setFundingSource(sources.length >= 1 ? sources[0].id : 'fs-placeholder');
     } else { setAppropriation(''); setFundingSource(''); untouch('appropriation', 'fundingSource'); }
-  }, [executionStatement]);
+  }, [l1Requirement]);
 
   const prevAppn = useRef(dv.appropriation);
   useEffect(() => {
@@ -365,14 +380,15 @@ function CreateTaskRow({ previewId, defaultValues, onDuplicate, onDelete, onVali
   }, [appropriation]);
 
   // Auto-select single options
-  useEffect(() => { if (filteredES.length === 1 && !executionStatement) setExecutionStatement(filteredES[0].id); }, [filteredES.length]);
+  useEffect(() => { if (filteredL1Requirements.length === 1 && !l1Requirement) setL1Requirement(filteredL1Requirements[0].id); }, [filteredL1Requirements.length]);
+  useEffect(() => { if (filteredL2Requirements.length === 1 && !l2Requirement) setL2Requirement(filteredL2Requirements[0].id); }, [filteredL2Requirements.length]);
   useEffect(() => { if (availableActivities.length === 1 && !executingActivity) setExecutingActivity(availableActivities[0]); }, [availableActivities.length]);
 
   // Task title error border
   const titleHasError = showErr('taskTitle');
 
   // Notify parent of validity change
-  const hasData = !!(project || taskTitle.trim() || executionStatement || wbsAttribute || executingActivity || appropriation || fundingSource);
+  const hasData = !!(project || taskTitle.trim() || l1Requirement || l2Requirement || wbsAttribute || executingActivity || appropriation || fundingSource);
   useEffect(() => {
     onValidityChange?.(isComplete, hasData);
   }, [isComplete, hasData]);
@@ -382,7 +398,7 @@ function CreateTaskRow({ previewId, defaultValues, onDuplicate, onDelete, onVali
   useEffect(() => {
     if (validateAll !== undefined && validateAll > prevValidateAll.current) {
       prevValidateAll.current = validateAll;
-      const allFields: FieldName[] = ['project', 'executionStatement', 'taskTitle', 'wbsAttribute', 'executingActivity', 'appropriation', 'fundingSource'];
+      const allFields: FieldName[] = ['project', 'l1Requirement', 'taskTitle', 'wbsAttribute', 'executingActivity', 'appropriation', 'fundingSource'];
       setTouched(new Set(allFields));
     }
   }, [validateAll]);
@@ -451,20 +467,31 @@ function CreateTaskRow({ previewId, defaultValues, onDuplicate, onDelete, onVali
         )}
       </div>
 
-      {/* Execution Statement */}
+            {/* Requirement (L1/L2) */}
       <div className="px-[4px] py-[6px]">
-        <GridSelect
-          value={executionStatement}
-          onChange={setExecutionStatement}
-          placeholder={project ? 'Select...' : '—'}
-          disabled={!project || isCODBRow}
-          options={filteredES.map(es => ({ value: es.id, label: es.label }))}
-          searchable
-          optionDetailsMap={Object.fromEntries(filteredES.map(es => [es.id, es.details]))}
-          onBlur={() => touch('executionStatement')}
-          error={!isCODBRow && !!showErr('executionStatement')}
-        />
-        {!isCODBRow && <FieldError show={!!showErr('executionStatement')} />}
+        <div className="flex flex-col gap-[6px]">
+          <GridSelect
+            value={l1Requirement}
+            onChange={setL1Requirement}
+            placeholder={project ? 'Select L1...' : '�'}
+            disabled={!project}
+            options={filteredL1Requirements.map(req => ({ value: req.id, label: req.label }))}
+            searchable
+            optionDetailsMap={Object.fromEntries(filteredL1Requirements.map(req => [req.id, req.details]))}
+            onBlur={() => touch('l1Requirement')}
+            error={!!showErr('l1Requirement')}
+          />
+          <GridSelect
+            value={l2Requirement}
+            onChange={setL2Requirement}
+            placeholder={l1Requirement ? 'Select L2 (optional)...' : '�'}
+            disabled={!l1Requirement}
+            options={filteredL2Requirements.map(req => ({ value: req.id, label: req.label }))}
+            searchable
+            optionDetailsMap={Object.fromEntries(filteredL2Requirements.map(req => [req.id, req.details]))}
+          />
+        </div>
+        <FieldError show={!!showErr('l1Requirement')} />
       </div>
 
       {/* Task Title */}
@@ -487,8 +514,8 @@ function CreateTaskRow({ previewId, defaultValues, onDuplicate, onDelete, onVali
         <GridSelect
           value={wbsAttribute}
           onChange={setWbsAttribute}
-          placeholder={selectedES && !isCODBRow ? 'Select...' : '—'}
-          disabled={!selectedES || isCODBRow}
+          placeholder={selectedL1Requirement && !isCODBRow ? 'Select...' : '—'}
+          disabled={!selectedL1Requirement || isCODBRow}
           options={availableWBS.map(wbs => ({ value: wbs.code, label: `${wbs.code} — ${wbs.description}` }))}
           searchable
           onBlur={() => touch('wbsAttribute')}
@@ -502,8 +529,8 @@ function CreateTaskRow({ previewId, defaultValues, onDuplicate, onDelete, onVali
         <GridSelect
           value={executingActivity}
           onChange={setExecutingActivity}
-          placeholder={selectedES && !isCODBRow ? 'Select...' : '—'}
-          disabled={!selectedES || isCODBRow}
+          placeholder={selectedL1Requirement && !isCODBRow ? 'Select...' : '—'}
+          disabled={!selectedL1Requirement || isCODBRow}
           options={availableActivities.map(a => ({ value: a, label: a }))}
           searchable
           onBlur={() => touch('executingActivity')}
@@ -517,8 +544,8 @@ function CreateTaskRow({ previewId, defaultValues, onDuplicate, onDelete, onVali
         <GridSelect
           value={appropriation}
           onChange={setAppropriation}
-          placeholder={selectedES ? 'Select...' : '—'}
-          disabled={!selectedES}
+          placeholder={selectedL1Requirement ? 'Select...' : '—'}
+          disabled={!selectedL1Requirement}
           options={availableAppropriations.map(a => ({ value: a, label: a }))}
           searchable
           onBlur={() => touch('appropriation')}
@@ -546,7 +573,7 @@ function CreateTaskRow({ previewId, defaultValues, onDuplicate, onDelete, onVali
       <div className="px-[4px] py-[6px] flex items-center justify-center gap-[8px]" style={{ minHeight: '42px' }}>
         <button
           type="button"
-          onClick={() => onDuplicate({ project, isCODB, executionStatement, taskTitle, wbsAttribute, executingActivity, appropriation, fundingSource })}
+          onClick={() => onDuplicate({ project, isCODB, l1Requirement, l2Requirement, taskTitle, wbsAttribute, executingActivity, appropriation, fundingSource })}
           className="inline-flex items-center justify-center w-[28px] h-[28px] rounded-[4px] border border-[rgba(0,6,46,0.12)] bg-white text-[#60646c] hover:bg-[#F9F9FB] hover:text-[#1C2024] transition-colors cursor-pointer"
         >
           <Copy size={14} strokeWidth={1.75} />
@@ -674,7 +701,7 @@ export default function CreateTaskGrid() {
       }
 
       if (openWorkspace) {
-        navigate('/task-planning/tasks/41-0279/workspace');
+        navigate('/task-planning/tasks/41-0279');
       }
     }, 50);
   }, [rows, validityMap, navigate]);
@@ -817,3 +844,6 @@ export default function CreateTaskGrid() {
     </div>
   );
 }
+
+
+
