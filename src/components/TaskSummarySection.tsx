@@ -218,7 +218,76 @@ function ClampedText({ text, muted }: { text: string; muted?: boolean }) {
   );
 }
 
-function MetadataField({ label, value, badge, action, showPulse, operationalStatus, tooltip, muted, truncate, longText }: { 
+function FieldLabel({ label, required, showRequiredIndicator, small }: {
+  label: string;
+  required?: boolean;
+  showRequiredIndicator?: boolean;
+  small?: boolean;
+}) {
+  return (
+    <span className={`font-['Inter:Semi_Bold',sans-serif] font-semibold ${small ? 'text-[13px]' : 'text-[14px]'} leading-[18px] text-[#1C2024]`}>
+      {label}
+      {required && showRequiredIndicator && (
+        <span className="ml-[4px] text-[#C1121F]">*</span>
+      )}
+    </span>
+  );
+}
+
+function RequirementLineageValue({
+  l1Requirement,
+  l2Requirement,
+  showMostSpecific,
+}: {
+  l1Requirement: string;
+  l2Requirement?: string;
+  showMostSpecific?: 'l1' | 'l2';
+}) {
+  const hasL2 = !!l2Requirement;
+  const visibleRequirement = showMostSpecific === 'l1' || !hasL2 ? l1Requirement : l2Requirement!;
+
+  return (
+    <HoverCard openDelay={150} closeDelay={100}>
+      <HoverCardTrigger asChild>
+        <button
+          type="button"
+          className="inline text-left border-none bg-transparent p-0 font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] underline decoration-dotted underline-offset-[3px] cursor-help"
+        >
+          {visibleRequirement}
+        </button>
+      </HoverCardTrigger>
+      <HoverCardContent
+        align="start"
+        side="top"
+        className="w-[360px] rounded-[6px] border border-[#E0E1E6] bg-white p-[12px] shadow-[0_8px_24px_rgba(0,0,0,0.12)]"
+      >
+        <div className="flex flex-col gap-[6px]">
+          <p className="m-0 font-['Inter:Semi_Bold',sans-serif] font-semibold text-[13px] leading-[18px] text-[#1C2024]">
+            Requirement Lineage
+          </p>
+          <p className="m-0 font-['Inter:Semi_Bold',sans-serif] font-semibold text-[12px] leading-[16px] text-[#60646C]">
+            L1 Requirement
+          </p>
+          <p className="m-0 font-['Inter:Regular',sans-serif] font-normal text-[13px] leading-[18px] text-[#1C2024]">
+            {l1Requirement}
+          </p>
+          {hasL2 && (
+            <>
+              <p className="m-0 font-['Inter:Semi_Bold',sans-serif] font-semibold text-[12px] leading-[16px] text-[#60646C]">
+                L2 Requirement
+              </p>
+              <p className="m-0 font-['Inter:Regular',sans-serif] font-normal text-[13px] leading-[18px] text-[#1C2024]">
+                {l2Requirement}
+              </p>
+            </>
+          )}
+        </div>
+      </HoverCardContent>
+    </HoverCard>
+  );
+}
+
+function MetadataField({ label, value, badge, action, showPulse, operationalStatus, tooltip, muted, truncate, longText, required, showRequiredIndicator, customValue }: { 
   label: string; 
   value: string; 
   badge?: 'appropriation' | 'status' | 'not-assigned'; 
@@ -229,13 +298,14 @@ function MetadataField({ label, value, badge, action, showPulse, operationalStat
   muted?: boolean;
   truncate?: boolean;
   longText?: boolean;
+  required?: boolean;
+  showRequiredIndicator?: boolean;
+  customValue?: React.ReactNode;
 }) {
   const [showTooltip, setShowTooltip] = useState(false);
   return (
     <div className={`flex flex-col gap-[4px] min-w-0 ${showPulse ? 'tier-field-pulse' : ''}`}>
-      <span className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[18px] text-[#60646c] text-[14px]">
-        {label}
-      </span>
+      <FieldLabel label={label} required={required} showRequiredIndicator={showRequiredIndicator} />
       {operationalStatus ? (
         <OperationalStatusBadge 
           status={operationalStatus.type} 
@@ -263,7 +333,9 @@ function MetadataField({ label, value, badge, action, showPulse, operationalStat
         </div>
       ) : (
         <>
-          {value && (
+          {customValue ? (
+            customValue
+          ) : value && (
             longText ? (
               <ClampedText text={value} muted={muted} />
             ) : (
@@ -335,7 +407,7 @@ function TierField({
 
   return (
     <div className={`flex flex-col gap-[4px] min-w-0 ${showPulse ? 'tier-field-pulse' : ''}`}>
-      <span className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[18px] text-[#60646c] text-[14px]">
+      <span className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[18px] text-[#1C2024] text-[14px]">
         Tier
       </span>
       <HoverCard openDelay={150} closeDelay={100}>
@@ -395,13 +467,25 @@ function EditIcon() {
 }
 
 /** Inline editable field wrapper */
-function EditableField({ label, children, showPulse }: { label: string; children: React.ReactNode; showPulse?: boolean }) {
+function EditableField({
+  label,
+  children,
+  showPulse,
+  required,
+  showRequiredIndicator,
+}: {
+  label: string;
+  children: React.ReactNode;
+  showPulse?: boolean;
+  required?: boolean;
+  showRequiredIndicator?: boolean;
+}) {
   return (
-    <div className={`flex flex-col gap-[4px] min-w-0 ${showPulse ? 'tier-field-pulse' : ''}`}>
-      <span className="font-['Inter:Semi_Bold',sans-serif] font-semibold text-[13px] leading-[18px] text-[#60646c]">
-        {label}
-      </span>
-      {children}
+    <div className={`flex flex-col gap-[4px] w-full min-w-0 max-w-full ${showPulse ? 'tier-field-pulse' : ''}`}>
+      <FieldLabel label={label} required={required} showRequiredIndicator={showRequiredIndicator} small />
+      <div className="w-full min-w-0 max-w-full">
+        {children}
+      </div>
     </div>
   );
 }
@@ -409,13 +493,15 @@ function EditableField({ label, children, showPulse }: { label: string; children
 /** Inline searchable dropdown for edit mode */
 function InlineSearchableDropdown({ value, onChange, options }: { value: string; onChange: (v: string) => void; options: string[] }) {
   return (
-    <SearchableFilterDropdown
-      value={value}
-      onChange={onChange}
-      options={options}
-      className="w-full"
-      triggerStyle={{ width: '100%', minWidth: 0 }}
-    />
+    <div className="w-full min-w-0 max-w-full">
+      <SearchableFilterDropdown
+        value={value}
+        onChange={onChange}
+        options={options}
+        className="w-full max-w-full"
+        triggerStyle={{ width: '100%', minWidth: 0, maxWidth: '100%' }}
+      />
+    </div>
   );
 }
 
@@ -643,31 +729,13 @@ function DateRangeInput({ startDate, endDate, onStartChange, onEndChange }: {
   startDate: string; endDate: string; onStartChange: (v: string) => void; onEndChange: (v: string) => void;
 }) {
   return (
-    <div className="flex items-center gap-[8px]">
+    <div className="flex w-full min-w-0 max-w-full items-center gap-[8px]">
       <InlineDatePickerInput value={startDate} onChange={onStartChange} />
       <span className="font-['Inter:Regular',sans-serif] font-normal text-[13px] leading-[18px] text-[#8b8d98] shrink-0">â€“</span>
       <InlineDatePickerInput value={endDate} onChange={onEndChange} />
     </div>
   );
 }
-
-const ROW_GRID_STYLE: React.CSSProperties = {
-  display: 'grid',
-  gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr 1fr',
-  gap: '24px',
-};
-
-const ROW_3_GRID_STYLE: React.CSSProperties = {
-  display: 'grid',
-  gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr 1fr',
-  gap: '24px',
-};
-
-const ROW_4_GRID_STYLE: React.CSSProperties = {
-  display: 'grid',
-  gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr 1fr',
-  gap: '24px',
-};
 
 // Sample options for dropdowns
 const WBS_OPTIONS = [
@@ -714,14 +782,18 @@ const TASK_LINK_OPTIONS = [
   'Not Yet Linked',
   'Not Yet Created',
   'None linked',
-  'TSK-2024-0412 â€” Radar Calibration',
-  'TSK-2024-0413 â€” Sensor Array Testing',
-  'TSK-2025-0101 â€” Platform Integration',
-  'TSK-2025-0102 â€” Software Validation',
+  'TSK-2024-0412 - Radar Calibration',
+  'TSK-2024-0413 - Sensor Array Testing',
+  'TSK-2025-0101 - Platform Integration',
+  'TSK-2025-0102 - Software Validation',
 ];
 
 interface EditFormState {
   executingActivity: string;
+  project: string;
+  requirement: string;
+  requirementLevel: 'l1' | 'l2';
+  profileId: string;
   wbsAttribute: string;
   fundingSource: string;
   planningYear: string;
@@ -748,9 +820,15 @@ interface TaskSummarySectionProps {
 export function TaskSummarySection({ taskId, currentTier, tierAssessmentResult, onOpenTierAssessment, showPulse, isEditing, onEnterEditMode, onSave, onCancel }: TaskSummarySectionProps) {
   const requirementProfile = getTaskRequirementProfile(taskId);
   const isNewlyCreatedTask = taskId === '41-0279';
+  const defaultRequirementValue = requirementProfile.l2Requirement ?? requirementProfile.l1Requirement;
+  const defaultRequirementLevel: 'l1' | 'l2' = requirementProfile.l2Requirement ? 'l2' : 'l1';
 
   const [formState, setFormState] = useState<EditFormState>(() => ({
     executingActivity: requirementProfile.activities[0] ?? 'PMS 420',
+    project: requirementProfile.project,
+    requirement: defaultRequirementValue,
+    requirementLevel: defaultRequirementLevel,
+    profileId: requirementProfile.id,
     wbsAttribute: requirementProfile.wbsAttribute,
     fundingSource: requirementProfile.fundingSource,
     planningYear: 'FY2026',
@@ -763,6 +841,42 @@ export function TaskSummarySection({ taskId, currentTier, tierAssessmentResult, 
   }));
 
   const [savedState, setSavedState] = useState<EditFormState>(() => ({ ...formState }));
+
+  const editableProfile = getRequirementProfile(formState.profileId);
+  const readProfile = getRequirementProfile(savedState.profileId);
+  const requirementContext = `${readProfile.project} - ${readProfile.programContext}`;
+
+  const requiredFields = new Set([
+    'Project / Program Context',
+    'Requirement',
+    'WBS',
+    'Appropriation',
+    'Funding Source',
+    'Planning Year',
+    'Period of Performance',
+  ]);
+
+  const getRequirementOptionsForProject = (project: string) => {
+    const projectProfiles = REQUIREMENT_PROFILES.filter(profile => profile.project === project);
+    return projectProfiles.flatMap(profile => {
+      const options = [{
+        value: profile.l1Requirement,
+        level: 'l1' as const,
+        profileId: profile.id,
+      }];
+      if (profile.l2Requirement) {
+        options.push({
+          value: profile.l2Requirement,
+          level: 'l2' as const,
+          profileId: profile.id,
+        });
+      }
+      return options;
+    });
+  };
+
+  const requirementOptions = getRequirementOptionsForProject(formState.project);
+  const requirementOptionValues = Array.from(new Set(requirementOptions.map(option => option.value)));
 
   const handleEdit = () => {
     setFormState({ ...savedState });
@@ -781,6 +895,39 @@ export function TaskSummarySection({ taskId, currentTier, tierAssessmentResult, 
 
   const updateField = <K extends keyof EditFormState>(field: K, value: EditFormState[K]) => {
     setFormState(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleProjectChange = (project: string) => {
+    const nextProfile = REQUIREMENT_PROFILES.find(profile => profile.project === project);
+    if (!nextProfile) return;
+
+    setFormState(prev => ({
+      ...prev,
+      project,
+      profileId: nextProfile.id,
+      requirement: nextProfile.l2Requirement ?? nextProfile.l1Requirement,
+      requirementLevel: nextProfile.l2Requirement ? 'l2' : 'l1',
+      wbsAttribute: nextProfile.wbsAttribute,
+      fundingSource: nextProfile.fundingSource,
+      executingActivity: nextProfile.activities[0] ?? prev.executingActivity,
+    }));
+  };
+
+  const handleRequirementChange = (requirement: string) => {
+    const selectedOption = requirementOptions.find(option => option.value === requirement);
+    if (!selectedOption) return;
+    const selectedProfile = getRequirementProfile(selectedOption.profileId);
+
+    setFormState(prev => ({
+      ...prev,
+      project: selectedProfile.project,
+      profileId: selectedProfile.id,
+      requirement,
+      requirementLevel: selectedOption.level,
+      wbsAttribute: selectedProfile.wbsAttribute,
+      fundingSource: selectedProfile.fundingSource,
+      executingActivity: selectedProfile.activities[0] ?? prev.executingActivity,
+    }));
   };
 
   // Format mm/dd/yyyy to display format "3 Mar 2026"
@@ -821,210 +968,276 @@ export function TaskSummarySection({ taskId, currentTier, tierAssessmentResult, 
   ) : (
     <button
       onClick={handleEdit}
-      className="bg-white flex gap-[8px] h-[32px] items-center justify-center px-[12px] relative rounded-[4px] shrink-0 cursor-pointer hover:bg-[#f0f7fc] transition-colors"
+      className="w-[32px] h-[32px] inline-flex items-center justify-center rounded-[4px] border border-[rgba(0,6,46,0.16)] bg-white text-[#006496] shrink-0 cursor-pointer hover:bg-[#f0f7fc] hover:border-[rgba(0,100,150,0.45)] transition-colors"
+      aria-label="Edit task summary"
     >
-      <div aria-hidden="true" className="absolute border border-[#006496] border-solid inset-0 pointer-events-none rounded-[4px] bg-[#ffffff]" />
-      <span className="relative shrink-0 text-[#006496]">
+      <span className="relative shrink-0">
         <EditIcon />
-      </span>
-      <span className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#006496] text-[14px] whitespace-nowrap">
-        Edit
       </span>
     </button>
   );
-
-  const requirementContext = `${requirementProfile.project} - ${requirementProfile.programContext}`;
 
   return (
     <CollapsibleFilterSection
       title="Task Summary"
       highContrast
       headerActions={headerActions}
+      className="[&>div:first-child>div:last-child>button[aria-expanded]]:hidden"
     >
-      {/* Single white content surface */}
-      <div className="bg-white rounded-[5px] relative">
-        {/* Row 1 â€” Structural Task Context */}
-        <div className="px-[8px] py-[12px]">
-          <div style={ROW_GRID_STYLE}>
-            <MetadataField
-              label="Project / Program Context"
-              value={requirementContext}
-              muted={isEditing}
-              longText
-            />
-            {isEditing ? (
-              <EditableField label="WBS">
-                <InlineSearchableDropdown
-                  value={formState.wbsAttribute}
-                  onChange={v => updateField('wbsAttribute', v)}
-                  options={WBS_OPTIONS}
+      {/* Content sits directly on panel surface */}
+      <div className="relative">
+        <div className="flex flex-col gap-[16px]">
+            {/* 1. Requirement Context */}
+            <div className="flex flex-col gap-[10px]">
+              <p className="m-0 font-['Inter:Semi_Bold',sans-serif] font-semibold text-[12px] leading-[16px] text-[#004B72]">
+                Requirement Context
+              </p>
+              <div className="flex flex-col gap-[12px]">
+                {isEditing ? (
+                  <EditableField
+                    label="Project / Program Context"
+                    required={requiredFields.has('Project / Program Context')}
+                    showRequiredIndicator={isEditing}
+                  >
+                    <div className="flex flex-col gap-[6px] w-full min-w-0 max-w-full">
+                      <InlineSearchableDropdown
+                        value={formState.project}
+                        onChange={handleProjectChange}
+                        options={TASK_SUMMARY_PROJECT_OPTIONS}
+                      />
+                      <span className="font-['Inter:Regular',sans-serif] font-normal text-[12px] leading-[16px] text-[#1C2024]">
+                        {editableProfile.programContext}
+                      </span>
+                    </div>
+                  </EditableField>
+                ) : (
+                  <MetadataField
+                    label="Project / Program Context"
+                    value={requirementContext}
+                    longText
+                  />
+                )}
+                {isEditing ? (
+                  <EditableField
+                    label="Requirement"
+                    required={requiredFields.has('Requirement')}
+                    showRequiredIndicator={isEditing}
+                  >
+                    <InlineSearchableDropdown
+                      value={formState.requirement}
+                      onChange={handleRequirementChange}
+                      options={requirementOptionValues}
+                    />
+                  </EditableField>
+                ) : (
+                  <MetadataField
+                    label="Requirement"
+                    value=""
+                    customValue={(
+                      <RequirementLineageValue
+                        l1Requirement={readProfile.l1Requirement}
+                        l2Requirement={readProfile.l2Requirement}
+                        showMostSpecific={savedState.requirementLevel}
+                      />
+                    )}
+                  />
+                )}
+                {isEditing ? (
+                  <EditableField
+                    label="WBS"
+                    required={requiredFields.has('WBS')}
+                    showRequiredIndicator={isEditing}
+                  >
+                    <InlineSearchableDropdown
+                      value={formState.wbsAttribute}
+                      onChange={v => updateField('wbsAttribute', v)}
+                      options={WBS_OPTIONS}
+                    />
+                  </EditableField>
+                ) : (
+                  <MetadataField label="WBS" value={savedState.wbsAttribute} />
+                )}
+              </div>
+            </div>
+
+            <div className="border-t border-solid border-[#e0e1e6]" />
+
+            {/* 2. Funding */}
+            <div className="flex flex-col gap-[10px]">
+              <p className="m-0 font-['Inter:Semi_Bold',sans-serif] font-semibold text-[12px] leading-[16px] text-[#004B72]">
+                Funding
+              </p>
+              <div className="flex flex-col gap-[12px]">
+                <MetadataField
+                  label="Appropriation"
+                  value={isEditing ? editableProfile.appropriation : readProfile.appropriation}
+                  badge="appropriation"
+                  required={requiredFields.has('Appropriation')}
+                  showRequiredIndicator={isEditing}
                 />
-              </EditableField>
-            ) : (
-              <MetadataField label="WBS" value={savedState.wbsAttribute} />
-            )}
-            <MetadataField label="Appropriation" value={requirementProfile.appropriation} badge="appropriation" />
-            {isEditing ? (
-              <EditableField label="Funding Source">
-                <InlineSearchableDropdown
-                  value={formState.fundingSource}
-                  onChange={v => updateField('fundingSource', v)}
-                  options={FUNDING_SOURCE_OPTIONS}
+                {isEditing ? (
+                  <EditableField
+                    label="Funding Source"
+                    required={requiredFields.has('Funding Source')}
+                    showRequiredIndicator={isEditing}
+                  >
+                    <InlineSearchableDropdown
+                      value={formState.fundingSource}
+                      onChange={v => updateField('fundingSource', v)}
+                      options={FUNDING_SOURCE_OPTIONS}
+                    />
+                  </EditableField>
+                ) : (
+                  <MetadataField
+                    label="Funding Source"
+                    value={savedState.fundingSource}
+                    tooltip={`${savedState.fundingSource} - ${readProfile.project} (FY2026)`}
+                    longText
+                  />
+                )}
+                <div className="flex flex-col gap-[12px]">
+                  <MetadataField label="Requested" value="Not Yet Estimated" />
+                  <MetadataField label="Allocated" value="Not Yet Allocated" />
+                  <MetadataField label="Delta" value="Not Applicable" />
+                </div>
+              </div>
+            </div>
+
+            <div className="border-t border-solid border-[#e0e1e6]" />
+
+            {/* 3. Timing & Status */}
+            <div className="flex flex-col gap-[10px]">
+              <p className="m-0 font-['Inter:Semi_Bold',sans-serif] font-semibold text-[12px] leading-[16px] text-[#004B72]">
+                Timing &amp; Status
+              </p>
+              <div className="flex flex-col gap-[12px]">
+                {isEditing ? (
+                  <EditableField
+                    label="Planning Year"
+                    required={requiredFields.has('Planning Year')}
+                    showRequiredIndicator={isEditing}
+                  >
+                    <InlineSearchableDropdown
+                      value={formState.planningYear}
+                      onChange={v => updateField('planningYear', v)}
+                      options={PLANNING_YEAR_OPTIONS}
+                    />
+                  </EditableField>
+                ) : (
+                  <MetadataField label="Planning Year" value={savedState.planningYear} />
+                )}
+                {isEditing ? (
+                  <EditableField
+                    label="Period of Performance"
+                    required={requiredFields.has('Period of Performance')}
+                    showRequiredIndicator={isEditing}
+                  >
+                    <DateRangeInput
+                      startDate={formState.popStart}
+                      endDate={formState.popEnd}
+                      onStartChange={v => updateField('popStart', v)}
+                      onEndChange={v => updateField('popEnd', v)}
+                    />
+                  </EditableField>
+                ) : (
+                  <MetadataField
+                    label="Period of Performance"
+                    value={displayPop}
+                    action={!displayPop ? { text: 'Add PoP', onClick: handleEdit } : undefined}
+                  />
+                )}
+                <MetadataField
+                  label="Operational Status"
+                  value="Active"
+                  operationalStatus={{ type: 'active' }}
                 />
-              </EditableField>
-            ) : (
-              <MetadataField label="Funding Source" value={savedState.fundingSource} tooltip={`${savedState.fundingSource} - ${requirementProfile.project} (FY2026)`} />
-            )}
-            {isEditing ? (
-              <EditableField label="Planning Year">
-                <InlineSearchableDropdown
-                  value={formState.planningYear}
-                  onChange={v => updateField('planningYear', v)}
-                  options={PLANNING_YEAR_OPTIONS}
+                <TierField
+                  currentTier={currentTier}
+                  overrideMetadata={tierAssessmentResult}
+                  onOpenTierAssessment={onOpenTierAssessment}
+                  showPulse={showPulse}
                 />
-              </EditableField>
-            ) : (
-              <MetadataField label="Planning Year" value={savedState.planningYear} />
-            )}
-            <TierField
-              currentTier={currentTier}
-              overrideMetadata={tierAssessmentResult}
-              onOpenTierAssessment={onOpenTierAssessment}
-              showPulse={showPulse}
-            />
-          </div>
+              </div>
+            </div>
+
+            <div className="border-t border-solid border-[#e0e1e6]" />
+
+            {/* 4. Ownership & Relationships */}
+            <div className="flex flex-col gap-[10px]">
+              <p className="m-0 font-['Inter:Semi_Bold',sans-serif] font-semibold text-[12px] leading-[16px] text-[#004B72]">
+                Ownership &amp; Relationships
+              </p>
+              <div className="flex flex-col gap-[12px]">
+                <MetadataField label="Project Lead" value="Jordan Blake" />
+                <MetadataField label="Activity Lead" value="Taylor Morgan" />
+                <MetadataField label="Created By" value="Alex Carter" />
+                <MetadataField label="Last Updated By" value="Riley Chen" />
+                {isEditing ? (
+                  <EditableField label="Previous Task">
+                    <InlineSearchableDropdown
+                      value={formState.previousTask}
+                      onChange={v => updateField('previousTask', v)}
+                      options={TASK_LINK_OPTIONS}
+                    />
+                  </EditableField>
+                ) : (
+                  <MetadataField
+                    label="Previous Task"
+                    value=""
+                    action={{ text: savedState.previousTask, onClick: handleEdit }}
+                  />
+                )}
+                {isEditing ? (
+                  <EditableField label="Associated Tasks">
+                    <InlineSearchableDropdown
+                      value={formState.associatedTasks}
+                      onChange={v => updateField('associatedTasks', v)}
+                      options={TASK_LINK_OPTIONS}
+                    />
+                  </EditableField>
+                ) : (
+                  <MetadataField
+                    label="Associated Tasks"
+                    value=""
+                    action={{ text: savedState.associatedTasks, onClick: handleEdit }}
+                  />
+                )}
+                {isEditing ? (
+                  <EditableField label="Next Task">
+                    <InlineSearchableDropdown
+                      value={formState.nextTask}
+                      onChange={v => updateField('nextTask', v)}
+                      options={TASK_LINK_OPTIONS}
+                    />
+                  </EditableField>
+                ) : (
+                  <MetadataField
+                    label="Next Task"
+                    value=""
+                    action={{ text: savedState.nextTask, onClick: handleEdit }}
+                  />
+                )}
+                {isEditing ? (
+                  <EditableField label="Objective">
+                    <textarea
+                      value={formState.objective}
+                      onChange={e => updateField('objective', e.target.value)}
+                      placeholder="Enter objective..."
+                      rows={2}
+                      className="block w-full min-w-0 max-w-full box-border px-[8px] py-[6px] rounded-[4px] border border-[rgba(0,6,46,0.2)] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] outline-none focus:border-[#004B72] focus:ring-[2px] focus:ring-[rgba(0,75,114,0.2)] resize-vertical min-h-[32px]"
+                    />
+                  </EditableField>
+                ) : (
+                  <MetadataField
+                    label="Objective"
+                    value={savedState.objective}
+                    longText={!!savedState.objective}
+                    action={!savedState.objective ? { text: 'Add Objective', onClick: handleEdit } : undefined}
+                  />
+                )}
+              </div>
+            </div>
         </div>
-
-        {/* Divider */}
-        <div className="border-t border-solid border-[#e0e1e6]" />
-
-        {/* Row 2 â€” Planning, Funding & Timeframe */}
-        <div className="px-[8px] py-[12px]">
-          <div style={ROW_GRID_STYLE}>
-            <MetadataField label="Requested" value="Not Yet Estimated" />
-            <MetadataField label="Allocated" value="Not Yet Allocated" />
-            <MetadataField label="Delta" value="Not Applicable" />
-            {isEditing ? (
-              <EditableField label="Period of Performance">
-                <DateRangeInput
-                  startDate={formState.popStart}
-                  endDate={formState.popEnd}
-                  onStartChange={v => updateField('popStart', v)}
-                  onEndChange={v => updateField('popEnd', v)}
-                />
-              </EditableField>
-            ) : (
-              <MetadataField
-                label="Period of Performance"
-                value={displayPop}
-                action={!displayPop ? { text: 'Add PoP', onClick: handleEdit } : undefined}
-              />
-            )}
-            <MetadataField
-              label="Operational Status" 
-              value="Active"
-              operationalStatus={{ type: 'active' }}
-            />
-          </div>
-        </div>
-
-        {/* Divider */}
-        <div className="border-t border-solid border-[#e0e1e6]" />
-
-        {/* Row 3 â€” Lineage, Program Context & Objective */}
-        <div className="px-[8px] py-[12px]">
-          <div style={ROW_3_GRID_STYLE}>
-            {isEditing ? (
-              <EditableField label="Previous Task">
-                <InlineSearchableDropdown
-                  value={formState.previousTask}
-                  onChange={v => updateField('previousTask', v)}
-                  options={TASK_LINK_OPTIONS}
-                />
-              </EditableField>
-            ) : (
-              <MetadataField
-                label="Previous Task"
-                value=""
-                action={{ text: savedState.previousTask, onClick: handleEdit }}
-              />
-            )}
-            {isEditing ? (
-              <EditableField label="Associated Tasks">
-                <InlineSearchableDropdown
-                  value={formState.associatedTasks}
-                  onChange={v => updateField('associatedTasks', v)}
-                  options={TASK_LINK_OPTIONS}
-                />
-              </EditableField>
-            ) : (
-              <MetadataField
-                label="Associated Tasks"
-                value=""
-                action={{ text: savedState.associatedTasks, onClick: handleEdit }}
-              />
-            )}
-            {isEditing ? (
-              <EditableField label="Next Task">
-                <InlineSearchableDropdown
-                  value={formState.nextTask}
-                  onChange={v => updateField('nextTask', v)}
-                  options={TASK_LINK_OPTIONS}
-                />
-              </EditableField>
-            ) : (
-              <MetadataField
-                label="Next Task"
-                value=""
-                action={{ text: savedState.nextTask, onClick: handleEdit }}
-              />
-            )}
-            <MetadataField
-              label="L1 Requirement"
-              value={requirementProfile.l1Requirement}
-              muted={isEditing}
-              longText
-            />
-            <MetadataField
-              label="L2 Requirement"
-              value={requirementProfile.l2Requirement ?? 'Not specified'}
-              muted={isEditing}
-              longText
-            />
-            {isEditing ? (
-              <EditableField label="Objective">
-                <textarea
-                  value={formState.objective}
-                  onChange={e => updateField('objective', e.target.value)}
-                  placeholder="Enter objective..."
-                  rows={2}
-                  className="w-full px-[8px] py-[6px] rounded-[4px] border border-[rgba(0,6,46,0.2)] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] outline-none focus:border-[#004B72] focus:ring-[2px] focus:ring-[rgba(0,75,114,0.2)] resize-vertical min-h-[32px]"
-                />
-              </EditableField>
-            ) : (
-              <MetadataField
-                label="Objective"
-                value={savedState.objective}
-                longText={!!savedState.objective}
-                action={!savedState.objective ? { text: 'Add Objective', onClick: handleEdit } : undefined}
-              />
-            )}
-          </div>
-        </div>
-
-        {/* Divider */}
-        <div className="border-t border-solid border-[#e0e1e6]" />
-
-        {/* Row 4 - People & Ownership Metadata */}
-        <div className="px-[8px] py-[12px]">
-          <div style={ROW_4_GRID_STYLE}>
-            <MetadataField label="Project Lead" value="Jordan Blake" />
-            <MetadataField label="Activity Lead" value="Taylor Morgan" />
-            <MetadataField label="Created By" value="Alex Carter" />
-            <MetadataField label="Last Updated By" value="Riley Chen" />
-          </div>
-        </div>
-
       </div>
     </CollapsibleFilterSection>
   );

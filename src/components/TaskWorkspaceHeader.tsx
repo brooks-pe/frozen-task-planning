@@ -503,18 +503,6 @@ export default function TaskWorkspaceHeader() {
       {/* Main Content Area */}
       <div className="flex-1 px-[24px] py-[24px]">
         <div className="flex flex-col gap-[24px]">
-          <TaskSummarySection
-            taskId={taskId || ''}
-            currentTier={currentTier}
-            tierAssessmentResult={tierAssessmentResult}
-            onOpenTierAssessment={handleOpenTierAssessment}
-            showPulse={showTierPulse}
-            isEditing={isEditing}
-            onEnterEditMode={() => handleEnterEditMode(false)}
-            onSave={handleSaveEdit}
-            onCancel={handleCancelEdit}
-          />
-          
           {/* Info Banner: Tier Assessment Required */}
           <div className="bg-[rgba(0,179,238,0.12)] rounded-[6px] w-full">
             <div className="flex gap-[8px] items-start p-[12px]">
@@ -538,8 +526,11 @@ export default function TaskWorkspaceHeader() {
             </div>
           </div>
 
-          {/* Tabbed Content Area */}
-          <div className="flex flex-col">
+          <div className="flex flex-col xl:flex-row gap-[24px] items-start">
+            {/* Primary workspace column */}
+            <div className="w-full xl:order-1 flex-1 min-w-0">
+              {/* Tabbed Content Area */}
+              <div className="flex flex-col">
             {/* Tab Bar */}
             <div className="flex border-b border-[#e0e1e6]">
               <button
@@ -707,6 +698,23 @@ export default function TaskWorkspaceHeader() {
                   )}
                 </div>
               )}
+            </div>
+              </div>
+            </div>
+
+            {/* Task Summary Panel: starts below banner and pins right on desktop */}
+            <div className="w-full xl:order-2 xl:basis-[340px] xl:min-w-[320px] xl:max-w-[360px] xl:flex-[0_0_340px] xl:sticky xl:top-[96px]">
+              <TaskSummarySection
+                taskId={taskId || ''}
+                currentTier={currentTier}
+                tierAssessmentResult={tierAssessmentResult}
+                onOpenTierAssessment={handleOpenTierAssessment}
+                showPulse={showTierPulse}
+                isEditing={isEditing}
+                onEnterEditMode={() => handleEnterEditMode(false)}
+                onSave={handleSaveEdit}
+                onCancel={handleCancelEdit}
+              />
             </div>
           </div>
         </div>

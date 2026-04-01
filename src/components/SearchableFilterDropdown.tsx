@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 
 interface SearchableFilterDropdownProps {
   value: string;
@@ -29,7 +30,9 @@ export function SearchableFilterDropdown({ value, onChange, options, className, 
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
+  const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
   const containerRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
 
@@ -68,7 +71,12 @@ export function SearchableFilterDropdown({ value, onChange, options, className, 
   useEffect(() => {
     if (!isOpen) return;
     const handler = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+      const target = e.target as Node;
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(target) &&
+        (!dropdownRef.current || !dropdownRef.current.contains(target))
+      ) {
         handleClose();
       }
     };
@@ -86,6 +94,54 @@ export function SearchableFilterDropdown({ value, onChange, options, className, 
       }
     }
   }, [highlightedIndex]);
+
+  const updateDropdownPosition = useCallback(() => {
+    if (!isOpen || !containerRef.current || !dropdownRef.current) return;
+
+    const viewportPadding = 12;
+    const containerRect = containerRef.current.getBoundingClientRect();
+    const dropdownRect = dropdownRef.current.getBoundingClientRect();
+    const maxWidthPx = Math.max(280, Math.min(560, window.innerWidth - viewportPadding * 2));
+
+    // Primary anchor: align dropdown's right edge to trigger's right edge.
+    let nextLeft = containerRect.right - dropdownRect.width;
+
+    const maxRight = window.innerWidth - viewportPadding;
+    if (nextLeft + dropdownRect.width > maxRight) {
+      nextLeft = maxRight - dropdownRect.width;
+    }
+    if (nextLeft < viewportPadding) {
+      nextLeft = viewportPadding;
+    }
+
+    const nextTop = containerRect.bottom + 4;
+
+    setDropdownStyle({
+      top: `${Math.round(nextTop)}px`,
+      left: `${Math.round(nextLeft)}px`,
+      width: 'max-content',
+      minWidth: `${Math.round(containerRect.width)}px`,
+      maxWidth: `${Math.round(maxWidthPx)}px`,
+      maxHeight: '280px',
+    });
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      setDropdownStyle({});
+      return;
+    }
+
+    const rafId = requestAnimationFrame(updateDropdownPosition);
+    window.addEventListener('resize', updateDropdownPosition);
+    window.addEventListener('scroll', updateDropdownPosition, true);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener('resize', updateDropdownPosition);
+      window.removeEventListener('scroll', updateDropdownPosition, true);
+    };
+  }, [isOpen, updateDropdownPosition]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (!isOpen) {
@@ -123,13 +179,13 @@ export function SearchableFilterDropdown({ value, onChange, options, className, 
   };
 
   return (
-    <div ref={containerRef} className="relative min-w-0" onKeyDown={handleKeyDown}>
+    <div ref={containerRef} className="relative w-full min-w-0 max-w-full box-border" onKeyDown={handleKeyDown}>
       {/* Trigger button - matches native select styling */}
       <button
         type="button"
         onClick={() => isOpen ? handleClose() : handleOpen()}
-        className={`bg-white h-[32px] w-full min-w-0 pl-[12px] pr-[32px] rounded-[4px] border border-[rgba(0,6,46,0.2)] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] cursor-pointer text-left overflow-hidden ${className || ''}`}
-        style={triggerStyle}
+        className={`block bg-white h-[32px] w-full min-w-0 max-w-full box-border pl-[12px] pr-[32px] rounded-[4px] border border-[rgba(0,6,46,0.2)] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] cursor-pointer text-left overflow-hidden ${className || ''}`}
+        style={{ boxSizing: 'border-box', width: '100%', maxWidth: '100%', ...triggerStyle }}
       >
         <span className="block overflow-hidden text-ellipsis whitespace-nowrap">
           {value}
@@ -142,9 +198,11 @@ export function SearchableFilterDropdown({ value, onChange, options, className, 
 
       {/* Dropdown menu */}
       {isOpen && (
+        createPortal(
         <div
-          className="absolute top-[calc(100%+4px)] left-0 min-w-full bg-white border border-[rgba(0,6,46,0.2)] rounded-[4px] shadow-[0px_4px_12px_rgba(0,0,0,0.12)] z-50 flex flex-col"
-          style={{ width: 'max-content', minWidth: '100%', maxWidth: 'min(560px, calc(100vw - 32px))', maxHeight: '280px' }}
+          ref={dropdownRef}
+          className="fixed bg-white border border-[rgba(0,6,46,0.2)] rounded-[4px] shadow-[0px_4px_12px_rgba(0,0,0,0.12)] z-[1200] flex flex-col"
+          style={dropdownStyle}
         >
           {/* Search input */}
           <div className="p-[8px] border-b border-[#e0e1e6]">
@@ -197,7 +255,8 @@ export function SearchableFilterDropdown({ value, onChange, options, className, 
               ))
             )}
           </div>
-        </div>
+        </div>,
+        document.body)
       )}
     </div>
   );
