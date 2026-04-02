@@ -407,7 +407,7 @@ export default function TasksContent() {
             to="/task-planning/tasks/create-grid"
             className="bg-white flex gap-[8px] h-[32px] items-center justify-center px-[12px] relative rounded-[4px] shrink-0 cursor-pointer no-underline hover:bg-[#f5f5f5] transition-colors"
           >
-            <div aria-hidden="true" className="absolute border border-[rgba(0,8,48,0.27)] border-solid inset-0 pointer-events-none rounded-[4px]" />
+            <div aria-hidden="true" className="absolute border border-[#B9BBC6] border-solid inset-0 pointer-events-none rounded-[4px]" />
             <span className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1c2024] text-[14px] whitespace-nowrap">
               Create Task Grid
             </span>
@@ -421,7 +421,7 @@ export default function TasksContent() {
             </span>
           </button>
           <button className="bg-white flex gap-[8px] h-[32px] items-center justify-center px-[12px] relative rounded-[4px] shrink-0 cursor-pointer border-none hover:bg-[#f5f5f5] transition-colors">
-            <div aria-hidden="true" className="absolute border border-[rgba(0,8,48,0.27)] border-solid inset-0 pointer-events-none rounded-[4px]" />
+            <div aria-hidden="true" className="absolute border border-[#B9BBC6] border-solid inset-0 pointer-events-none rounded-[4px]" />
             <span className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1c2024] text-[14px] whitespace-nowrap">
               Export
             </span>
@@ -473,7 +473,7 @@ export default function TasksContent() {
               triggerStyle={{ width: '100%' }} 
               optionColors={{
                 'All': '#1C2024',
-                'Awaiting My Action': '#0073AA',
+                'Awaiting My Action': '#004B72',
                 'Stalled Tasks': '#6B7280',
                 'Near Deadline': '#F59E0B',
                 'Overdue': '#DC2626',
@@ -512,7 +512,7 @@ export default function TasksContent() {
       <div className="h-[24px] w-full" />
 
       {/* Tasks Table */}
-      <div className="flex flex-col rounded-[5px] border border-solid border-[#e0e1e6] overflow-hidden w-full">
+      <div className="flex flex-col rounded-[5px] border border-solid border-[#CDCED6] overflow-hidden w-full">
         {/* Table Title Header */}
         <div className="bg-[#f9f9fb] relative w-full">
           <div className="flex items-center justify-between px-[24px] py-[20px] w-full border-b border-solid border-b-[#d0d1d6]">
@@ -521,7 +521,7 @@ export default function TasksContent() {
               {/* Vertical divider */}
               
               <div className="bg-white h-[32px] relative rounded-[4px] w-[268px]">
-                <div aria-hidden="true" className="absolute border border-[rgba(0,6,46,0.2)] border-solid inset-0 pointer-events-none rounded-[4px]" />
+                <div aria-hidden="true" className="absolute border border-[#B9BBC6] border-solid inset-0 pointer-events-none rounded-[4px]" />
                 <div className="flex items-center size-full px-[4px]">
                   <div className="flex items-center justify-center shrink-0 px-[2px]">
                     <SearchIcon />
@@ -572,7 +572,7 @@ export default function TasksContent() {
 
         {/* Column Headers */}
         <div
-          className="bg-[#f9f9fb] border-b border-[#e0e1e6] grid"
+          className="bg-[#f9f9fb] border-b border-[#CDCED6] grid"
           style={{ gridTemplateColumns: TASK_TABLE_GRID }}
         >
           {COLUMNS.map((col) => {
@@ -648,7 +648,7 @@ export default function TasksContent() {
             displayData.map((task) => (
               <div
                 key={task.taskId}
-                className={`border-b border-[#e0e1e6] hover:bg-[#fafafa] transition-all cursor-pointer grid ${
+                className={`border-b border-[#CDCED6] hover:bg-[#fafafa] transition-all cursor-pointer grid ${
                   highlightedTaskId === task.taskId ? 'animate-[rowPulse_2s_ease-out]' : ''
                 }`}
                 style={{
@@ -711,7 +711,7 @@ export default function TasksContent() {
                   {task.workflowState === 'Draft' ? (
                     <DraftDashCell tooltip="Not Applicable" />
                   ) : (
-                    <p className={`font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[14px] whitespace-nowrap ${task.gap > 0 ? 'text-[#ca6c18]' : 'text-[#60646c]'}`}>
+                    <p className={`font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[14px] whitespace-nowrap ${task.gap > 0 ? 'text-[#AB6400]' : 'text-[#60646c]'}`}>
                       {task.gap > 0 ? formatCurrency(task.gap) : '$0'}
                     </p>
                   )}
@@ -734,7 +734,7 @@ export default function TasksContent() {
                           className="fixed inset-0 z-[100]"
                           onClick={() => setOpenMenuId(null)}
                         />
-                        <div className="absolute right-0 top-full mt-[4px] z-[101] bg-white rounded-[8px] p-[8px] min-w-[160px] shadow-[0px_12px_32px_-16px_rgba(0,9,50,0.12),0px_12px_60px_0px_rgba(0,0,0,0.15)] border border-[rgba(0,0,51,0.06)]">
+                        <div className="absolute right-0 top-full mt-[4px] z-[101] bg-white rounded-[8px] p-[8px] min-w-[160px] shadow-[0px_12px_32px_-16px_rgba(0,9,50,0.12),0px_12px_60px_0px_rgba(0,0,0,0.15)] border border-[#CDCED6]">
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
@@ -793,8 +793,8 @@ export default function TasksContent() {
             <div className="relative shrink-0 size-[16px]">
               <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 16 16">
                 <g clipPath="url(#clip0_tasks_create)">
-                  <path d="M14.6654 7.38667V8C14.6646 9.43761 14.2003 10.8365 13.3392 11.988C12.4781 13.1394 11.2665 13.9817 9.88921 14.3893C8.51188 14.7969 7.03815 14.7479 5.68963 14.2497C4.3411 13.7515 3.18975 12.8307 2.40723 11.6247C1.62471 10.4187 1.25287 8.99205 1.34746 7.55754C1.44205 6.12303 1.99812 4.75755 2.93217 3.66471C3.86621 2.57188 5.1285 1.81024 6.53077 1.49344C7.93304 1.17664 9.40016 1.32152 10.7121 1.90667" stroke="rgba(0,113,63,0.87)" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M14.6667 2.66666L8 9.34L6 7.34" stroke="rgba(0,113,63,0.87)" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M14.6654 7.38667V8C14.6646 9.43761 14.2003 10.8365 13.3392 11.988C12.4781 13.1394 11.2665 13.9817 9.88921 14.3893C8.51188 14.7969 7.03815 14.7479 5.68963 14.2497C4.3411 13.7515 3.18975 12.8307 2.40723 11.6247C1.62471 10.4187 1.25287 8.99205 1.34746 7.55754C1.44205 6.12303 1.99812 4.75755 2.93217 3.66471C3.86621 2.57188 5.1285 1.81024 6.53077 1.49344C7.93304 1.17664 9.40016 1.32152 10.7121 1.90667" stroke="#218358" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M14.6667 2.66666L8 9.34L6 7.34" stroke="#218358" strokeLinecap="round" strokeLinejoin="round" />
                 </g>
                 <defs>
                   <clipPath id="clip0_tasks_create">
@@ -804,9 +804,9 @@ export default function TasksContent() {
               </svg>
             </div>
           </div>
-          <div className="flex-[1_0_0] font-['Inter:Medium',sans-serif] font-medium leading-[20px] min-h-px min-w-px not-italic relative text-[14px] text-[rgba(0,113,63,0.87)]">
+          <div className="flex-[1_0_0] font-['Inter:Medium',sans-serif] font-medium leading-[20px] min-h-px min-w-px not-italic relative text-[14px] text-[#218358]">
             <p className="mb-0">Task Created</p>
-            <p className="font-['Inter:Regular',sans-serif] font-normal mb-0 text-[rgba(0,113,63,0.87)]">
+            <p className="font-['Inter:Regular',sans-serif] font-normal mb-0 text-[#218358]">
               Task {toastMessage} has been created and added to Draft.
             </p>
           </div>
@@ -910,7 +910,7 @@ function AppliedFiltersRow({
   if (groups.length === 0) return null;
 
   return (
-    <div className="w-full mt-[12px] pt-[14px] pb-[14px] border-t border-b border-[#e0e1e6]">
+    <div className="w-full mt-[12px] pt-[14px] pb-[14px] border-t border-b border-[#CDCED6]">
       <div className="flex flex-wrap gap-x-[16px] gap-y-[8px] items-center">
         {groups.map((group) => (
           <div key={group.type} className="flex items-center gap-[4px]">
@@ -933,7 +933,7 @@ function AppliedFiltersRow({
                     aria-label={`Remove ${value}`}
                   >
                     <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
-                      <path d="M1.5 1.5L6.5 6.5M1.5 6.5L6.5 1.5" stroke="#006496" strokeWidth="1.5" strokeLinecap="round" />
+                      <path d="M1.5 1.5L6.5 6.5M1.5 6.5L6.5 1.5" stroke="#004B72" strokeWidth="1.5" strokeLinecap="round" />
                     </svg>
                   </button>
                 </div>
@@ -945,7 +945,7 @@ function AppliedFiltersRow({
         <button
           onClick={onClearAll}
           className="bg-transparent border-none cursor-pointer flex items-center outline-none hover:underline focus-visible:ring-[3px] focus-visible:ring-[rgba(0,75,114,0.35)] rounded-[2px]"
-          style={{ color: '#006496' }}
+          style={{ color: '#004B72' }}
         >
           <span className="font-['Inter:Regular',sans-serif] font-normal text-[12px] leading-[18px] whitespace-nowrap">
             Clear All
@@ -955,3 +955,5 @@ function AppliedFiltersRow({
     </div>
   );
 }
+
+

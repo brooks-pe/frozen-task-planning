@@ -12,7 +12,7 @@ import type { TaskRow } from './TaskPlanningData';
 
 // ─── Info Tooltip Component ─────────────────────────────────────────────────
 
-function InfoTooltip({ text, iconColor = '#006496' }: { text: string; iconColor?: string }) {
+function InfoTooltip({ text, iconColor = '#004B72' }: { text: string; iconColor?: string }) {
   const [visible, setVisible] = useState(false);
   const [tooltipPos, setTooltipPos] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
   const iconRef = useRef<HTMLSpanElement>(null);
@@ -83,7 +83,7 @@ interface KPICardData {
 const DERIVED_KPI = getKPICounts();
 
 const KPI_CARDS: KPICardData[] = [
-  { label: 'Tasks Awaiting My Action', value: DERIVED_KPI.awaitingMyAction, supporting: 'Assigned to you across 3 projects', tooltip: 'Tasks currently requiring your review, approval, or action based on your role in the workflow.', railColor: '#0073AA', filterValue: 'Awaiting My Action' },
+  { label: 'Tasks Awaiting My Action', value: DERIVED_KPI.awaitingMyAction, supporting: 'Assigned to you across 3 projects', tooltip: 'Tasks currently requiring your review, approval, or action based on your role in the workflow.', railColor: '#004B72', filterValue: 'Awaiting My Action' },
   { label: 'Stalled Tasks', value: DERIVED_KPI.stalledTasks, supporting: 'No updates in 14+ days', tooltip: 'Tasks with no workflow progress or updates within the defined inactivity threshold.', railColor: '#6B7280', filterValue: 'Stalled Tasks' },
   { label: 'Tasks Near Deadline', value: DERIVED_KPI.nearDeadline, supporting: 'Due within 10 days', tooltip: 'Tasks approaching key planning or milestone deadlines within the defined time window.', railColor: '#F59E0B', filterValue: 'Near Deadline' },
   { label: 'Overdue Tasks', value: DERIVED_KPI.overdue, supporting: 'Past planned completion date', tooltip: 'Tasks that have passed their planned milestone or completion date without progressing.', railColor: '#DC2626', filterValue: 'Overdue' },
@@ -339,7 +339,7 @@ function KPICard({ data }: { data: KPICardData }) {
 
   return (
     <div className="flex items-stretch relative rounded-[5px] transition-shadow">
-      <div aria-hidden="true" className="absolute border border-[#e0e1e6] border-solid inset-0 pointer-events-none rounded-[5px]" />
+      <div aria-hidden="true" className="absolute border border-[#CDCED6] border-solid inset-0 pointer-events-none rounded-[5px]" />
       <div className="h-full rounded-bl-[5px] rounded-tl-[5px] shrink-0 w-[8px]" style={{ backgroundColor: data.railColor }} />
       <div className="flex flex-1 w-full min-w-0 flex-col gap-[8px] items-start p-[20px] relative">
         <div className="flex items-center gap-[6px]">
@@ -350,7 +350,7 @@ function KPICard({ data }: { data: KPICardData }) {
         </div>
         <span
           onClick={handleValueClick}
-          className="inline-flex items-center px-[8px] py-[2px] -ml-[8px] rounded-[4px] cursor-pointer transition-colors hover:bg-[rgba(0,75,114,0.06)] font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[normal] not-italic text-[32px] tracking-[-1px] text-[#147DB9] hover:text-[#0073AA] hover:underline"
+          className="inline-flex items-center px-[8px] py-[2px] -ml-[8px] rounded-[4px] cursor-pointer transition-colors hover:bg-[rgba(0,75,114,0.06)] font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[normal] not-italic text-[32px] tracking-[-1px] text-[#147DB9] hover:text-[#004B72] hover:underline"
           role="link"
           tabIndex={0}
           onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleValueClick(e as any); } }}
@@ -415,14 +415,14 @@ function WorkflowProgressCard() {
 
   return (
     <div className="flex flex-col relative rounded-[5px]">
-      <div aria-hidden="true" className="absolute border border-[#e0e1e6] border-solid inset-0 pointer-events-none rounded-[5px]" />
+      <div aria-hidden="true" className="absolute border border-[#CDCED6] border-solid inset-0 pointer-events-none rounded-[5px]" />
       {/* Card Header */}
       <div className="px-[20px] pt-[20px] pb-[16px] flex flex-col gap-[4px]">
         <div className="flex items-center gap-[6px]">
           <p className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[24px] not-italic text-[#1C2024] text-[16px]">
             Workflow Progress
           </p>
-          <InfoTooltip iconColor="#006496" text="Completed shows the percentage of tasks that have finished each workflow state. Current shows how many tasks are currently in each state." />
+          <InfoTooltip iconColor="#004B72" text="Completed shows the percentage of tasks that have finished each workflow state. Current shows how many tasks are currently in each state." />
         </div>
         <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] not-italic text-[#60646c] text-[13px]">
           {TOTAL_TASKS} tasks in FY2026 planning cycle
@@ -439,13 +439,13 @@ function WorkflowProgressCard() {
           <p className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[18px] text-[#60646c] text-[11px] uppercase tracking-[0.5px]">
             Completed
           </p>
-          <InfoTooltip iconColor="#006496" text="Percentage of tasks that have completed this workflow state." />
+          <InfoTooltip iconColor="#004B72" text="Percentage of tasks that have completed this workflow state." />
         </div>
         <div className="w-[36px] shrink-0 flex items-center justify-end gap-[4px]">
           <p className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[18px] text-[#60646c] text-[11px] uppercase tracking-[0.5px] whitespace-nowrap">
             Current
           </p>
-          <InfoTooltip iconColor="#006496" text="Number of tasks currently in this workflow state." />
+          <InfoTooltip iconColor="#004B72" text="Number of tasks currently in this workflow state." />
         </div>
       </div>
       {/* Progress Bars */}
@@ -464,7 +464,7 @@ function WorkflowProgressCard() {
             >
               <span
                 onClick={() => navigate(`/task-planning/tasks?workflowState=${encodeURIComponent(state.name)}`)}
-                className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] not-italic text-[#147DB9] text-[13px] w-[140px] shrink-0 truncate cursor-pointer hover:underline hover:text-[#0073AA] transition-colors inline-flex items-center px-[4px] py-[1px] -ml-[4px] rounded-[3px] hover:bg-[rgba(0,75,114,0.06)]"
+                className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] not-italic text-[#147DB9] text-[13px] w-[140px] shrink-0 truncate cursor-pointer hover:underline hover:text-[#004B72] transition-colors inline-flex items-center px-[4px] py-[1px] -ml-[4px] rounded-[3px] hover:bg-[rgba(0,75,114,0.06)]"
                 role="link"
                 tabIndex={0}
                 onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate(`/task-planning/tasks?workflowState=${encodeURIComponent(state.name)}`); } }}
@@ -472,7 +472,7 @@ function WorkflowProgressCard() {
               >
                 {state.name}
               </span>
-              <div className="flex-1 h-[22px] bg-[#e8e8ec] rounded-full relative overflow-hidden">
+              <div className="flex-1 h-[22px] bg-[#D9D9E0] rounded-full relative overflow-hidden">
                 {pct > 0 && (
                   <div
                     className="h-full rounded-full transition-all flex items-center"
@@ -491,7 +491,7 @@ function WorkflowProgressCard() {
               </div>
               <span
                 onClick={() => navigate(`/task-planning/tasks?workflowState=${encodeURIComponent(state.name)}`)}
-                className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#147DB9] text-[13px] w-[36px] text-right shrink-0 cursor-pointer hover:underline hover:text-[#0073AA] transition-colors inline-flex items-center justify-end px-[4px] py-[1px] rounded-[3px] hover:bg-[rgba(0,75,114,0.06)]"
+                className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#147DB9] text-[13px] w-[36px] text-right shrink-0 cursor-pointer hover:underline hover:text-[#004B72] transition-colors inline-flex items-center justify-end px-[4px] py-[1px] rounded-[3px] hover:bg-[rgba(0,75,114,0.06)]"
                 role="link"
                 tabIndex={0}
                 onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate(`/task-planning/tasks?workflowState=${encodeURIComponent(state.name)}`); } }}
@@ -530,7 +530,7 @@ function PlanningMilestonesCard() {
   }, []);
 
   return (
-    <div className="flex flex-col border border-[#e0e1e6] border-solid rounded-[5px] overflow-hidden h-full">
+    <div className="flex flex-col border border-[#CDCED6] border-solid rounded-[5px] overflow-hidden h-full">
       {/* Card Header */}
       <div className="px-[20px] pt-[20px] pb-[16px] flex items-center gap-[8px] shrink-0">
         <CalendarIcon />
@@ -587,7 +587,7 @@ function PlanningMilestonesCard() {
                       }
                     : {
                         borderLeft: '4px solid transparent',
-                        borderBottom: i < MILESTONES.length - 1 ? '1px solid #e0e1e6' : 'none',
+                        borderBottom: i < MILESTONES.length - 1 ? '1px solid #CDCED6' : 'none',
                       }
                 }
               >
@@ -733,7 +733,7 @@ function RecentTaskUpdatesTable() {
   }, [sortedTasks, searchValue]);
 
   return (
-    <div className="flex flex-col rounded-[5px] border border-solid border-[#e0e1e6] overflow-hidden">
+    <div className="flex flex-col rounded-[5px] border border-solid border-[#CDCED6] overflow-hidden">
       
       {/* Standardized Title Header — matches Execution Plans / APM Acceptance pattern */}
       <div className="bg-[#f9f9fb] relative w-full">
@@ -744,9 +744,9 @@ function RecentTaskUpdatesTable() {
             </p>
             <InfoTooltip text="Recently updated tasks across the planning cycle, including workflow changes and key edits." />
             {/* Vertical divider */}
-            <div className="w-[1px] h-[24px] bg-[#e0e1e6] shrink-0" />
+            <div className="w-[1px] h-[24px] bg-[#CDCED6] shrink-0" />
             <div className="bg-white h-[32px] relative rounded-[4px] w-[268px]">
-              <div aria-hidden="true" className="absolute border border-[rgba(0,6,46,0.2)] border-solid inset-0 pointer-events-none rounded-[4px]" />
+              <div aria-hidden="true" className="absolute border border-[#B9BBC6] border-solid inset-0 pointer-events-none rounded-[4px]" />
               <div className="flex items-center size-full px-[4px]">
                 <div className="flex items-center justify-center shrink-0 px-[2px]">
                   <SearchIcon />
@@ -765,7 +765,7 @@ function RecentTaskUpdatesTable() {
           <div className="flex items-center gap-[4px]">
             {/* Segmented control — matches G-Invoicing Bulk Status Update pattern */}
             <div
-              className="inline-flex w-fit h-[32px] items-center rounded-[4px] shrink-0 bg-[#F5F5F7] border border-solid border-[#e0e1e6] p-[2px] overflow-hidden box-border"
+              className="inline-flex w-fit h-[32px] items-center rounded-[4px] shrink-0 bg-[#F5F5F7] border border-solid border-[#CDCED6] p-[2px] overflow-hidden box-border"
               role="radiogroup"
               aria-label="Time range filter"
             >
@@ -797,11 +797,11 @@ function RecentTaskUpdatesTable() {
               })}
             </div>
             {/* Divider */}
-            <div className="w-[1px] h-[20px] bg-[#e0e1e6] shrink-0 mx-[8px]" />
+            <div className="w-[1px] h-[20px] bg-[#CDCED6] shrink-0 mx-[8px]" />
             {/* View All Tasks link */}
             <span
               onClick={() => navigate('/task-planning/tasks')}
-              className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] text-[#147DB9] text-[14px] whitespace-nowrap cursor-pointer hover:underline hover:text-[#0073AA] transition-colors px-[4px] py-[1px] rounded-[3px] hover:bg-[rgba(0,75,114,0.06)] shrink-0"
+              className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] text-[#147DB9] text-[14px] whitespace-nowrap cursor-pointer hover:underline hover:text-[#004B72] transition-colors px-[4px] py-[1px] rounded-[3px] hover:bg-[rgba(0,75,114,0.06)] shrink-0"
               role="link"
               tabIndex={0}
               onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate('/task-planning/tasks'); } }}
@@ -809,7 +809,7 @@ function RecentTaskUpdatesTable() {
               View All Tasks
             </span>
             {/* Divider */}
-            <div className="w-[1px] h-[20px] bg-[#e0e1e6] shrink-0 mx-[8px]" />
+            <div className="w-[1px] h-[20px] bg-[#CDCED6] shrink-0 mx-[8px]" />
             {/* Collapse toggle — matches CollapsibleFilterSection pattern exactly */}
             <button
               onClick={handleToggle}
@@ -846,7 +846,7 @@ function RecentTaskUpdatesTable() {
         <div style={{ overflow: overflowVisible ? 'visible' : 'hidden' }}>
           {/* Column Headers */}
           <div
-            className="bg-[#f9f9fb] border-b border-[#e0e1e6] grid"
+            className="bg-[#f9f9fb] border-b border-[#CDCED6] grid"
             style={{ gridTemplateColumns: TASK_TABLE_GRID }}
           >
             {TASK_COLUMNS.map((col) => {
@@ -878,7 +878,7 @@ function RecentTaskUpdatesTable() {
           {filteredTasks.map((task) => (
             <div
               key={task.taskId}
-              className="border-b border-[#e0e1e6] hover:bg-[#fafafa] transition-colors cursor-pointer grid"
+              className="border-b border-[#CDCED6] hover:bg-[#fafafa] transition-colors cursor-pointer grid"
               style={{ gridTemplateColumns: TASK_TABLE_GRID }}
             >
               {/* Task ID */}
@@ -928,7 +928,7 @@ function RecentTaskUpdatesTable() {
 function EmptyStateCard({ title, message, headerTooltip, emptyTooltip }: { title: string; message: string; headerTooltip: string; emptyTooltip: string }) {
   return (
     <div className="flex flex-col relative rounded-[5px]" style={{ minHeight: '200px' }}>
-      <div aria-hidden="true" className="absolute border border-[#e0e1e6] border-solid inset-0 pointer-events-none rounded-[5px]" />
+      <div aria-hidden="true" className="absolute border border-[#CDCED6] border-solid inset-0 pointer-events-none rounded-[5px]" />
       {/* Card Header */}
       <div className="px-[20px] pt-[20px] pb-[12px]">
         <div className="flex items-center gap-[6px]">
@@ -960,3 +960,4 @@ function EmptyIcon() {
     </svg>
   );
 }
+

@@ -200,7 +200,7 @@ export function CloneTaskFlyout({ open, onClose, sourceTask, currentTier: curren
         }}
       >
         {/* ─── Header ────────────────────────────────────────────── */}
-        <div className="shrink-0 px-[24px] pt-[24px] pb-[16px] border-b border-[#e0e1e6]">
+        <div className="shrink-0 px-[24px] pt-[24px] pb-[16px] border-b border-[#CDCED6]">
           <div className="flex items-start justify-between">
             <div className="flex flex-col gap-[4px]">
               <h2 className="font-['Inter:Semi_Bold',sans-serif] font-semibold text-[20px] leading-[28px] text-[#1C2024] m-0">
@@ -227,7 +227,7 @@ export function CloneTaskFlyout({ open, onClose, sourceTask, currentTier: curren
           <div className="flex flex-col gap-[20px]">
 
             {/* Source Task Card */}
-            <div className="rounded-[6px] border border-[#d9dade] bg-[#f9f9fb] p-[16px] flex flex-col gap-[10px]">
+            <div className="rounded-[6px] border border-[#CDCED6] bg-[#f9f9fb] p-[16px] flex flex-col gap-[10px]">
               <p className="font-['Inter:Medium',sans-serif] font-medium text-[12px] leading-[16px] text-[#80838D] m-0 uppercase tracking-[0.5px]">
                 Source Task
               </p>
@@ -250,7 +250,7 @@ export function CloneTaskFlyout({ open, onClose, sourceTask, currentTier: curren
                 value={newTitle}
                 onChange={(e) => setNewTitle(e.target.value)}
                 placeholder="Enter task title..."
-                className="h-[36px] px-[10px] bg-white rounded-[4px] border border-[rgba(0,6,46,0.2)] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] placeholder:text-[#8b8d98] outline-none focus:border-[#004b72] focus:shadow-[0_0_0_1px_#004b72] transition-shadow w-full box-border"
+                className="h-[36px] px-[10px] bg-white rounded-[4px] border border-[#B9BBC6] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] placeholder:text-[#8b8d98] outline-none focus:border-[#147DB9] focus:shadow-[0_0_0_1px_#147DB9] transition-shadow w-full box-border"
               />
             </FieldGroup>
 
@@ -277,17 +277,17 @@ export function CloneTaskFlyout({ open, onClose, sourceTask, currentTier: curren
                     value={popStartDate}
                     onChange={(e) => setPopStartDate(e.target.value)}
                     placeholder="mm/dd/yyyy"
-                    className="h-[36px] px-[10px] bg-white rounded-[4px] border border-[rgba(0,6,46,0.2)] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] placeholder:text-[#8b8d98] outline-none focus:border-[#004b72] focus:shadow-[0_0_0_1px_#004b72] transition-shadow w-full box-border"
+                    className="h-[36px] px-[10px] bg-white rounded-[4px] border border-[#B9BBC6] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] placeholder:text-[#8b8d98] outline-none focus:border-[#147DB9] focus:shadow-[0_0_0_1px_#147DB9] transition-shadow w-full box-border"
                   />
                 </div>
-                <span className="font-['Inter:Regular',sans-serif] font-normal text-[13px] leading-[18px] text-[#8b8d98] shrink-0">to</span>
+                <span className="font-['Inter:Regular',sans-serif] font-normal text-[13px] leading-[18px] text-[#60646C] shrink-0">to</span>
                 <div className="flex-1 min-w-0">
                   <input
                     type="text"
                     value={popEndDate}
                     onChange={(e) => setPopEndDate(e.target.value)}
                     placeholder="mm/dd/yyyy"
-                    className="h-[36px] px-[10px] bg-white rounded-[4px] border border-[rgba(0,6,46,0.2)] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] placeholder:text-[#8b8d98] outline-none focus:border-[#004b72] focus:shadow-[0_0_0_1px_#004b72] transition-shadow w-full box-border"
+                    className="h-[36px] px-[10px] bg-white rounded-[4px] border border-[#B9BBC6] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] placeholder:text-[#8b8d98] outline-none focus:border-[#147DB9] focus:shadow-[0_0_0_1px_#147DB9] transition-shadow w-full box-border"
                   />
                 </div>
               </div>
@@ -333,22 +333,22 @@ export function CloneTaskFlyout({ open, onClose, sourceTask, currentTier: curren
                 onChange={(e) => setCloneNotes(e.target.value)}
                 placeholder="Add notes about how this clone should differ from the original task…"
                 rows={3}
-                className="px-[10px] py-[8px] bg-white rounded-[4px] border border-[rgba(0,6,46,0.2)] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] placeholder:text-[#8b8d98] outline-none focus:border-[#004b72] focus:shadow-[0_0_0_1px_#004b72] transition-shadow w-full box-border resize-vertical"
+                className="px-[10px] py-[8px] bg-white rounded-[4px] border border-[#B9BBC6] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] placeholder:text-[#8b8d98] outline-none focus:border-[#147DB9] focus:shadow-[0_0_0_1px_#147DB9] transition-shadow w-full box-border resize-vertical"
               />
             </FieldGroup>
 
             {/* Helper text near footer */}
-            <p className="font-['Inter:Regular',sans-serif] font-normal text-[12px] leading-[16px] text-[#8b8d98] m-0 mt-[4px]">
+            <p className="font-['Inter:Regular',sans-serif] font-normal text-[12px] leading-[16px] text-[#80838D] m-0 mt-[4px]">
               The cloned task will be assigned the next available Task ID and created in Draft status.
             </p>
           </div>
         </div>
 
         {/* ─── Footer (sticky) ───────────────────────────────────── */}
-        <div className="shrink-0 px-[24px] py-[16px] border-t border-[#e0e1e6] flex items-center justify-end gap-[12px]">
+        <div className="shrink-0 px-[24px] py-[16px] border-t border-[#CDCED6] flex items-center justify-end gap-[12px]">
           <button
             onClick={handleCancel}
-            className="h-[36px] px-[20px] rounded-[4px] border border-[rgba(0,8,48,0.27)] bg-white cursor-pointer hover:bg-[#f5f5f5] transition-colors font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] text-[#1C2024]"
+            className="h-[36px] px-[20px] rounded-[4px] border border-[#B9BBC6] bg-white cursor-pointer hover:bg-[#f5f5f5] transition-colors font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] text-[#1C2024]"
           >
             Cancel
           </button>
@@ -383,7 +383,7 @@ function SourceRow({ label, value }: { label: string; value: string }) {
 function FieldGroup({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="flex flex-col gap-[6px]">
-      <label className="font-['Inter:Medium',sans-serif] font-medium text-[13px] leading-[18px] text-[#1C2024] m-0">
+      <label className="font-['Inter:Medium',sans-serif] font-medium text-[13px] leading-[18px] text-[#60646C] m-0">
         {label}
       </label>
       {children}
@@ -402,7 +402,7 @@ function SelectInput({ value, onChange, placeholder, options }: {
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className={`h-[36px] w-full px-[10px] pr-[32px] rounded-[4px] border border-[rgba(0,6,46,0.2)] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] outline-none appearance-none bg-white cursor-pointer focus:border-[#004b72] focus:shadow-[0_0_0_1px_#004b72] transition-shadow box-border ${value ? 'text-[#1C2024]' : 'text-[#8b8d98]'}`}
+        className={`h-[36px] w-full px-[10px] pr-[32px] rounded-[4px] border border-[#B9BBC6] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] outline-none appearance-none bg-white cursor-pointer focus:border-[#147DB9] focus:shadow-[0_0_0_1px_#147DB9] transition-shadow box-border ${value ? 'text-[#1C2024]' : 'text-[#8b8d98]'}`}
         style={{ color: value ? '#1C2024' : '#8b8d98' }}
       >
         <option value="" disabled style={{ color: '#8b8d98' }}>{placeholder}</option>

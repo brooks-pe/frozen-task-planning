@@ -13,7 +13,7 @@ function StatusIndicator({ state }: { state: SectionState }) {
   if (state === 'completed') {
     return (
       <div className="flex items-center justify-center w-[18px] h-[18px] rounded-[4px] bg-[#e6f6eb]">
-        <Check size={12} className="text-[rgba(0,113,63,0.87)]" />
+        <Check size={12} className="text-[#218358]" />
       </div>
     );
   }
@@ -66,7 +66,7 @@ export function TaskWorkspaceOverview({ currentTier, onOpenTierAssessment }: Tas
             <MetadataRow label="Created Date">March 3, 2026</MetadataRow>
             <MetadataRow label="Created By">Sarah Mitchell</MetadataRow>
             <MetadataRow label="Operational Status">
-              <span className="inline-flex items-center h-[22px] px-[8px] rounded-[4px] bg-[#e6f6eb] font-['Inter:Medium',sans-serif] font-medium text-[13px] leading-[18px] text-[rgba(0,113,63,0.87)]">
+              <span className="inline-flex items-center h-[22px] px-[8px] rounded-[4px] bg-[#e6f6eb] font-['Inter:Medium',sans-serif] font-medium text-[13px] leading-[18px] text-[#218358]">
                 Active
               </span>
             </MetadataRow>
@@ -98,7 +98,7 @@ export function TaskWorkspaceOverview({ currentTier, onOpenTierAssessment }: Tas
       title: 'BOE Build-Up',
       state: 'not-started',
       content: (
-        <p className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#80838D]">
+        <p className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#60646C]">
           BOE development will begin after the task is submitted.
         </p>
       ),
@@ -107,7 +107,7 @@ export function TaskWorkspaceOverview({ currentTier, onOpenTierAssessment }: Tas
       title: 'Activity Acceptance',
       state: 'not-started',
       content: (
-        <p className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#80838D]">
+        <p className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#60646C]">
           This stage begins once BOE development is completed.
         </p>
       ),
@@ -116,7 +116,7 @@ export function TaskWorkspaceOverview({ currentTier, onOpenTierAssessment }: Tas
       title: 'Project Acceptance',
       state: 'not-started',
       content: (
-        <p className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#80838D]">
+        <p className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#60646C]">
           Project acceptance follows activity-level review.
         </p>
       ),
@@ -125,7 +125,7 @@ export function TaskWorkspaceOverview({ currentTier, onOpenTierAssessment }: Tas
       title: 'Project Allocation',
       state: 'not-started',
       content: (
-        <p className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#80838D]">
+        <p className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#60646C]">
           Funding allocation occurs after approvals.
         </p>
       ),
@@ -134,7 +134,7 @@ export function TaskWorkspaceOverview({ currentTier, onOpenTierAssessment }: Tas
       title: 'Impact Assessment',
       state: 'not-started',
       content: (
-        <p className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#80838D]">
+        <p className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#60646C]">
           Impact assessment evaluates changes against the current baseline.
         </p>
       ),
@@ -143,7 +143,7 @@ export function TaskWorkspaceOverview({ currentTier, onOpenTierAssessment }: Tas
       title: 'Project Approval',
       state: 'not-started',
       content: (
-        <p className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#80838D]">
+        <p className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#60646C]">
           Project-level approval is required before program review.
         </p>
       ),
@@ -152,7 +152,7 @@ export function TaskWorkspaceOverview({ currentTier, onOpenTierAssessment }: Tas
       title: 'Program Approval',
       state: 'not-started',
       content: (
-        <p className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#80838D]">
+        <p className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#60646C]">
           Program approval is the final authorization step.
         </p>
       ),
@@ -161,7 +161,7 @@ export function TaskWorkspaceOverview({ currentTier, onOpenTierAssessment }: Tas
       title: 'Baselined',
       state: 'not-started',
       content: (
-        <p className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#80838D]">
+        <p className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#60646C]">
           The task will be baselined after all approvals are completed.
         </p>
       ),
@@ -169,7 +169,7 @@ export function TaskWorkspaceOverview({ currentTier, onOpenTierAssessment }: Tas
   ];
 
   return (
-    <div className="border border-[#e0e1e6] rounded-[8px] bg-white overflow-hidden">
+    <div className="border border-[#CDCED6] rounded-[8px] bg-white overflow-hidden">
       {sections.map((section, index) => {
         const isActive = section.state === 'active';
         const isLast = index === sections.length - 1;
@@ -181,7 +181,7 @@ export function TaskWorkspaceOverview({ currentTier, onOpenTierAssessment }: Tas
               {/* Section Header */}
               <div className="flex items-center gap-[10px] mb-[12px]">
                 <StatusIndicator state={section.state} />
-                <span className={`font-['Inter:Semi_Bold',sans-serif] font-semibold text-[18px] leading-[26px] ${isActive ? 'text-[#1C2024]' : 'text-[#80838D]'}`}>
+                <span className={`font-['Inter:Semi_Bold',sans-serif] font-semibold text-[18px] leading-[26px] ${isActive ? 'text-[#1C2024]' : 'text-[#60646C]'}`}>
                   {section.title}
                 </span>
               </div>
@@ -192,7 +192,7 @@ export function TaskWorkspaceOverview({ currentTier, onOpenTierAssessment }: Tas
             </div>
             {/* Divider */}
             {!isLast && (
-              <div className="mx-[24px] border-b border-[#e8e8ec]" />
+              <div className="mx-[24px] border-b border-[#D9D9E0]" />
             )}
           </div>
         );

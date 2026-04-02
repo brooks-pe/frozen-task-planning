@@ -77,7 +77,7 @@ export function WorkflowFooter({
   const isBoeBuildUpState = workflowState === 'BOE_BUILD_UP';
 
   return (
-    <div className="sticky bottom-0 z-40 bg-white border-t border-[#e0e1e6] shadow-[0_-2px_8px_rgba(0,0,0,0.08)]">
+    <div className="sticky bottom-0 z-40 bg-white border-t border-[#CDCED6] shadow-[0_-2px_8px_rgba(0,0,0,0.08)]">
       <div className="flex items-center justify-between px-[24px] py-[12px] gap-[16px]">
         <div className="flex items-center gap-[6px] min-w-0" style={{ overflowX: 'auto', scrollbarWidth: 'thin' }}>
           {steps.map((step, i) => (
@@ -85,7 +85,7 @@ export function WorkflowFooter({
               {step.label === 'Draft' ? (
                 !tierAssigned ? (
                   <button
-                    className="h-[32px] px-[12px] rounded-[4px] bg-white border border-[rgba(0,8,48,0.27)] font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] text-[#1C2024] cursor-default whitespace-nowrap shrink-0"
+                    className="h-[32px] px-[12px] rounded-[4px] bg-white border border-[#B9BBC6] font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] text-[#1C2024] cursor-default whitespace-nowrap shrink-0"
                   >
                     Draft
                   </button>
@@ -97,7 +97,7 @@ export function WorkflowFooter({
                   </button>
                 ) : (
                   <button
-                    className="h-[32px] px-[12px] rounded-[4px] bg-[#e6f6eb] text-[rgba(0,113,63,0.87)] font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] whitespace-nowrap shrink-0 border-none cursor-default inline-flex items-center gap-[6px]"
+                    className="h-[32px] px-[12px] rounded-[4px] bg-[#e6f6eb] text-[#218358] font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] whitespace-nowrap shrink-0 border-none cursor-default inline-flex items-center gap-[6px]"
                   >
                     <Check size={14} />
                     Draft
@@ -107,14 +107,14 @@ export function WorkflowFooter({
                 isT0Skip ? (
                   <button
                     disabled
-                    className="h-[32px] px-[12px] rounded-[4px] bg-[#f0f0f3] text-[#80838D] cursor-not-allowed font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] whitespace-nowrap shrink-0 border-none"
+                    className="h-[32px] px-[12px] rounded-[4px] bg-[#f0f0f3] text-[#8B8D98] cursor-not-allowed font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] whitespace-nowrap shrink-0 border border-[#CDCED6]"
                   >
                     BOE Build
                   </button>
                 ) : !tierAssigned ? (
                   <button
                     disabled
-                    className="h-[32px] px-[12px] rounded-[4px] bg-[#f0f0f3] text-[#80838D] cursor-not-allowed font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] whitespace-nowrap shrink-0 border-none"
+                    className="h-[32px] px-[12px] rounded-[4px] bg-[#f0f0f3] text-[#8B8D98] cursor-not-allowed font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] whitespace-nowrap shrink-0 border border-[#CDCED6]"
                   >
                     BOE Build
                   </button>
@@ -150,7 +150,7 @@ export function WorkflowFooter({
                 ) : (
                   <button
                     disabled
-                    className="h-[32px] px-[12px] rounded-[4px] bg-[#f0f0f3] text-[#80838D] cursor-not-allowed font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] whitespace-nowrap shrink-0 border-none"
+                    className="h-[32px] px-[12px] rounded-[4px] bg-[#f0f0f3] text-[#8B8D98] cursor-not-allowed font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] whitespace-nowrap shrink-0 border border-[#CDCED6]"
                   >
                     Activity Accept
                   </button>
@@ -164,10 +164,12 @@ export function WorkflowFooter({
               ) : (
                 <button
                   disabled
-                  className={`h-[32px] px-[10px] rounded-[4px] font-['Inter:Medium',sans-serif] font-medium text-[12px] leading-[16px] whitespace-nowrap shrink-0 border-none cursor-not-allowed flex items-center gap-[5px] ${
+                  className={`h-[32px] px-[10px] rounded-[4px] font-['Inter:Medium',sans-serif] font-medium text-[12px] leading-[16px] whitespace-nowrap shrink-0 cursor-not-allowed flex items-center gap-[5px] ${
                     step.state === 'completed'
-                      ? 'bg-[#e6f6eb] text-[rgba(0,113,63,0.87)]'
-                      : 'bg-[#f0f0f3] text-[#80838D]'
+                      ? 'bg-[#e6f6eb] text-[#218358] border border-[#CDCED6]'
+                      : step.state === 'next'
+                        ? 'bg-[#f0f7fc] text-[#004B72] border border-[#CDCED6]'
+                        : 'bg-[#f0f0f3] text-[#8B8D98] border border-[#CDCED6]'
                   }`}
                 >
                   {step.state === 'completed' && <Check size={11} />}

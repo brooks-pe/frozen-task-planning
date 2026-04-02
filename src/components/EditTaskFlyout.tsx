@@ -221,7 +221,7 @@ export function EditTaskFlyout({ open, onClose, onTaskUpdated, taskId }: EditTas
         }}
       >
         {/* ─── Header ────────────────────────────────────────────── */}
-        <div className="shrink-0 px-[24px] pt-[24px] pb-[16px] border-b border-[#e0e1e6]">
+        <div className="shrink-0 px-[24px] pt-[24px] pb-[16px] border-b border-[#CDCED6]">
           <div className="flex items-start justify-between">
             <div className="flex flex-col gap-[4px]">
               <h2 className="font-['Inter:Semi_Bold',sans-serif] font-semibold text-[20px] leading-[28px] text-[#1C2024] m-0">
@@ -237,7 +237,7 @@ export function EditTaskFlyout({ open, onClose, onTaskUpdated, taskId }: EditTas
               aria-label="Close"
             >
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M4 4L12 12M12 4L4 12" stroke="#60646c" strokeWidth="1.5" strokeLinecap="round" />
+                <path d="M4 4L12 12M12 4L4 12" stroke="#60646C" strokeWidth="1.5" strokeLinecap="round" />
               </svg>
             </button>
           </div>
@@ -310,10 +310,10 @@ export function EditTaskFlyout({ open, onClose, onTaskUpdated, taskId }: EditTas
             <FieldGroup label="Appropriation">
               {selectedES ? (
                 <div className="flex flex-col gap-[4px]">
-                  <div className="h-[36px] px-[10px] rounded-[4px] border border-[rgba(0,6,46,0.12)] flex items-center bg-[#f5f5f7]">
+                  <div className="h-[36px] px-[10px] rounded-[4px] border border-[#CDCED6] flex items-center bg-[#f5f5f7]">
                     <AppropriationBadge code={selectedES.appropriation} />
                   </div>
-                  <p className="font-['Inter:Regular',sans-serif] font-normal text-[12px] leading-[16px] text-[#8b8d98] m-0">
+                  <p className="font-['Inter:Regular',sans-serif] font-normal text-[12px] leading-[16px] text-[#80838D] m-0">
                     Driven by Execution Statement
                   </p>
                 </div>
@@ -377,7 +377,7 @@ export function EditTaskFlyout({ open, onClose, onTaskUpdated, taskId }: EditTas
                     error={attempted && !popStartDate.trim()}
                   />
                 </div>
-                <span className="font-['Inter:Regular',sans-serif] font-normal text-[13px] leading-[18px] text-[#8b8d98] shrink-0">to</span>
+                <span className="font-['Inter:Regular',sans-serif] font-normal text-[13px] leading-[18px] text-[#60646C] shrink-0">to</span>
                 <div className="flex-1 min-w-0">
                   <DatePickerInput
                     value={popEndDate}
@@ -393,10 +393,10 @@ export function EditTaskFlyout({ open, onClose, onTaskUpdated, taskId }: EditTas
         </div>
 
         {/* ─── Footer (sticky) ───────────────────────────────────── */}
-        <div className="shrink-0 px-[24px] py-[16px] border-t border-[#e0e1e6] flex items-center justify-end gap-[12px]">
+        <div className="shrink-0 px-[24px] py-[16px] border-t border-[#CDCED6] flex items-center justify-end gap-[12px]">
           <button
             onClick={handleCancel}
-            className="h-[36px] px-[20px] rounded-[4px] border border-[rgba(0,8,48,0.27)] bg-white cursor-pointer hover:bg-[#f5f5f5] transition-colors font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] text-[#1C2024]"
+            className="h-[36px] px-[20px] rounded-[4px] border border-[#B9BBC6] bg-white cursor-pointer hover:bg-[#f5f5f5] transition-colors font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] text-[#1C2024]"
           >
             Cancel
           </button>
@@ -405,7 +405,7 @@ export function EditTaskFlyout({ open, onClose, onTaskUpdated, taskId }: EditTas
             className={`h-[36px] px-[16px] rounded-[4px] border-none transition-colors font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] ${
               isFormValid
                 ? 'bg-[#004b72] cursor-pointer hover:bg-[#003a57] text-white'
-                : 'bg-[#e0e1e6] text-[#8b8d98] cursor-not-allowed'
+                : 'bg-[#f0f0f3] text-[#8B8D98] cursor-not-allowed'
             }`}
           >
             Save Changes
@@ -453,11 +453,10 @@ function FieldGroup({ label, helperText, children, required, attempted, invalid 
   const showError = attempted && invalid;
   return (
     <div className="flex flex-col gap-[6px]">
-      <label className="font-['Inter:Medium',sans-serif] font-medium text-[13px] leading-[18px] text-[#1C2024] m-0">
-        {label}{required && <span className="text-[#d4183d] ml-[2px]">*</span>}
+      <label className="font-['Inter:Medium',sans-serif] font-medium text-[13px] leading-[18px] text-[#60646C] m-0">{label}{required && <span className="text-[#d4183d] ml-[2px]">*</span>}
       </label>
       {helperText && (
-        <p className="font-['Inter:Regular',sans-serif] font-normal text-[12px] leading-[16px] text-[#8b8d98] m-0 -mt-[2px]">
+        <p className="font-['Inter:Regular',sans-serif] font-normal text-[12px] leading-[16px] text-[#80838D] m-0 -mt-[2px]">
           {helperText}
         </p>
       )}
@@ -478,7 +477,7 @@ function TextInput({ value, onChange, placeholder, error }: { value: string; onC
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
-      className={`h-[36px] px-[10px] bg-white rounded-[4px] border font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] placeholder:text-[#8b8d98] outline-none focus:border-[#004b72] focus:shadow-[0_0_0_1px_#004b72] transition-shadow w-full box-border ${error ? 'border-[#d4183d]' : 'border-[rgba(0,6,46,0.2)]'}`}
+      className={`h-[36px] px-[10px] bg-white rounded-[4px] border font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] placeholder:text-[#8B8D98] outline-none focus:border-[#147DB9] focus:shadow-[0_0_0_1px_#147DB9] transition-shadow w-full box-border ${error ? 'border-[#d4183d]' : 'border-[#B9BBC6]'}`}
     />
   );
 }
@@ -549,9 +548,9 @@ function SelectInput({ value, onChange, placeholder, options, disabled, error, n
           value={value}
           onChange={(e) => onChange(e.target.value)}
           disabled={disabled}
-          className={`h-[36px] w-full px-[10px] pr-[32px] rounded-[4px] border font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] outline-none appearance-none bg-white cursor-pointer focus:border-[#004b72] focus:shadow-[0_0_0_1px_#004b72] transition-shadow box-border ${
-            disabled ? 'bg-[#f5f5f7] text-[#8b8d98] cursor-not-allowed' : value ? 'text-[#1C2024]' : 'text-[#8b8d98]'
-          } ${error ? 'border-[#d4183d]' : 'border-[rgba(0,6,46,0.2)]'}`}
+          className={`h-[36px] w-full px-[10px] pr-[32px] rounded-[4px] border font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] outline-none appearance-none bg-white cursor-pointer focus:border-[#147DB9] focus:shadow-[0_0_0_1px_#147DB9] transition-shadow box-border ${
+            disabled ? 'bg-[#f5f5f7] text-[#8B8D98] cursor-not-allowed' : value ? 'text-[#1C2024]' : 'text-[#8B8D98]'
+          } ${error ? 'border-[#d4183d]' : 'border-[#B9BBC6]'}`}
           style={{ color: disabled ? '#8b8d98' : (value ? '#1C2024' : '#8b8d98') }}
         >
           <option value="" disabled style={{ color: '#8b8d98' }}>{placeholder}</option>
@@ -561,7 +560,7 @@ function SelectInput({ value, onChange, placeholder, options, disabled, error, n
         </select>
         <div className="absolute right-[10px] top-1/2 -translate-y-1/2 pointer-events-none">
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-            <path d="M3 4.5L6 7.5L9 4.5" stroke={disabled ? '#a0a1a6' : '#60646c'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M3 4.5L6 7.5L9 4.5" stroke={disabled ? '#8B8D98' : '#60646C'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </div>
       </div>
@@ -576,10 +575,10 @@ function SelectInput({ value, onChange, placeholder, options, disabled, error, n
         disabled={disabled}
         className={`h-[36px] w-full px-[10px] pr-[32px] rounded-[4px] border font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-left outline-none box-border transition-shadow ${
           disabled
-            ? 'bg-[#f5f5f7] cursor-not-allowed border-[rgba(0,6,46,0.12)]'
+            ? 'bg-[#f5f5f7] cursor-not-allowed border-[#CDCED6]'
             : isOpen
-              ? 'bg-white cursor-pointer border-[#004b72] shadow-[0_0_0_1px_#004b72]'
-              : `bg-white cursor-pointer ${error ? 'border-[#d4183d]' : 'border-[rgba(0,6,46,0.2)]'}`
+              ? 'bg-white cursor-pointer border-[#147DB9] shadow-[0_0_0_1px_#147DB9]'
+              : `bg-white cursor-pointer ${error ? 'border-[#d4183d]' : 'border-[#B9BBC6]'}`
         }`}
         style={{ color: disabled ? '#8b8d98' : (value ? '#1C2024' : '#8b8d98') }}
       >
@@ -587,7 +586,7 @@ function SelectInput({ value, onChange, placeholder, options, disabled, error, n
       </button>
       <div className="absolute right-[10px] top-1/2 -translate-y-1/2 pointer-events-none">
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-          <path d="M3 4.5L6 7.5L9 4.5" stroke={disabled ? '#a0a1a6' : isOpen ? '#004b72' : '#60646c'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M3 4.5L6 7.5L9 4.5" stroke={disabled ? '#8B8D98' : isOpen ? '#147DB9' : '#60646C'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </div>
 
@@ -595,10 +594,10 @@ function SelectInput({ value, onChange, placeholder, options, disabled, error, n
         <div
           ref={dropdownRef}
           style={{ position: 'fixed', top: dropdownPos.top, left: dropdownPos.left, width: dropdownPos.width, zIndex: 9999 }}
-          className="bg-white border border-[rgba(0,6,46,0.2)] rounded-[4px] shadow-[0px_4px_12px_rgba(0,0,0,0.12)] flex flex-col"
+          className="bg-white border border-[#B9BBC6] rounded-[4px] shadow-[0px_4px_12px_rgba(0,0,0,0.12)] flex flex-col"
         >
           {/* Search input */}
-          <div className="p-[8px] border-b border-[#e0e1e6]">
+          <div className="p-[8px] border-b border-[#CDCED6]">
             <div className="relative">
               <div className="absolute left-[8px] top-1/2 -translate-y-1/2 pointer-events-none">
                 <svg width={14} height={14} viewBox="0 0 14 14" fill="none">
@@ -611,7 +610,7 @@ function SelectInput({ value, onChange, placeholder, options, disabled, error, n
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search…"
-                className="w-full h-[32px] pl-[28px] pr-[8px] rounded-[4px] border border-[rgba(0,6,46,0.2)] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] outline-none focus:border-[#004B72] focus:ring-[2px] focus:ring-[rgba(0,75,114,0.2)]"
+                className="w-full h-[32px] pl-[28px] pr-[8px] rounded-[4px] border border-[#B9BBC6] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] outline-none focus:border-[#147DB9] focus:ring-[2px] focus:ring-[rgba(20,125,185,0.2)]"
               />
             </div>
           </div>
@@ -646,14 +645,14 @@ function SystemDrivenField({ value, placeholder, helperText, multiline }: { valu
   return (
     <div className="flex flex-col gap-[4px]">
       <div
-        className={`${multiline ? 'min-h-[36px] py-[8px]' : 'h-[36px]'} px-[10px] rounded-[4px] border border-[rgba(0,6,46,0.12)] flex items-center font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] ${
-          value ? 'bg-[#f5f5f7] text-[#1C2024]' : 'bg-[#f9f9fb] text-[#8b8d98]'
+        className={`${multiline ? 'min-h-[36px] py-[8px]' : 'h-[36px]'} px-[10px] rounded-[4px] border border-[#CDCED6] flex items-center font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] ${
+          value ? 'bg-[#f5f5f7] text-[#1C2024]' : 'bg-[#f9f9fb] text-[#8B8D98]'
         }`}
       >
         {value || placeholder}
       </div>
       {helperText && (
-        <p className="font-['Inter:Regular',sans-serif] font-normal text-[12px] leading-[16px] text-[#8b8d98] m-0">
+        <p className="font-['Inter:Regular',sans-serif] font-normal text-[12px] leading-[16px] text-[#80838D] m-0">
           {helperText}
         </p>
       )}
@@ -790,7 +789,7 @@ function DatePickerInput({ value, onChange, placeholder, error }: { value: strin
         onChange={(e) => onChange(e.target.value)}
         onClick={() => { if (!calendarOpen) setCalendarOpen(true); }}
         placeholder={placeholder}
-        className={`w-full h-[36px] px-[10px] pr-[34px] bg-white rounded-[4px] border font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] placeholder:text-[#8b8d98] outline-none focus:border-[#004b72] focus:shadow-[0_0_0_1px_#004b72] transition-shadow box-border cursor-pointer ${error ? 'border-[#d4183d]' : 'border-[rgba(0,6,46,0.2)]'}`}
+        className={`w-full h-[36px] px-[10px] pr-[34px] bg-white rounded-[4px] border font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] placeholder:text-[#8B8D98] outline-none focus:border-[#147DB9] focus:shadow-[0_0_0_1px_#147DB9] transition-shadow box-border cursor-pointer ${error ? 'border-[#d4183d]' : 'border-[#B9BBC6]'}`}
       />
       {/* Calendar icon */}
       <button
@@ -801,10 +800,10 @@ function DatePickerInput({ value, onChange, placeholder, error }: { value: strin
         aria-label="Open calendar"
       >
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-          <rect x="1" y="2.5" width="12" height="10" rx="1.5" stroke="#60646c" strokeWidth="1.2" />
-          <path d="M1 5.5H13" stroke="#60646c" strokeWidth="1.2" />
-          <path d="M4 1V3.5" stroke="#60646c" strokeWidth="1.2" strokeLinecap="round" />
-          <path d="M10 1V3.5" stroke="#60646c" strokeWidth="1.2" strokeLinecap="round" />
+          <rect x="1" y="2.5" width="12" height="10" rx="1.5" stroke="#60646C" strokeWidth="1.2" />
+          <path d="M1 5.5H13" stroke="#60646C" strokeWidth="1.2" />
+          <path d="M4 1V3.5" stroke="#60646C" strokeWidth="1.2" strokeLinecap="round" />
+          <path d="M10 1V3.5" stroke="#60646C" strokeWidth="1.2" strokeLinecap="round" />
         </svg>
       </button>
       {/* Calendar dropdown */}
@@ -812,7 +811,7 @@ function DatePickerInput({ value, onChange, placeholder, error }: { value: strin
         <div
           ref={calendarRef}
           data-datepicker-calendar
-          className="fixed z-[10000] bg-white rounded-[6px] shadow-[0_4px_20px_rgba(0,0,0,0.15)] border border-[#e0e1e6] p-[12px] w-[240px]"
+          className="fixed z-[10000] bg-white rounded-[6px] shadow-[0_4px_20px_rgba(0,0,0,0.15)] border border-[#CDCED6] p-[12px] w-[240px]"
           style={dropdownStyle}
         >
           {/* Header */}
@@ -824,7 +823,7 @@ function DatePickerInput({ value, onChange, placeholder, error }: { value: strin
               aria-label="Previous month"
             >
               <svg width="8" height="12" viewBox="0 0 8 12" fill="none">
-                <path d="M6 2L2 6L6 10" stroke="#60646c" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M6 2L2 6L6 10" stroke="#60646C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
             <span className="font-['Inter:Medium',sans-serif] font-medium text-[13px] leading-[18px] text-[#1C2024]">
@@ -837,14 +836,14 @@ function DatePickerInput({ value, onChange, placeholder, error }: { value: strin
               aria-label="Next month"
             >
               <svg width="8" height="12" viewBox="0 0 8 12" fill="none">
-                <path d="M2 2L6 6L2 10" stroke="#60646c" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M2 2L6 6L2 10" stroke="#60646C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
           </div>
           {/* Day headers */}
           <div className="grid grid-cols-7 gap-[2px] mb-[4px]">
             {DAY_HEADERS.map(dh => (
-              <div key={dh} className="h-[24px] flex items-center justify-center font-['Inter:Medium',sans-serif] font-medium text-[11px] leading-[16px] text-[#8b8d98]">
+              <div key={dh} className="h-[24px] flex items-center justify-center font-['Inter:Medium',sans-serif] font-medium text-[11px] leading-[16px] text-[#8B8D98]">
                 {dh}
               </div>
             ))}
@@ -882,3 +881,4 @@ function DatePickerInput({ value, onChange, placeholder, error }: { value: strin
     </div>
   );
 }
+

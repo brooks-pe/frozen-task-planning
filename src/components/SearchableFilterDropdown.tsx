@@ -192,7 +192,7 @@ export function SearchableFilterDropdown({ value, onChange, options, className, 
       <button
         type="button"
         onClick={() => isOpen ? handleClose() : handleOpen()}
-        className={`block bg-white h-[32px] w-full min-w-0 max-w-full box-border pl-[12px] pr-[32px] rounded-[4px] border border-[rgba(0,6,46,0.2)] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] cursor-pointer text-left overflow-hidden ${className || ''}`}
+        className={`block bg-white h-[32px] w-full min-w-0 max-w-full box-border pl-[12px] pr-[32px] rounded-[4px] border border-[#B9BBC6] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] cursor-pointer text-left overflow-hidden focus-visible:outline-none focus-visible:border-[#147DB9] focus-visible:ring-[2px] focus-visible:ring-[rgba(20,125,185,0.2)] transition-colors ${className || ''}`}
         style={{ boxSizing: 'border-box', width: '100%', maxWidth: '100%', ...triggerStyle }}
       >
         <span className="block overflow-hidden text-ellipsis whitespace-nowrap">
@@ -209,11 +209,11 @@ export function SearchableFilterDropdown({ value, onChange, options, className, 
         createPortal(
         <div
           ref={dropdownRef}
-          className="fixed bg-white border border-[rgba(0,6,46,0.2)] rounded-[4px] shadow-[0px_4px_12px_rgba(0,0,0,0.12)] z-[1200] flex flex-col"
+          className="fixed bg-white border border-[#CDCED6] rounded-[4px] shadow-[0px_4px_12px_rgba(0,0,0,0.12)] z-[1200] flex flex-col"
           style={dropdownStyle}
         >
           {/* Search input */}
-          <div className="p-[8px] border-b border-[#e0e1e6]">
+          <div className="p-[8px] border-b border-[#D9D9E0]">
             <div className="relative">
               <div className="absolute left-[8px] top-1/2 -translate-y-1/2 pointer-events-none">
                 <SearchIcon />
@@ -227,7 +227,7 @@ export function SearchableFilterDropdown({ value, onChange, options, className, 
                   setHighlightedIndex(-1);
                 }}
                 placeholder="Search…"
-                className="w-full h-[32px] pl-[28px] pr-[8px] rounded-[4px] border border-[rgba(0,6,46,0.2)] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] outline-none focus:border-[#004B72] focus:ring-[2px] focus:ring-[rgba(0,75,114,0.2)]"
+                className="w-full h-[32px] pl-[28px] pr-[8px] rounded-[4px] border border-[#B9BBC6] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] outline-none focus:border-[#147DB9] focus:ring-[2px] focus:ring-[rgba(20,125,185,0.2)]"
               />
             </div>
           </div>
@@ -235,7 +235,7 @@ export function SearchableFilterDropdown({ value, onChange, options, className, 
           {/* Options list */}
           <div ref={listRef} className="overflow-y-auto flex-1" style={{ maxHeight: '220px' }}>
             {filteredOptions.length === 0 ? (
-              <div className="px-[12px] py-[8px] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#60646c]">
+              <div className="px-[12px] py-[8px] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#80838D]">
                 No results
               </div>
             ) : (
