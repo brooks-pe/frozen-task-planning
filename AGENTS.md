@@ -39,6 +39,18 @@ SyncPoint Prototype is a maintained Vite + React codebase worked on primarily in
 - Keep inline editing in place unless a modal or flyout is explicitly required.
 - Use `lucide-react` for new icons unless the surrounding implementation already requires something else.
 
+## Style Guidance
+
+- Prioritize readability and contrast over soft modern styling.
+- Optimize text styling for aging leadership and enterprise readability.
+- Use approved semantic text tokens from `docs/guidelines/ui-style-guide.md` when adding or updating UI.
+- Do not introduce new ad hoc text hex values when an approved semantic token exists.
+- Treat muted text and disabled text as different semantic roles.
+- Prefer approved semantic border tokens from `docs/guidelines/ui-style-guide.md` when adding or updating UI.
+- Avoid low-alpha or overly faint borders for core structure.
+- Use border-default for standard structure and reserve border-subtle for secondary separation.
+- Keep focus/interactive borders visually distinct from neutral borders.
+
 ## `src/imports` Warning
 
 `src/imports/` is not a safe “generated trash” folder. It contains:
