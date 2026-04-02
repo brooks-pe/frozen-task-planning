@@ -130,7 +130,7 @@ export function MultiSelectFilterDropdown({
       <button
         type="button"
         onClick={() => isOpen ? handleClose() : handleOpen()}
-        className={`bg-white h-[32px] pl-[12px] pr-[32px] rounded-[4px] border border-[rgba(0,6,46,0.2)] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] cursor-pointer text-left whitespace-nowrap overflow-hidden text-ellipsis ${className || ''}`}
+        className={`bg-white h-[32px] pl-[12px] pr-[32px] rounded-[4px] border border-[#B9BBC6] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] cursor-pointer text-left whitespace-nowrap overflow-hidden text-ellipsis focus-visible:outline-none focus-visible:border-[#147DB9] focus-visible:ring-[2px] focus-visible:ring-[rgba(20,125,185,0.2)] transition-colors ${className || ''}`}
         style={triggerStyle}
       >
         {displayText}
@@ -143,11 +143,11 @@ export function MultiSelectFilterDropdown({
       {/* Dropdown menu */}
       {isOpen && (
         <div
-          className="absolute top-[calc(100%+4px)] left-0 min-w-full bg-white border border-[rgba(0,6,46,0.2)] rounded-[4px] shadow-[0px_4px_12px_rgba(0,0,0,0.12)] z-50 flex flex-col"
+          className="absolute top-[calc(100%+4px)] left-0 min-w-full bg-white border border-[#CDCED6] rounded-[4px] shadow-[0px_4px_12px_rgba(0,0,0,0.12)] z-50 flex flex-col"
           style={{ maxHeight: '320px' }}
         >
           {/* Search input */}
-          <div className="p-[8px] border-b border-[#e0e1e6]">
+          <div className="p-[8px] border-b border-[#D9D9E0]">
             <div className="relative">
               <div className="absolute left-[8px] top-1/2 -translate-y-1/2 pointer-events-none">
                 <SearchIcon />
@@ -158,7 +158,7 @@ export function MultiSelectFilterDropdown({
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search…"
-                className="w-full h-[32px] pl-[28px] pr-[8px] rounded-[4px] border border-[rgba(0,6,46,0.2)] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] outline-none focus:border-[#004B72] focus:ring-[2px] focus:ring-[rgba(0,75,114,0.2)]"
+                className="w-full h-[32px] pl-[28px] pr-[8px] rounded-[4px] border border-[#B9BBC6] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] outline-none focus:border-[#147DB9] focus:ring-[2px] focus:ring-[rgba(20,125,185,0.2)]"
               />
             </div>
           </div>
@@ -199,12 +199,12 @@ export function MultiSelectFilterDropdown({
 
             {/* Separator */}
             {filteredOptions.length > 0 && (
-              <div className="h-[1px] bg-[#e0e1e6] mx-[8px] my-[4px]" />
+              <div className="h-[1px] bg-[#D9D9E0] mx-[8px] my-[4px]" />
             )}
 
             {/* Filtered options */}
             {filteredOptions.length === 0 && search ? (
-              <div className="px-[12px] py-[8px] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#60646c]">
+              <div className="px-[12px] py-[8px] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#80838D]">
                 No results
               </div>
             ) : (

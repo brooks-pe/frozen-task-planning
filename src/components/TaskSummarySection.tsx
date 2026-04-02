@@ -1,4 +1,4 @@
-﻿import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { CollapsibleFilterSection } from './CollapsibleFilterSection';
 import { SearchableFilterDropdown } from './SearchableFilterDropdown';
@@ -119,7 +119,7 @@ export function getTaskRequirementProfile(taskId: string): RequirementProfile {
   return getRequirementProfile(getTaskRequirementProfileId(taskId));
 }
 
-// â”€â”€â”€ Sub-components â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Sub-components ──────────────────────────────────────────────────────────
 
 interface OperationalStatusBadgeProps {
   status: OperationalStatusType;
@@ -135,7 +135,7 @@ function OperationalStatusBadge({ status, fullStatusText, tooltip }: Operational
                       'Completed';
   
   const colorScheme = {
-    active: { bg: 'bg-[#e6f6eb]', text: 'text-[rgba(0,113,63,0.87)]' },
+    active: { bg: 'bg-[#e6f6eb]', text: 'text-[#218358]' },
     suspended: { bg: 'bg-[rgba(255,222,0,0.24)]', text: 'text-[#ab6400]' },
     completed: { bg: 'bg-[#F0F0F3]', text: 'text-[#60646C]' },
   };
@@ -160,7 +160,7 @@ function OperationalStatusBadge({ status, fullStatusText, tooltip }: Operational
                 {fullStatusText}
               </p>
             )}
-            <p className="font-['Inter:Regular',sans-serif] font-normal text-[13px] leading-[18px] text-[rgba(255,255,255,0.87)] m-0">
+            <p className="font-['Inter:Regular',sans-serif] font-normal text-[13px] leading-[18px] text-[#FFFFFF] m-0">
               {tooltip}
             </p>
           </div>
@@ -208,7 +208,7 @@ function ClampedText({ text, muted }: { text: string; muted?: boolean }) {
       </span>
       {isTruncated && showTooltip && (
         <div className="absolute z-50 left-0 bottom-[calc(100%+6px)] bg-[#1C2024] text-white rounded-[4px] px-[12px] py-[8px] shadow-lg min-w-[240px] max-w-[320px] whitespace-normal">
-          <p className="font-['Inter:Regular',sans-serif] font-normal text-[13px] leading-[18px] text-[rgba(255,255,255,0.87)] m-0">
+          <p className="font-['Inter:Regular',sans-serif] font-normal text-[13px] leading-[18px] text-[#FFFFFF] m-0">
             {text}
           </p>
           <div className="absolute -bottom-[4px] left-[12px] w-[8px] h-[8px] bg-[#1C2024] transform rotate-45" />
@@ -225,7 +225,7 @@ function FieldLabel({ label, required, showRequiredIndicator, small }: {
   small?: boolean;
 }) {
   return (
-    <span className={`font-['Inter:Semi_Bold',sans-serif] font-semibold ${small ? 'text-[13px]' : 'text-[14px]'} leading-[18px] text-[#1C2024]`}>
+    <span className={`font-['Inter:Semi_Bold',sans-serif] font-semibold ${small ? 'text-[13px]' : 'text-[14px]'} leading-[18px] text-[#60646C]`}>
       {label}
       {required && showRequiredIndicator && (
         <span className="ml-[4px] text-[#C1121F]">*</span>
@@ -259,7 +259,7 @@ function RequirementLineageValue({
       <HoverCardContent
         align="start"
         side="top"
-        className="w-[360px] rounded-[6px] border border-[#E0E1E6] bg-white p-[12px] shadow-[0_8px_24px_rgba(0,0,0,0.12)]"
+        className="w-[360px] rounded-[6px] border border-[#CDCED6] bg-white p-[12px] shadow-[0_8px_24px_rgba(0,0,0,0.12)]"
       >
         <div className="flex flex-col gap-[6px]">
           <p className="m-0 font-['Inter:Semi_Bold',sans-serif] font-semibold text-[13px] leading-[18px] text-[#1C2024]">
@@ -349,7 +349,7 @@ function MetadataField({ label, value, badge, action, showPulse, operationalStat
                 </span>
                 {tooltip && showTooltip && (
                   <div className="absolute z-50 left-0 bottom-[calc(100%+6px)] bg-[#1C2024] text-white rounded-[4px] px-[12px] py-[8px] shadow-lg min-w-[240px] max-w-[320px] whitespace-normal">
-                    <p className="font-['Inter:Regular',sans-serif] font-normal text-[13px] leading-[18px] text-[rgba(255,255,255,0.87)] m-0">
+                    <p className="font-['Inter:Regular',sans-serif] font-normal text-[13px] leading-[18px] text-[#FFFFFF] m-0">
                       {tooltip}
                     </p>
                     <div className="absolute -bottom-[4px] left-[12px] w-[8px] h-[8px] bg-[#1C2024] transform rotate-45" />
@@ -436,7 +436,7 @@ function TierField({
         <HoverCardContent
           align="start"
           side="top"
-          className="w-[320px] rounded-[6px] border border-[#E0E1E6] bg-white p-[12px] shadow-[0_8px_24px_rgba(0,0,0,0.12)]"
+          className="w-[320px] rounded-[6px] border border-[#CDCED6] bg-white p-[12px] shadow-[0_8px_24px_rgba(0,0,0,0.12)]"
         >
           <div className="flex flex-col gap-[6px]">
             <p className="m-0 font-['Inter:Semi_Bold',sans-serif] font-semibold text-[13px] leading-[18px] text-[#1C2024]">
@@ -505,7 +505,7 @@ function InlineSearchableDropdown({ value, onChange, options }: { value: string;
   );
 }
 
-/** DatePickerInput â€” matches CreateTaskFlyout calendar pattern exactly */
+/** DatePickerInput — matches CreateTaskFlyout calendar pattern exactly */
 function InlineDatePickerInput({ value, onChange }: { value: string; onChange: (v: string) => void }) {
   const [calendarOpen, setCalendarOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -618,7 +618,7 @@ function InlineDatePickerInput({ value, onChange }: { value: string; onChange: (
         onChange={(e) => onChange(e.target.value)}
         onClick={() => { if (!calendarOpen) setCalendarOpen(true); }}
         placeholder="mm/dd/yyyy"
-        className="w-full h-[32px] px-[8px] pr-[30px] bg-white rounded-[4px] border border-[rgba(0,6,46,0.2)] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] placeholder:text-[#8b8d98] outline-none focus:border-[#004b72] focus:shadow-[0_0_0_1px_#004b72] transition-shadow box-border cursor-pointer"
+        className="w-full h-[32px] px-[8px] pr-[30px] bg-white rounded-[4px] border border-[#B9BBC6] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] placeholder:text-[#80838D] outline-none focus:border-[#147DB9] focus:shadow-[0_0_0_1px_#147DB9] transition-shadow box-border cursor-pointer"
       />
       <button
         type="button"
@@ -628,17 +628,17 @@ function InlineDatePickerInput({ value, onChange }: { value: string; onChange: (
         aria-label="Open calendar"
       >
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-          <rect x="1" y="2.5" width="12" height="10" rx="1.5" stroke="#60646c" strokeWidth="1.2" />
-          <path d="M1 5.5H13" stroke="#60646c" strokeWidth="1.2" />
-          <path d="M4 1V3.5" stroke="#60646c" strokeWidth="1.2" strokeLinecap="round" />
-          <path d="M10 1V3.5" stroke="#60646c" strokeWidth="1.2" strokeLinecap="round" />
+          <rect x="1" y="2.5" width="12" height="10" rx="1.5" stroke="#60646C" strokeWidth="1.2" />
+          <path d="M1 5.5H13" stroke="#60646C" strokeWidth="1.2" />
+          <path d="M4 1V3.5" stroke="#60646C" strokeWidth="1.2" strokeLinecap="round" />
+          <path d="M10 1V3.5" stroke="#60646C" strokeWidth="1.2" strokeLinecap="round" />
         </svg>
       </button>
       {calendarOpen && createPortal(
         <div
           ref={calendarRef}
           style={dropdownStyle}
-          className="fixed z-[1100] bg-white rounded-[4px] shadow-[0_4px_16px_rgba(0,0,0,0.14)] border border-[#e0e1e6] p-[12px] w-[240px] select-none"
+          className="fixed z-[1100] bg-white rounded-[4px] shadow-[0_4px_16px_rgba(0,0,0,0.14)] border border-[#CDCED6] p-[12px] w-[240px] select-none"
           data-datepicker-calendar
         >
           {/* Month/Year header */}
@@ -650,7 +650,7 @@ function InlineDatePickerInput({ value, onChange }: { value: string; onChange: (
               aria-label="Previous month"
             >
               <svg width="8" height="12" viewBox="0 0 8 12" fill="none">
-                <path d="M6 2L2 6L6 10" stroke="#60646c" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M6 2L2 6L6 10" stroke="#60646C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
             <span className="font-['Inter:Medium',sans-serif] font-medium text-[13px] leading-[18px] text-[#1C2024]">
@@ -663,14 +663,14 @@ function InlineDatePickerInput({ value, onChange }: { value: string; onChange: (
               aria-label="Next month"
             >
               <svg width="8" height="12" viewBox="0 0 8 12" fill="none">
-                <path d="M2 2L6 6L2 10" stroke="#60646c" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M2 2L6 6L2 10" stroke="#60646C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
           </div>
           {/* Day headers */}
           <div className="grid grid-cols-7 gap-0 mb-[2px]">
             {DAY_HEADERS.map(d => (
-              <div key={d} className="h-[24px] flex items-center justify-center font-['Inter:Medium',sans-serif] font-medium text-[11px] leading-[14px] text-[#8b8d98]">
+              <div key={d} className="h-[24px] flex items-center justify-center font-['Inter:Medium',sans-serif] font-medium text-[11px] leading-[14px] text-[#80838D]">
                 {d}
               </div>
             ))}
@@ -691,9 +691,9 @@ function InlineDatePickerInput({ value, onChange }: { value: string; onChange: (
                   onClick={() => handleSelectDay(day)}
                   className={`h-[28px] w-full flex items-center justify-center rounded-[4px] border-none cursor-pointer transition-colors font-['Inter:Regular',sans-serif] font-normal text-[12px] leading-[16px] p-0 ${
                     selected
-                      ? 'bg-[#004b72] text-white'
+                      ? 'bg-[#004B72] text-white'
                       : today
-                        ? 'bg-[#f0f7fb] text-[#004b72] hover:bg-[#e0eff6]'
+                        ? 'bg-[#f0f7fb] text-[#004B72] hover:bg-[#e0eff6]'
                         : 'bg-transparent text-[#1C2024] hover:bg-[#f5f5f7]'
                   }`}
                 >
@@ -703,7 +703,7 @@ function InlineDatePickerInput({ value, onChange }: { value: string; onChange: (
             })}
           </div>
           {/* Today shortcut */}
-          <div className="mt-[8px] pt-[8px] border-t border-[#e0e1e6] flex justify-center">
+          <div className="mt-[8px] pt-[8px] border-t border-[#D9D9E0] flex justify-center">
             <button
               type="button"
               onClick={() => {
@@ -712,7 +712,7 @@ function InlineDatePickerInput({ value, onChange }: { value: string; onChange: (
                 setCalendarOpen(false);
                 inputRef.current?.focus();
               }}
-              className="border-none bg-transparent cursor-pointer font-['Inter:Medium',sans-serif] font-medium text-[12px] leading-[16px] text-[#006496] hover:underline p-0"
+              className="border-none bg-transparent cursor-pointer font-['Inter:Medium',sans-serif] font-medium text-[12px] leading-[16px] text-[#004B72] hover:underline p-0"
             >
               Today
             </button>
@@ -731,7 +731,7 @@ function DateRangeInput({ startDate, endDate, onStartChange, onEndChange }: {
   return (
     <div className="flex w-full min-w-0 max-w-full items-center gap-[8px]">
       <InlineDatePickerInput value={startDate} onChange={onStartChange} />
-      <span className="font-['Inter:Regular',sans-serif] font-normal text-[13px] leading-[18px] text-[#8b8d98] shrink-0">â€“</span>
+      <span className="font-['Inter:Regular',sans-serif] font-normal text-[13px] leading-[18px] text-[#80838D] shrink-0">–</span>
       <InlineDatePickerInput value={endDate} onChange={onEndChange} />
     </div>
   );
@@ -969,7 +969,7 @@ export function TaskSummarySection({ taskId, currentTier, tierAssessmentResult, 
         onClick={handleCancel}
         className="bg-white flex gap-[8px] h-[32px] items-center justify-center px-[12px] relative rounded-[4px] shrink-0 cursor-pointer hover:bg-[#f0f0f3] transition-colors"
       >
-        <div aria-hidden="true" className="absolute border border-[rgba(0,6,46,0.2)] border-solid inset-0 pointer-events-none rounded-[4px]" />
+        <div aria-hidden="true" className="absolute border border-[#B9BBC6] border-solid inset-0 pointer-events-none rounded-[4px]" />
         <span className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#1C2024] text-[14px] whitespace-nowrap">
           Cancel
         </span>
@@ -978,7 +978,7 @@ export function TaskSummarySection({ taskId, currentTier, tierAssessmentResult, 
   ) : (
     <button
       onClick={handleEdit}
-      className="w-[32px] h-[32px] inline-flex items-center justify-center rounded-[4px] border border-[rgba(0,6,46,0.16)] bg-white text-[#006496] shrink-0 cursor-pointer hover:bg-[#f0f7fc] hover:border-[rgba(0,100,150,0.45)] transition-colors"
+      className="w-[32px] h-[32px] inline-flex items-center justify-center rounded-[4px] border border-[#B9BBC6] bg-white text-[#004B72] shrink-0 cursor-pointer hover:bg-[#f0f7fc] hover:border-[#004B72] transition-colors"
       aria-label="Edit task summary"
     >
       <span className="relative shrink-0">
@@ -992,7 +992,7 @@ export function TaskSummarySection({ taskId, currentTier, tierAssessmentResult, 
       title="Task Summary"
       highContrast
       headerActions={headerActions}
-      className="[&>div:first-child>div:last-child>button[aria-expanded]]:hidden"
+      className="!border-[#CDCED6] [&>div:nth-child(2)>div>div>div:first-child>div]:!border-[#D9D9E0] [&>div:first-child>div:last-child>button[aria-expanded]]:hidden"
     >
       {/* Content sits directly on panel surface */}
       <div className="relative">
@@ -1015,7 +1015,7 @@ export function TaskSummarySection({ taskId, currentTier, tierAssessmentResult, 
                         onChange={handleProjectChange}
                         options={TASK_SUMMARY_PROJECT_OPTIONS}
                       />
-                      <span className="font-['Inter:Regular',sans-serif] font-normal text-[12px] leading-[16px] text-[#1C2024]">
+                      <span className="font-['Inter:Regular',sans-serif] font-normal text-[12px] leading-[16px] text-[#60646C]">
                         {editableProfile.programContext}
                       </span>
                     </div>
@@ -1074,7 +1074,7 @@ export function TaskSummarySection({ taskId, currentTier, tierAssessmentResult, 
                       onChange={e => updateField('objective', e.target.value)}
                       placeholder="Enter objective..."
                       rows={2}
-                      className="block w-full min-w-0 max-w-full box-border px-[8px] py-[6px] rounded-[4px] border border-[rgba(0,6,46,0.2)] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] outline-none focus:border-[#004B72] focus:ring-[2px] focus:ring-[rgba(0,75,114,0.2)] resize-vertical min-h-[32px]"
+                      className="block w-full min-w-0 max-w-full box-border px-[8px] py-[6px] rounded-[4px] border border-[#B9BBC6] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] outline-none focus:border-[#147DB9] focus:ring-[2px] focus:ring-[rgba(20,125,185,0.2)] resize-vertical min-h-[32px]"
                     />
                   </EditableField>
                 ) : (
@@ -1088,7 +1088,7 @@ export function TaskSummarySection({ taskId, currentTier, tierAssessmentResult, 
               </div>
             </div>
 
-            <div className="border-t border-solid border-[#e0e1e6]" />
+            <div className="border-t border-solid border-[#D9D9E0]" />
 
             {/* 2. Funding */}
             <div className="flex flex-col gap-[10px]">
@@ -1131,7 +1131,7 @@ export function TaskSummarySection({ taskId, currentTier, tierAssessmentResult, 
               </div>
             </div>
 
-            <div className="border-t border-solid border-[#e0e1e6]" />
+            <div className="border-t border-solid border-[#D9D9E0]" />
 
             {/* 3. Timing & Status */}
             <div className="flex flex-col gap-[10px]">
@@ -1188,7 +1188,7 @@ export function TaskSummarySection({ taskId, currentTier, tierAssessmentResult, 
               </div>
             </div>
 
-            <div className="border-t border-solid border-[#e0e1e6]" />
+            <div className="border-t border-solid border-[#D9D9E0]" />
 
             {/* 4. Ownership */}
             <div className="flex flex-col gap-[10px]">
@@ -1203,7 +1203,7 @@ export function TaskSummarySection({ taskId, currentTier, tierAssessmentResult, 
               </div>
             </div>
 
-            <div className="border-t border-solid border-[#e0e1e6]" />
+            <div className="border-t border-solid border-[#D9D9E0]" />
 
             {/* 5. Task Relationships */}
             <div className="flex flex-col gap-[10px]">
@@ -1263,4 +1263,5 @@ export function TaskSummarySection({ taskId, currentTier, tierAssessmentResult, 
     </CollapsibleFilterSection>
   );
 }
+
 

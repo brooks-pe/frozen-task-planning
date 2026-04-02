@@ -151,10 +151,10 @@ function GridSelect({
   function handleToggle() { if (disabled) return; setOpen(o => !o); if (open) setSearch(''); }
 
   const triggerBorder = disabled
-    ? '1px solid rgba(0,6,46,0.12)'
-    : open ? '1px solid #004B72'
+    ? '1px solid #CDCED6'
+    : open ? '1px solid #147DB9'
     : error ? '1px solid #e5484d'
-    : '1px solid rgba(0,6,46,0.18)';
+    : '1px solid #B9BBC6';
 
   return (
     <div ref={containerRef} className="relative w-full">
@@ -164,7 +164,7 @@ function GridSelect({
         disabled={disabled}
         className="w-full flex items-center justify-between px-[8px] py-[5px] rounded-[3px] text-left transition-colors"
         style={{
-          background: disabled ? '#e0e1e6' : 'white',
+          background: disabled ? '#f0f0f3' : 'white',
           border: triggerBorder,
           cursor: disabled ? 'not-allowed' : 'pointer',
           minHeight: '30px',
@@ -176,28 +176,28 @@ function GridSelect({
         >
           {selected ? selected.label : (placeholder || 'Select...')}
         </span>
-        <svg width="12" height="12" viewBox="0 0 14 14" fill="none" className="shrink-0 ml-[4px]" style={{ color: disabled ? '#8b8d98' : '#60646c' }}>
+        <svg width="12" height="12" viewBox="0 0 14 14" fill="none" className="shrink-0 ml-[4px]" style={{ color: disabled ? '#8B8D98' : '#60646C' }}>
           <path d={open ? 'M2.5 9L7 4.5L11.5 9' : 'M2.5 5L7 9.5L11.5 5'} stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </button>
       {open && !disabled && (
         <div
           ref={dropdownRef}
-          className="absolute z-[200] left-0 min-w-full top-[calc(100%+4px)] bg-white rounded-[4px] shadow-[0_4px_16px_rgba(0,0,0,0.12)] border border-[rgba(0,6,46,0.10)] overflow-hidden"
+          className="absolute z-[200] left-0 min-w-full top-[calc(100%+4px)] bg-white rounded-[4px] shadow-[0_4px_16px_rgba(0,0,0,0.12)] border border-[#CDCED6] overflow-hidden"
           style={{ maxHeight: '220px', display: 'flex', flexDirection: 'column', width: 'max-content', minWidth: '100%', maxWidth: '360px' }}
         >
           {searchable && (
-            <div className="px-[8px] py-[6px] border-b border-[rgba(0,6,46,0.08)] shrink-0">
+            <div className="px-[8px] py-[6px] border-b border-[#D9D9E0] shrink-0">
               <input
                 autoFocus type="text" value={search} onChange={e => setSearch(e.target.value)}
                 placeholder="Search..."
-                className="w-full px-[8px] py-[5px] rounded-[3px] border border-[rgba(0,6,46,0.18)] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] placeholder:text-[#8b8d98] outline-none focus:border-[#004B72]"
+                className="w-full px-[8px] py-[5px] rounded-[3px] border border-[#B9BBC6] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] placeholder:text-[#8b8d98] outline-none focus:border-[#147DB9]"
               />
             </div>
           )}
           <div className="overflow-y-auto" style={{ maxHeight: searchable ? '172px' : '220px' }}>
             {filteredOptions.length === 0 ? (
-              <div className="px-[12px] py-[8px] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#8b8d98]">No options found</div>
+              <div className="px-[12px] py-[8px] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#80838D]">No options found</div>
             ) : filteredOptions.map(opt => (
               <div
                 key={opt.value}
@@ -207,7 +207,7 @@ function GridSelect({
                 onMouseLeave={handleOptionMouseLeave}
                 className={`flex items-center gap-[8px] px-[12px] py-[7px] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] cursor-pointer ${opt.value === value ? 'bg-[rgba(0,75,114,0.06)]' : 'hover:bg-[#F9F9FB]'}`}
               >
-                {optionDetailsMap?.[opt.value] && <Info size={14} className="shrink-0 text-[#8b8d98]" strokeWidth={1.75} />}
+                {optionDetailsMap?.[opt.value] && <Info size={14} className="shrink-0 text-[#80838D]" strokeWidth={1.75} />}
                 <span className="truncate">{opt.label}</span>
               </div>
             ))}
@@ -217,7 +217,7 @@ function GridSelect({
               ref={hoverCardRef}
               onMouseEnter={handleHoverCardEnter}
               onMouseLeave={handleHoverCardLeave}
-              className="fixed z-[300] bg-white rounded-[4px] shadow-[0_4px_16px_rgba(0,0,0,0.14)] border border-[rgba(0,6,46,0.10)]"
+              className="fixed z-[300] bg-white rounded-[4px] shadow-[0_4px_16px_rgba(0,0,0,0.14)] border border-[#CDCED6]"
               style={{ top: hoverCardPosition.top, left: hoverCardPosition.left, width: '360px', padding: '14px 16px' }}
             >
               <p className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] m-0 whitespace-normal">
@@ -406,7 +406,7 @@ function CreateTaskRow({ previewId, defaultValues, onDuplicate, onDelete, onVali
   return (
     <div
       className="min-w-0"
-      style={{ display: 'grid', gridTemplateColumns: GRID_TEMPLATE, gap: '0', alignItems: 'start', borderBottom: '1px solid rgba(0,6,46,0.08)' }}
+      style={{ display: 'grid', gridTemplateColumns: GRID_TEMPLATE, gap: '0', alignItems: 'start', borderBottom: '1px solid #D9D9E0' }}
     >
       {/* Status indicator */}
       <div className="flex items-center justify-center" style={{ minHeight: '42px', paddingTop: '6px' }}>
@@ -450,7 +450,7 @@ function CreateTaskRow({ previewId, defaultValues, onDuplicate, onDelete, onVali
             <span
               className="inline-flex items-center justify-center w-[16px] h-[16px] rounded-[3px] shrink-0 transition-colors"
               style={{
-                border: isCODB ? '1.5px solid #004b72' : '1.5px solid rgba(0,6,46,0.27)',
+                border: isCODB ? '1.5px solid #004B72' : '1.5px solid #8B8D98',
                 backgroundColor: isCODB ? '#004b72' : 'white',
               }}
             >
@@ -502,9 +502,9 @@ function CreateTaskRow({ previewId, defaultValues, onDuplicate, onDelete, onVali
           onChange={e => setTaskTitle(e.target.value)}
           placeholder="Enter title..."
           className="w-full px-[8px] py-[5px] rounded-[3px] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] placeholder:text-[#8b8d98] outline-none transition-colors"
-          style={{ border: titleHasError ? '1px solid #e5484d' : '1px solid rgba(0,6,46,0.18)', background: 'white', minHeight: '30px' }}
-          onFocus={e => { if (!titleHasError) e.currentTarget.style.border = '1px solid #004B72'; }}
-          onBlur={e => { touch('taskTitle'); const hasErr = !taskTitle.trim(); e.currentTarget.style.border = hasErr ? '1px solid #e5484d' : '1px solid rgba(0,6,46,0.18)'; }}
+          style={{ border: titleHasError ? '1px solid #e5484d' : '1px solid #B9BBC6', background: 'white', minHeight: '30px' }}
+          onFocus={e => { if (!titleHasError) e.currentTarget.style.border = '1px solid #147DB9'; }}
+          onBlur={e => { touch('taskTitle'); const hasErr = !taskTitle.trim(); e.currentTarget.style.border = hasErr ? '1px solid #e5484d' : '1px solid #B9BBC6'; }}
         />
         <FieldError show={!!titleHasError} />
       </div>
@@ -574,14 +574,14 @@ function CreateTaskRow({ previewId, defaultValues, onDuplicate, onDelete, onVali
         <button
           type="button"
           onClick={() => onDuplicate({ project, isCODB, l1Requirement, l2Requirement, taskTitle, wbsAttribute, executingActivity, appropriation, fundingSource })}
-          className="inline-flex items-center justify-center w-[28px] h-[28px] rounded-[4px] border border-[rgba(0,6,46,0.12)] bg-white text-[#60646c] hover:bg-[#F9F9FB] hover:text-[#1C2024] transition-colors cursor-pointer"
+          className="inline-flex items-center justify-center w-[28px] h-[28px] rounded-[4px] border border-[#CDCED6] bg-white text-[#60646c] hover:bg-[#F9F9FB] hover:text-[#1C2024] transition-colors cursor-pointer"
         >
           <Copy size={14} strokeWidth={1.75} />
         </button>
         <button
           type="button"
           onClick={onDelete}
-          className="inline-flex items-center justify-center w-[28px] h-[28px] rounded-[4px] border border-[rgba(0,6,46,0.12)] bg-white text-[#60646c] hover:bg-[#FFF1F0] hover:text-[#cf1322] transition-colors cursor-pointer"
+          className="inline-flex items-center justify-center w-[28px] h-[28px] rounded-[4px] border border-[#CDCED6] bg-white text-[#60646c] hover:bg-[#FFF1F0] hover:text-[#cf1322] transition-colors cursor-pointer"
         >
           <Trash2 size={14} strokeWidth={1.75} />
         </button>
@@ -738,7 +738,7 @@ export default function CreateTaskGrid() {
         {/* Header */}
         <div
           className="min-w-0"
-          style={{ display: 'grid', gridTemplateColumns: GRID_TEMPLATE, gap: '0', borderBottom: '1px solid rgba(0,6,46,0.12)' }}
+          style={{ display: 'grid', gridTemplateColumns: GRID_TEMPLATE, gap: '0', borderBottom: '1px solid #CDCED6' }}
         >
           {COL_HEADERS.map((h, i) => (
             <div
@@ -777,7 +777,7 @@ export default function CreateTaskGrid() {
       </div>
 
       {/* ── Bottom Action Bar ─────────────────────────────────────────────── */}
-      <div className="flex items-center justify-between w-full mt-[24px] pt-[16px]" style={{ borderTop: '1px solid rgba(0,6,46,0.10)' }}>
+      <div className="flex items-center justify-between w-full mt-[24px] pt-[16px]" style={{ borderTop: '1px solid #CDCED6' }}>
         {/* Left: Reset All */}
         <button
           type="button"
@@ -785,7 +785,7 @@ export default function CreateTaskGrid() {
           disabled={!hasAnyData}
           className="px-[16px] py-[7px] rounded-[4px] font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] transition-colors"
           style={{
-            border: '1px solid rgba(0,6,46,0.18)',
+            border: '1px solid #B9BBC6',
             backgroundColor: 'white',
             color: hasAnyData ? '#1C2024' : '#8b8d98',
             cursor: hasAnyData ? 'pointer' : 'not-allowed',
@@ -828,7 +828,7 @@ export default function CreateTaskGrid() {
           {/* Dropdown */}
           {splitOpen && (
             <div
-              className="absolute right-0 bottom-[calc(100%+4px)] bg-white rounded-[4px] shadow-[0_4px_16px_rgba(0,0,0,0.12)] border border-[rgba(0,6,46,0.10)] overflow-hidden z-[200]"
+              className="absolute right-0 bottom-[calc(100%+4px)] bg-white rounded-[4px] shadow-[0_4px_16px_rgba(0,0,0,0.12)] border border-[#CDCED6] overflow-hidden z-[200]"
               style={{ minWidth: '260px' }}
             >
               <div
@@ -844,6 +844,8 @@ export default function CreateTaskGrid() {
     </div>
   );
 }
+
+
 
 
 

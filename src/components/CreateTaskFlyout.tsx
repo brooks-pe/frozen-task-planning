@@ -149,7 +149,7 @@ const BADGE_COLORS: Record<BadgeStyle, { bg: string; text: string }> = {
   omn:   { bg: '#99FFAD', text: '#1c2024' },
   rdten: { bg: '#F8FF94', text: '#1c2024' },
   opn:   { bg: '#F3A977', text: '#1c2024' },
-  none:  { bg: '#e8e8ec', text: '#60646c' },
+  none:  { bg: '#D9D9E0', text: '#60646c' },
 };
 
 interface OptionBadge {
@@ -352,14 +352,14 @@ function SelectInput({
     if (open) setSearch('');
   }
 
-  const triggerBg = disabled ? '#e0e1e6' : (error ? '#fff0f2' : 'white');
+  const triggerBg = disabled ? '#CDCED6' : (error ? '#fff0f2' : 'white');
   const triggerBorder = error
     ? '1px solid #d4183d'
     : disabled
-    ? '1px solid rgba(0,6,46,0.12)'
+    ? '1px solid #CDCED6'
     : open
     ? '1px solid #004B72'
-    : '1px solid rgba(0,6,46,0.18)';
+    : '1px solid #B9BBC6';
 
   return (
     <div ref={containerRef} className="relative">
@@ -404,18 +404,18 @@ function SelectInput({
       {open && !disabled && (
         <div
           ref={dropdownRef}
-          className="absolute z-[200] left-0 right-0 top-[calc(100%+4px)] bg-white rounded-[4px] shadow-[0_4px_16px_rgba(0,0,0,0.12)] border border-[rgba(0,6,46,0.10)] overflow-hidden"
+          className="absolute z-[200] left-0 right-0 top-[calc(100%+4px)] bg-white rounded-[4px] shadow-[0_4px_16px_rgba(0,0,0,0.12)] border border-[#CDCED6] overflow-hidden"
           style={{ maxHeight: '220px', display: 'flex', flexDirection: 'column' }}
         >
           {searchable && (
-            <div className="px-[8px] py-[6px] border-b border-[rgba(0,6,46,0.08)] shrink-0">
+            <div className="px-[8px] py-[6px] border-b border-[#D9D9E0] shrink-0">
               <input
                 autoFocus
                 type="text"
                 value={search}
                 onChange={e => setSearch(e.target.value)}
                 placeholder="Search..."
-                className="w-full px-[8px] py-[5px] rounded-[3px] border border-[rgba(0,6,46,0.18)] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] placeholder:text-[#8b8d98] outline-none focus:border-[#004B72]"
+                className="w-full px-[8px] py-[5px] rounded-[3px] border border-[#B9BBC6] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] placeholder:text-[#8b8d98] outline-none focus:border-[#147DB9]"
               />
             </div>
           )}
@@ -480,7 +480,7 @@ function SelectInput({
                 {/* Special footer option - visually separated, always visible */}
                 {specialFooterOption && (
                   <>
-                    <div className="mx-[8px] border-t border-[rgba(0,6,46,0.08)]" />
+                    <div className="mx-[8px] border-t border-[#D9D9E0]" />
                     <div
                       onClick={() => handleSelect(specialFooterOption.value)}
                       className={`flex items-center gap-[8px] px-[12px] py-[7px] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] cursor-pointer ${
@@ -505,7 +505,7 @@ function SelectInput({
               ref={hoverCardRef}
               onMouseEnter={handleHoverCardEnter}
               onMouseLeave={handleHoverCardLeave}
-              className="fixed z-[300] bg-white rounded-[4px] shadow-[0_4px_16px_rgba(0,0,0,0.14)] border border-[rgba(0,6,46,0.10)]"
+              className="fixed z-[300] bg-white rounded-[4px] shadow-[0_4px_16px_rgba(0,0,0,0.14)] border border-[#CDCED6]"
               style={{
                 top: hoverCardPosition.top,
                 left: hoverCardPosition.left,
@@ -549,7 +549,7 @@ function TextInput({
       placeholder={placeholder}
       className="w-full px-[10px] py-[7px] rounded-[4px] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] placeholder:text-[#8b8d98] outline-none transition-colors"
       style={{
-        border: error ? '1px solid #d4183d' : '1px solid rgba(0,6,46,0.18)',
+        border: error ? '1px solid #d4183d' : '1px solid #B9BBC6',
         background: error ? '#fff0f2' : 'white',
         minHeight: '34px',
       }}
@@ -557,7 +557,7 @@ function TextInput({
         if (!error) e.currentTarget.style.border = '1px solid #004B72';
       }}
       onBlur={e => {
-        if (!error) e.currentTarget.style.border = '1px solid rgba(0,6,46,0.18)';
+        if (!error) e.currentTarget.style.border = '1px solid #B9BBC6';
       }}
     />
   );
@@ -900,7 +900,7 @@ export function CreateTaskFlyout({ open, onClose, onTaskCreated, onTaskCreatedAn
         }}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-[24px] py-[18px] border-b border-[rgba(0,6,46,0.12)] shrink-0">
+        <div className="flex items-center justify-between px-[24px] py-[18px] border-b border-[#CDCED6] shrink-0">
           <span className="font-['Inter:SemiBold',sans-serif] font-semibold text-[16px] leading-[24px] text-[#1C2024]">
             Create Task
           </span>
@@ -939,8 +939,8 @@ export function CreateTaskFlyout({ open, onClose, onTaskCreated, onTaskCreatedAn
               <span
                 className="inline-flex items-center justify-center w-[16px] h-[16px] rounded-[3px] shrink-0 transition-colors"
                 style={{
-                  border: isCODB ? '1.5px solid #004b72' : '1.5px solid rgba(0,6,46,0.27)',
-                  backgroundColor: isCODB ? '#004b72' : 'white',
+                  border: isCODB ? '1.5px solid #004B72' : '1.5px solid #8B8D98',
+                  backgroundColor: isCODB ? '#004B72' : 'white',
                 }}
               >
                 {isCODB && (
@@ -1002,7 +1002,7 @@ export function CreateTaskFlyout({ open, onClose, onTaskCreated, onTaskCreatedAn
                 className="px-[10px] py-[7px] rounded-[4px] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] whitespace-normal"
                 style={{
                   background: '#F9F9FB',
-                  border: '1px solid rgba(0,6,46,0.12)',
+                  border: '1px solid #CDCED6',
                   minHeight: '34px',
                   color: selectedL2Requirement || selectedL1Requirement ? '#1C2024' : '#8b8d98',
                 }}
@@ -1124,11 +1124,11 @@ export function CreateTaskFlyout({ open, onClose, onTaskCreated, onTaskCreatedAn
         </div>
 
         {/* Footer */}
-        <div className="shrink-0 flex items-center justify-end gap-[8px] px-[24px] py-[16px] border-t border-[rgba(0,6,46,0.12)] bg-white">
+        <div className="shrink-0 flex items-center justify-end gap-[8px] px-[24px] py-[16px] border-t border-[#CDCED6] bg-white">
           <button
             type="button"
             onClick={handleClose}
-            className="px-[16px] py-[7px] rounded-[4px] border border-[rgba(0,6,46,0.18)] font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] text-[#1C2024] hover:bg-[#F9F9FB] transition-colors"
+            className="px-[16px] py-[7px] rounded-[4px] border border-[#B9BBC6] font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] text-[#1C2024] hover:bg-[#F9F9FB] transition-colors"
           >
             Cancel
           </button>
@@ -1167,7 +1167,7 @@ export function CreateTaskFlyout({ open, onClose, onTaskCreated, onTaskCreatedAn
             </button>
             {splitMenuOpen && (
               <div
-                className="absolute z-[200] right-0 bottom-[calc(100%+4px)] bg-white rounded-[4px] shadow-[0_4px_16px_rgba(0,0,0,0.12)] border border-[rgba(0,6,46,0.10)] overflow-hidden whitespace-nowrap"
+                className="absolute z-[200] right-0 bottom-[calc(100%+4px)] bg-white rounded-[4px] shadow-[0_4px_16px_rgba(0,0,0,0.12)] border border-[#CDCED6] overflow-hidden whitespace-nowrap"
               >
                 <div
                   onClick={() => {
@@ -1187,3 +1187,4 @@ export function CreateTaskFlyout({ open, onClose, onTaskCreated, onTaskCreatedAn
     document.body
   );
 }
+

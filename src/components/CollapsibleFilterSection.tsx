@@ -52,7 +52,7 @@ export function CollapsibleFilterSection({
   const showLabel = 'Show ' + title;
 
   return (
-    <div className={'bg-[#f9f9fb] relative rounded-[5px] w-full border border-solid border-[#e0e1e6] ' + className}>
+    <div className={'bg-[#f9f9fb] relative rounded-[5px] w-full border border-solid border-[#CDCED6] ' + className}>
       <div className="flex items-center justify-between px-[24px] py-[12px]">
         <span className="font-['Inter',sans-serif] font-semibold leading-[24px] not-italic text-[#1C2024] text-[18px] tracking-[0px]">
           {title}
@@ -94,7 +94,7 @@ export function CollapsibleFilterSection({
           style={{ overflow: overflowVisible ? 'visible' : 'hidden' }}
         >
           <div className="w-full box-border px-[24px]">
-            <div className="w-full border-t border-solid border-[#e0e1e6]" />
+            <div className="w-full border-t border-solid border-[#D9D9E0]" />
           </div>
           <div className="w-full box-border px-[24px] pt-[16px] pb-[24px]">
             {children}

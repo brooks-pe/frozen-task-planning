@@ -320,7 +320,7 @@ export default function TaskWorkspaceHeader() {
           {visibleRequirementAnchor}
         </span>
       </HoverCardTrigger>
-      <HoverCardContent align="start" className="w-[420px] bg-white border border-[rgba(0,6,46,0.14)] shadow-lg rounded-[6px] p-[12px]">
+      <HoverCardContent align="start" className="w-[420px] bg-white border border-[#CDCED6] shadow-lg rounded-[6px] p-[12px]">
         <div className="flex flex-col gap-[8px]">
           <div className="flex flex-col gap-[2px]">
             <span className="font-['Inter:Medium',sans-serif] font-medium text-[12px] leading-[16px] text-[#60646C]">L1 Requirement</span>
@@ -345,7 +345,7 @@ export default function TaskWorkspaceHeader() {
             showStickyContextHeader ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
           }`}
         >
-          <div className="bg-white border-b border-[#e0e1e6] shadow-[0_2px_8px_rgba(0,0,0,0.08)]">
+          <div className="bg-white border-b border-[#CDCED6] shadow-[0_2px_8px_rgba(0,0,0,0.08)]">
             <div className="px-[24px] py-[12px]">
               <p className="font-['Inter:Regular',sans-serif] font-normal text-[18px] leading-[24px] text-[#1C2024] overflow-hidden text-ellipsis whitespace-nowrap">
                 {taskId} | {visibleRequirementAnchor} | {savedExecutingActivity}
@@ -385,7 +385,7 @@ export default function TaskWorkspaceHeader() {
                 <select
                   value={currentTier ?? ''}
                   onChange={e => handleDevTierChange(e.target.value === '' ? null : e.target.value)}
-                  className="h-[32px] pl-[10px] pr-[28px] rounded-[4px] border border-[rgba(0,8,48,0.18)] font-['Inter:Regular',sans-serif] font-normal text-[13px] leading-[18px] text-[#1C2024] bg-white cursor-pointer appearance-none focus:outline-none focus:border-[#004B72] transition-colors"
+                  className="h-[32px] pl-[10px] pr-[28px] rounded-[4px] border border-[#B9BBC6] font-['Inter:Regular',sans-serif] font-normal text-[13px] leading-[18px] text-[#1C2024] bg-white cursor-pointer appearance-none focus:outline-none focus:border-[#147DB9] transition-colors"
                 >
                   <option value="">No Tier Assigned</option>
                   <option value="Tier 0">Tier 0</option>
@@ -402,8 +402,8 @@ export default function TaskWorkspaceHeader() {
                 onClick={handleCloneClick}
                 className="bg-white content-stretch flex gap-[8px] h-[32px] items-center justify-center px-[12px] relative rounded-[4px] shrink-0 cursor-pointer hover:bg-[#f0f7fc] transition-colors"
               >
-                <div aria-hidden="true" className="absolute border border-[#006496] border-solid inset-0 pointer-events-none rounded-[4px]" />
-                <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#006496] text-[14px] whitespace-nowrap">
+                <div aria-hidden="true" className="absolute border border-[#004B72] border-solid inset-0 pointer-events-none rounded-[4px]" />
+                <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#004B72] text-[14px] whitespace-nowrap">
                   <p className="leading-[20px]">Clone Task</p>
                 </div>
               </button>
@@ -414,7 +414,7 @@ export default function TaskWorkspaceHeader() {
           {/* Row 2: Content Header - Title, Subtitle, and Breadcrumbs */}
           <div className="relative flex flex-col gap-[12px] py-[16px]">
             {/* Decorative divider lines */}
-            <div aria-hidden="true" className="absolute border-[#004b72] border-b-[3px] border-solid border-t-[3px] inset-0 pointer-events-none" />
+            <div aria-hidden="true" className="absolute border-[#004B72] border-b-[3px] border-solid border-t-[3px] inset-0 pointer-events-none" />
 
             <div className="flex flex-col gap-[4px]">
               {/* Title row  inline edit in edit mode, pencil affordance in read mode (Draft only) */}
@@ -425,7 +425,7 @@ export default function TaskWorkspaceHeader() {
                     type="text"
                     value={taskTitle}
                     onChange={e => setTaskTitle(e.target.value)}
-                    className="flex-1 h-[40px] px-[8px] bg-white rounded-[4px] border border-[rgba(0,6,46,0.2)] font-['Inter:Semi_Bold',sans-serif] font-semibold text-[32px] leading-[40px] text-[#1C2024] outline-none focus:border-[#004b72] focus:shadow-[0_0_0_1px_#004b72] transition-shadow"
+                    className="flex-1 h-[40px] px-[8px] bg-white rounded-[4px] border border-[#B9BBC6] font-['Inter:Semi_Bold',sans-serif] font-semibold text-[32px] leading-[40px] text-[#1C2024] outline-none focus:border-[#147DB9] focus:shadow-[0_0_0_1px_#147DB9] transition-shadow"
                   />
                 ) : (
                   <>
@@ -435,7 +435,7 @@ export default function TaskWorkspaceHeader() {
                     {isDraftState && (
                       <button
                         onClick={() => handleEnterEditMode(true)}
-                        className="flex items-center justify-center w-[28px] h-[28px] rounded-[4px] border-none bg-transparent cursor-pointer text-[#60646C] hover:text-[#004b72] hover:bg-[#f0f7fb] transition-colors shrink-0"
+                        className="flex items-center justify-center w-[28px] h-[28px] rounded-[4px] border-none bg-transparent cursor-pointer text-[#60646C] hover:text-[#004B72] hover:bg-[#f0f7fb] transition-colors shrink-0"
                         aria-label="Edit task title"
                       >
                         <PencilIcon />
@@ -532,7 +532,7 @@ export default function TaskWorkspaceHeader() {
               {/* Tabbed Content Area */}
               <div className="flex flex-col">
             {/* Tab Bar */}
-            <div className="flex border-b border-[#e0e1e6]">
+            <div className="flex border-b border-[#CDCED6]">
               <button
                 onClick={() => setActiveTab('overview')}
                 className={`px-[16px] py-[10px] font-['Inter:Medium',sans-serif] font-medium leading-[20px] border-b-[2px] transition-colors cursor-pointer bg-transparent ${ activeTab === 'overview' ? 'border-[#004B72] text-[#004B72]' : 'border-transparent text-[#60646C] hover:text-[#1C2024]' } text-[16px]`}
@@ -559,7 +559,7 @@ export default function TaskWorkspaceHeader() {
               {!!currentTier && !isTier0 && (
                 <button
                   onClick={handleAddSubtaskTab}
-                  className="px-[16px] py-[10px] font-['Inter:Medium',sans-serif] font-medium leading-[20px] border-b-[2px] border-transparent transition-colors cursor-pointer bg-transparent text-[#006496] hover:text-[#004B72] text-[16px]"
+                  className="px-[16px] py-[10px] font-['Inter:Medium',sans-serif] font-medium leading-[20px] border-b-[2px] border-transparent transition-colors cursor-pointer bg-transparent text-[#004B72] hover:text-[#004B72] text-[16px]"
                 >
                   + Add Subtask
                 </button>
@@ -574,11 +574,11 @@ export default function TaskWorkspaceHeader() {
               {activeTab === 'tier0' && (
                 isTier0 ? (
                   /* Tier 0 minimal BOE form */
-                  <div className="border border-[#e0e1e6] rounded-[8px] bg-white px-[24px] py-[24px]">
+                  <div className="border border-[#CDCED6] rounded-[8px] bg-white px-[24px] py-[24px]">
                     <div className="flex flex-col gap-[20px] max-w-[480px]">
 
                       {/* Instructional context */}
-                      <div className="flex gap-[8px] items-start">
+                      <div className="flex gap-[8px] items-start pb-[12px] border-b border-[#D9D9E0]">
                         <Info size={14} className="text-[#60646C] shrink-0 mt-[2px]" />
                         <p className="font-['Inter:Regular',sans-serif] font-normal leading-[18px] text-[#60646C] text-[14px]">
                           Optional for Tier 0 tasks. Completing both fields allows this task to bypass BOE Build-Up and submit directly to Project Allocation.
@@ -586,7 +586,7 @@ export default function TaskWorkspaceHeader() {
                       </div>
 
                       {/* Reimbursable Total Dollars */}
-                      <div className="flex flex-col gap-[6px]">
+                      <div className="flex flex-col gap-[6px] pb-[12px] border-b border-[#D9D9E0]">
                         <p className="font-['Inter:Medium',sans-serif] font-medium leading-[18px] text-[#60646C] text-[14px]">
                           Reimbursable Total Dollars
                         </p>
@@ -599,7 +599,7 @@ export default function TaskWorkspaceHeader() {
                             value={reimbursableTotal}
                             onChange={e => setReimbursableTotal(e.target.value)}
                             placeholder="0.00"
-                            className="w-full h-[36px] pl-[20px] pr-[10px] border border-[rgba(0,6,46,0.2)] rounded-[4px] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] placeholder:text-[#80838D] focus:outline-none focus:border-[#004B72] focus:ring-1 focus:ring-[#004B72] bg-white"
+                            className="w-full h-[36px] pl-[20px] pr-[10px] border border-[#B9BBC6] rounded-[4px] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] placeholder:text-[#80838D] focus:outline-none focus:border-[#147DB9] focus:ring-[2px] focus:ring-[rgba(20,125,185,0.2)] bg-white"
                           />
                         </div>
                         <p className="font-['Inter:Regular',sans-serif] font-normal text-[12px] leading-[16px] text-[#80838D]">
@@ -608,7 +608,7 @@ export default function TaskWorkspaceHeader() {
                       </div>
 
                       {/* Direct Cite Total Dollars */}
-                      <div className="flex flex-col gap-[6px]">
+                      <div className="flex flex-col gap-[6px] pb-[12px] border-b border-[#D9D9E0]">
                         <p className="font-['Inter:Medium',sans-serif] font-medium leading-[18px] text-[#60646C] text-[14px]">
                           Direct Cite Total Dollars
                         </p>
@@ -621,7 +621,7 @@ export default function TaskWorkspaceHeader() {
                             value={directCiteTotal}
                             onChange={e => setDirectCiteTotal(e.target.value)}
                             placeholder="0.00"
-                            className="w-full h-[36px] pl-[20px] pr-[10px] border border-[rgba(0,6,46,0.2)] rounded-[4px] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] placeholder:text-[#80838D] focus:outline-none focus:border-[#004B72] focus:ring-1 focus:ring-[#004B72] bg-white"
+                            className="w-full h-[36px] pl-[20px] pr-[10px] border border-[#B9BBC6] rounded-[4px] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] placeholder:text-[#80838D] focus:outline-none focus:border-[#147DB9] focus:ring-[2px] focus:ring-[rgba(20,125,185,0.2)] bg-white"
                           />
                         </div>
                         <p className="font-['Inter:Regular',sans-serif] font-normal text-[12px] leading-[16px] text-[#80838D]">
@@ -666,7 +666,7 @@ export default function TaskWorkspaceHeader() {
                           value={acquisitionFee}
                           onChange={e => setAcquisitionFee(e.target.value)}
                           placeholder="0.00"
-                          className="w-full h-[36px] pl-[20px] pr-[10px] border border-[rgba(0,6,46,0.2)] rounded-[4px] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] placeholder:text-[#80838D] focus:outline-none focus:border-[#004B72] focus:ring-1 focus:ring-[#004B72] bg-white"
+                          className="w-full h-[36px] pl-[20px] pr-[10px] border border-[#B9BBC6] rounded-[4px] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] placeholder:text-[#80838D] focus:outline-none focus:border-[#147DB9] focus:ring-1 focus:ring-[#147DB9] bg-white"
                         />
                       </div>
                       <p className="font-['Inter:Regular',sans-serif] font-normal text-[12px] leading-[16px] text-[#80838D]">
@@ -739,8 +739,8 @@ export default function TaskWorkspaceHeader() {
             <div className="relative shrink-0 size-[16px]">
               <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 16 16">
                 <g clipPath="url(#clip0_48_12035)">
-                  <path d="M14.6654 7.38667V8C14.6646 9.43761 14.2003 10.8365 13.3392 11.988C12.4781 13.1394 11.2665 13.9817 9.88921 14.3893C8.51188 14.7969 7.03815 14.7479 5.68963 14.2497C4.3411 13.7515 3.18975 12.8307 2.40723 11.6247C1.62471 10.4187 1.25287 8.99205 1.34746 7.55754C1.44205 6.12303 1.99812 4.75755 2.93217 3.66471C3.86621 2.57188 5.1285 1.81024 6.53077 1.49344C7.93304 1.17664 9.40016 1.32152 10.7121 1.90667" stroke="rgba(0,113,63,0.87)" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M14.6667 2.66666L8 9.34L6 7.34" stroke="rgba(0,113,63,0.87)" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M14.6654 7.38667V8C14.6646 9.43761 14.2003 10.8365 13.3392 11.988C12.4781 13.1394 11.2665 13.9817 9.88921 14.3893C8.51188 14.7969 7.03815 14.7479 5.68963 14.2497C4.3411 13.7515 3.18975 12.8307 2.40723 11.6247C1.62471 10.4187 1.25287 8.99205 1.34746 7.55754C1.44205 6.12303 1.99812 4.75755 2.93217 3.66471C3.86621 2.57188 5.1285 1.81024 6.53077 1.49344C7.93304 1.17664 9.40016 1.32152 10.7121 1.90667" stroke="#218358" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M14.6667 2.66666L8 9.34L6 7.34" stroke="#218358" strokeLinecap="round" strokeLinejoin="round" />
                 </g>
                 <defs>
                   <clipPath id="clip0_48_12035">
@@ -750,7 +750,7 @@ export default function TaskWorkspaceHeader() {
               </svg>
             </div>
           </div>
-          <div className="flex-[1_0_0] font-['Inter:Medium',sans-serif] font-medium leading-[20px] min-h-px min-w-px not-italic relative text-[14px] text-[rgba(0,113,63,0.87)]">
+          <div className="flex-[1_0_0] font-['Inter:Medium',sans-serif] font-medium leading-[20px] min-h-px min-w-px not-italic relative text-[14px] text-[#218358]">
             <p className="mb-0">Tier Assigned</p>
             <p className="font-['Inter:Regular',sans-serif] font-normal mb-0">The task has been updated with the selected planning tier.</p>
           </div>
@@ -766,8 +766,8 @@ export default function TaskWorkspaceHeader() {
             <div className="relative shrink-0 size-[16px]">
               <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 16 16">
                 <g clipPath="url(#clip1_clone_success)">
-                  <path d="M14.6654 7.38667V8C14.6646 9.43761 14.2003 10.8365 13.3392 11.988C12.4781 13.1394 11.2665 13.9817 9.88921 14.3893C8.51188 14.7969 7.03815 14.7479 5.68963 14.2497C4.3411 13.7515 3.18975 12.8307 2.40723 11.6247C1.62471 10.4187 1.25287 8.99205 1.34746 7.55754C1.44205 6.12303 1.99812 4.75755 2.93217 3.66471C3.86621 2.57188 5.1285 1.81024 6.53077 1.49344C7.93304 1.17664 9.40016 1.32152 10.7121 1.90667" stroke="rgba(0,113,63,0.87)" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M14.6667 2.66666L8 9.34L6 7.34" stroke="rgba(0,113,63,0.87)" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M14.6654 7.38667V8C14.6646 9.43761 14.2003 10.8365 13.3392 11.988C12.4781 13.1394 11.2665 13.9817 9.88921 14.3893C8.51188 14.7969 7.03815 14.7479 5.68963 14.2497C4.3411 13.7515 3.18975 12.8307 2.40723 11.6247C1.62471 10.4187 1.25287 8.99205 1.34746 7.55754C1.44205 6.12303 1.99812 4.75755 2.93217 3.66471C3.86621 2.57188 5.1285 1.81024 6.53077 1.49344C7.93304 1.17664 9.40016 1.32152 10.7121 1.90667" stroke="#218358" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M14.6667 2.66666L8 9.34L6 7.34" stroke="#218358" strokeLinecap="round" strokeLinejoin="round" />
                 </g>
                 <defs>
                   <clipPath id="clip1_clone_success">
@@ -777,7 +777,7 @@ export default function TaskWorkspaceHeader() {
               </svg>
             </div>
           </div>
-          <div className="flex-[1_0_0] font-['Inter:Medium',sans-serif] font-medium leading-[20px] min-h-px min-w-px not-italic relative text-[14px] text-[rgba(0,113,63,0.87)]">
+          <div className="flex-[1_0_0] font-['Inter:Medium',sans-serif] font-medium leading-[20px] min-h-px min-w-px not-italic relative text-[14px] text-[#218358]">
             <p className="mb-0">Task Cloned</p>
             <p className="font-['Inter:Regular',sans-serif] font-normal mb-0">The cloned task has been created in Draft status and is ready for editing.</p>
           </div>
@@ -803,4 +803,5 @@ export default function TaskWorkspaceHeader() {
     </>
   );
 }
+
 
