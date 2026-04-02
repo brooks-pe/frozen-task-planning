@@ -232,7 +232,7 @@ function ButtonRow() {
         </div>
       </Link>
       <Link 
-        to="/apm-acceptance"
+        to="/bfm-processing"
         className="bg-white content-stretch flex gap-[8px] h-[32px] items-center justify-center px-[12px] relative rounded-[4px] shrink-0 cursor-pointer hover:bg-[#f5f5f5] transition-colors" 
         data-name="pe-button"
       >
