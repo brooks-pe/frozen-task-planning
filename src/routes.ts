@@ -63,6 +63,10 @@ export const router = createBrowserRouter([
     Component: App,
   },
   {
+    path: "/bfm-processing",
+    Component: App,
+  },
+  {
     path: "/task-requirements-alignment",
     Component: App,
   },

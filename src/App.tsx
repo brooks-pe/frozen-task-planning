@@ -22,6 +22,7 @@ import FundingWorkPlansContent from './components/FundingWorkPlansContent';
 import APMDistributionContent from './components/APMDistributionContent';
 import ActivityDistributionContent from './components/ActivityDistributionContent';
 import APMAcceptanceContent from './components/APMAcceptanceContent';
+import BFMProcessingContent from './components/BFMProcessingContent';
 import AdminConsoleContent from './components/AdminConsoleContent';
 import TaskRequirementsAlignmentContent from './components/TaskRequirementsAlignmentContent';
 import TaskIdDetailsContent from './components/TaskIdDetailsContent';
@@ -93,6 +94,7 @@ export function App() {
   const isAPMDistribution = location.pathname === '/apm-distribution';
   const isActivityDistribution = location.pathname === '/activity-distribution';
   const isAPMAcceptance = location.pathname === '/apm-acceptance';
+  const isBFMProcessing = location.pathname === '/bfm-processing';
   const isGInvoicingReport = location.pathname === '/reconciliation-report' || location.pathname === '/g-invoicing-report';
   const isGInvoicePerformanceItems = location.pathname === '/g-invoicing-reports' || location.pathname === '/g-invoice-performance-items';
   const isAdminConsole = location.pathname === '/admin-console';
@@ -146,6 +148,7 @@ export function App() {
         isAPMDistribution={isAPMDistribution}
         isActivityDistribution={isActivityDistribution}
         isAPMAcceptance={isAPMAcceptance}
+        isBFMProcessing={isBFMProcessing}
         isGInvoicingReport={isGInvoicingReport}
         isGInvoicePerformanceItems={isGInvoicePerformanceItems}
         isAdminConsole={isAdminConsole}
@@ -188,6 +191,7 @@ function PeShell({
   isAPMDistribution,
   isActivityDistribution,
   isAPMAcceptance,
+  isBFMProcessing,
   isGInvoicingReport,
   isGInvoicePerformanceItems,
   isAdminConsole,
@@ -237,6 +241,7 @@ function PeShell({
           isAPMDistribution={isAPMDistribution}
           isActivityDistribution={isActivityDistribution}
           isAPMAcceptance={isAPMAcceptance}
+          isBFMProcessing={isBFMProcessing}
           isGInvoicingReport={isGInvoicingReport}
           isGInvoicePerformanceItems={isGInvoicePerformanceItems}
           isAdminConsole={isAdminConsole}
@@ -774,7 +779,7 @@ function PeNetwork() {
 }
 
 // Middle section and footer components (non-interactive parts)
-function Middle({ isSidebarCollapsed, isUserManagementPage, isUserProfilePage, isExecutionPlanningDashboard, isPendingRoleAssignments, isAddRoleAssignment, isEditRoleAssignment, isFundingDistribution, isFundingAuthorization, isFundingWorkPlans, isAPMDistribution, isActivityDistribution, isAPMAcceptance, isGInvoicingReport, isGInvoicePerformanceItems, isAdminConsole, isTaskRequirementsAlignment, isTaskIdDetails, isTaskPlanningDashboard, isTaskPlanningTasks, isTaskWorkspace }: any) {
+function Middle({ isSidebarCollapsed, isUserManagementPage, isUserProfilePage, isExecutionPlanningDashboard, isPendingRoleAssignments, isAddRoleAssignment, isEditRoleAssignment, isFundingDistribution, isFundingAuthorization, isFundingWorkPlans, isAPMDistribution, isActivityDistribution, isAPMAcceptance, isBFMProcessing, isGInvoicingReport, isGInvoicePerformanceItems, isAdminConsole, isTaskRequirementsAlignment, isTaskIdDetails, isTaskPlanningDashboard, isTaskPlanningTasks, isTaskWorkspace }: any) {
   const location = useLocation();
   const isTaskWorkspaceLocal = isTaskWorkspace ?? (location.pathname.startsWith('/task-planning/tasks/') && location.pathname !== '/task-planning/tasks');
   let content;
@@ -816,6 +821,8 @@ function Middle({ isSidebarCollapsed, isUserManagementPage, isUserProfilePage, i
     content = <ActivityDistributionContent />;
   } else if (isAPMAcceptance) {
     content = <APMAcceptanceContent />;
+  } else if (isBFMProcessing) {
+    content = <BFMProcessingContent />;
   } else if (isExecutionPlanningDashboard) {
     content = <ExecutionPlanningDashboard />;
   } else if (isPendingRoleAssignments) {
@@ -888,7 +895,7 @@ function PeSidenav({ isSidebarCollapsed }: any) {
 }
 
 function PeSidenavCollapsed({ hoveredItem, setHoveredItem, currentPath }: any) {
-  const isOnExecutionPlanningRoute = currentPath?.startsWith('/execution-planning');
+  const isOnExecutionPlanningRoute = currentPath?.startsWith('/execution-planning') || currentPath === '/bfm-processing';
   const isOnTaskPlanningRoute = currentPath === '/task-planning/dashboard' || currentPath === '/task-requirements-alignment' || currentPath?.startsWith('/task-requirements-alignment/');
   
   return (
@@ -1327,7 +1334,7 @@ function Chevron3() {
 
 function ExecutionPlanning({ hoveredItem, setHoveredItem, currentPath }: any) {
   // Auto-expand if we're on any execution planning route
-  const isOnExecutionPlanningRoute = currentPath?.startsWith('/execution-planning') || currentPath === '/funding-distribution' || currentPath === '/funding-authorization' || currentPath === '/funding-work-plans' || currentPath === '/apm-distribution' || currentPath === '/reconciliation-report' || currentPath === '/g-invoicing-report' || currentPath === '/g-invoicing-reports' || currentPath === '/g-invoice-performance-items';
+  const isOnExecutionPlanningRoute = currentPath?.startsWith('/execution-planning') || currentPath === '/funding-distribution' || currentPath === '/funding-authorization' || currentPath === '/funding-work-plans' || currentPath === '/apm-distribution' || currentPath === '/bfm-processing' || currentPath === '/reconciliation-report' || currentPath === '/g-invoicing-report' || currentPath === '/g-invoicing-reports' || currentPath === '/g-invoice-performance-items';
   const [isExpanded, setIsExpanded] = useState(isOnExecutionPlanningRoute);
   
   // Keep expanded state in sync with route
@@ -1376,7 +1383,7 @@ function ExecutionPlanning({ hoveredItem, setHoveredItem, currentPath }: any) {
           <ExecutionPlanningSubmenuItem label="APM Distribution" to="/apm-distribution" isActive={currentPath === '/apm-distribution'} />
           <ExecutionPlanningSubmenuItem label="Activity Distribution" to="/activity-distribution" isActive={currentPath === '/activity-distribution'} />
           <ExecutionPlanningSubmenuItem label="APM Acceptance" to="/apm-acceptance" isActive={currentPath === '/apm-acceptance'} />
-          <ExecutionPlanningSubmenuItem label="BFM Processing" to="#" isActive={false} />
+          <ExecutionPlanningSubmenuItem label="BFM Processing" to="/bfm-processing" isActive={currentPath === '/bfm-processing'} />
           <ExecutionPlanningSubmenuItem label="Funding Workplans" to="/funding-work-plans" isActive={currentPath === '/funding-work-plans'} />
           <ExecutionPlanningSubmenuItem label="Reconciliation Report" to="/reconciliation-report" isActive={currentPath === '/reconciliation-report' || currentPath === '/g-invoicing-report'} />
           <ExecutionPlanningSubmenuItem label="G-Invoicing Reports" to="/g-invoicing-reports" isActive={currentPath === '/g-invoicing-reports' || currentPath === '/g-invoice-performance-items'} />
