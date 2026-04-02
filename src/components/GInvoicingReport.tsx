@@ -411,14 +411,14 @@ export default function GInvoicingReport() {
 
   // ─── Cell Styles ──────────────────────────────────────────────────────
   const groupCellBase = (_level: number) =>
-    `px-[12px] py-[12px] border-b border-[rgba(0,0,47,0.15)]`;
+    `px-[12px] py-[12px] border-b border-[#CDCED6]`;
   const groupLabelClass = (level: number): string => {
     if (level === 0) return "font-['Inter:Semi_Bold',sans-serif] font-semibold text-[14px] leading-[20px] text-[#1C2024] truncate";
     if (level <= 2) return "font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] text-[#1C2024] truncate";
     return "font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] truncate";
   };
   const leafCellBase =
-    `px-[12px] py-[12px] border-b border-[rgba(0,0,47,0.15)]`;
+    `px-[12px] py-[12px] border-b border-[#CDCED6]`;
   const valueTextClass =
     "font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024]";
 
@@ -442,7 +442,7 @@ export default function GInvoicingReport() {
         style={{
           gridColumn: '1 / -1',
           gridTemplateColumns: 'subgrid',
-          boxShadow: isGroupSelected ? 'inset 3px 0 0 0 #004b72' : 'none',
+          boxShadow: isGroupSelected ? 'inset 3px 0 0 0 #004B72' : 'none',
         }}
         onClick={() => setSelectedRowId(node.compositeKey)}
       >
@@ -564,7 +564,7 @@ export default function GInvoicingReport() {
         style={{
           gridColumn: '1 / -1',
           gridTemplateColumns: 'subgrid',
-          boxShadow: isLeafSelected ? 'inset 3px 0 0 0 #004b72' : 'none',
+          boxShadow: isLeafSelected ? 'inset 3px 0 0 0 #004B72' : 'none',
         }}
         onClick={() => setSelectedRowId(leaf.id)}
       >
@@ -660,7 +660,7 @@ export default function GInvoicingReport() {
             {/* Decorative divider lines */}
             <div
               aria-hidden="true"
-              className="absolute border-[#004b72] border-b-[3px] border-solid border-t-[3px] inset-0 pointer-events-none"
+              className="absolute border-[#004B72] border-b-[3px] border-solid border-t-[3px] inset-0 pointer-events-none"
             />
 
             <div className="flex flex-col gap-[4px]">
@@ -873,7 +873,7 @@ export default function GInvoicingReport() {
                       {!mappedTasksOnly && (
                         <div
                           aria-hidden="true"
-                          className="absolute border border-[rgba(0,6,46,0.2)] border-solid inset-0 pointer-events-none rounded-[3px]"
+                          className="absolute border border-[#B9BBC6] border-solid inset-0 pointer-events-none rounded-[3px]"
                         />
                       )}
                       {mappedTasksOnly && (
@@ -899,7 +899,7 @@ export default function GInvoicingReport() {
                     onChange={(e) => setMappedTasksOnly(e.target.checked)}
                     className="sr-only"
                   />
-                  <span className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1c2024]">
+                  <span className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024]">
                     Mapped Tasks Only
                   </span>
                 </label>
@@ -935,13 +935,13 @@ export default function GInvoicingReport() {
                           <div className="w-full h-full rounded-full bg-[#f9f9fb] relative">
                             <div
                               aria-hidden="true"
-                              className="absolute border border-[rgba(0,6,46,0.2)] border-solid inset-0 pointer-events-none rounded-full"
+                              className="absolute border border-[#B9BBC6] border-solid inset-0 pointer-events-none rounded-full"
                             />
                           </div>
                         )}
                       </div>
                     </div>
-                    <span className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1c2024]">
+                    <span className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024]">
                       Active Years
                     </span>
                   </label>
@@ -970,13 +970,13 @@ export default function GInvoicingReport() {
                           <div className="w-full h-full rounded-full bg-[#f9f9fb] relative">
                             <div
                               aria-hidden="true"
-                              className="absolute border border-[rgba(0,6,46,0.2)] border-solid inset-0 pointer-events-none rounded-full"
+                              className="absolute border border-[#B9BBC6] border-solid inset-0 pointer-events-none rounded-full"
                             />
                           </div>
                         )}
                       </div>
                     </div>
-                    <span className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1c2024]">
+                    <span className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024]">
                       All
                     </span>
                   </label>
@@ -985,7 +985,7 @@ export default function GInvoicingReport() {
                 {/* Clear Filters */}
                 <button
                   onClick={handleClearFilters}
-                  className="bg-transparent border-none cursor-pointer h-[32px] flex items-center px-[12px] rounded-[4px] hover:bg-[rgba(0,75,114,0.06)] transition-colors outline-none focus-visible:ring-[3px] focus-visible:ring-[rgba(0,75,114,0.35)]"
+                  className="bg-transparent border-none cursor-pointer h-[32px] flex items-center px-[12px] rounded-[4px] hover:bg-[rgba(0,75,114,0.06)] transition-colors outline-none focus-visible:ring-[3px] focus-visible:ring-[rgba(20,125,185,0.22)]"
                   style={{ color: '#004B72' }}
                 >
                   <span className="font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px]">
@@ -1001,21 +1001,21 @@ export default function GInvoicingReport() {
       {/* Hierarchical Financial Table */}
       <div className="px-[24px] pb-[24px]">
         <div
-          className={`border border-[#e0e1e6] rounded-[5px] overflow-hidden transition-opacity duration-200 ${
+          className={`border border-[#CDCED6] rounded-[5px] overflow-hidden transition-opacity duration-200 ${
             tableFlash ? 'opacity-60' : 'opacity-100'
           }`}
         >
           {/* Standardized Title Header — matches G-Invoicing / APM Acceptance pattern */}
           <div className="bg-[#f9f9fb] relative w-full">
-            <div className="flex items-center px-[24px] py-[20px] w-full border-b-[2px] border-solid border-b-[#d0d1d6]">
+            <div className="flex items-center px-[24px] py-[20px] w-full border-b-[2px] border-solid border-b-[#CDCED6]">
               <div className="flex items-center gap-[16px] shrink-0 flex-wrap">
-                <p className="font-['Inter',sans-serif] font-semibold leading-[24px] not-italic text-[#1c2024] text-[18px] tracking-[0px] whitespace-nowrap">
+                <p className="font-['Inter',sans-serif] font-semibold leading-[24px] not-italic text-[#1C2024] text-[18px] tracking-[0px] whitespace-nowrap">
                   Cost Element
                 </p>
                 {/* Vertical divider */}
-                <div className="w-[1px] h-[24px] bg-[#e0e1e6] shrink-0" />
+                <div className="w-[1px] h-[24px] bg-[#CDCED6] shrink-0" />
                 <div className="bg-white h-[32px] relative rounded-[4px] w-[268px]">
-                  <div aria-hidden="true" className="absolute border border-[rgba(0,6,46,0.2)] border-solid inset-0 pointer-events-none rounded-[4px]" />
+                  <div aria-hidden="true" className="absolute border border-[#B9BBC6] border-solid inset-0 pointer-events-none rounded-[4px]" />
                   <div className="flex items-center size-full px-[4px]">
                     <div className="flex items-center justify-center shrink-0 px-[2px]">
                       <SearchIcon />
@@ -1025,7 +1025,7 @@ export default function GInvoicingReport() {
                       value={searchValue}
                       onChange={(e) => setSearchValue(e.target.value)}
                       placeholder="Search..."
-                      className="flex-1 bg-transparent border-none outline-none font-['Inter:Regular',sans-serif] font-normal leading-[20px] not-italic text-[#1c2024] text-[14px] placeholder:text-[#60646c] px-[4px]"
+                      className="flex-1 bg-transparent border-none outline-none font-['Inter:Regular',sans-serif] font-normal leading-[20px] not-italic text-[#1C2024] text-[14px] placeholder:text-[#60646C] px-[4px]"
                     />
                   </div>
                   <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_1.5px_2px_0px_rgba(0,0,0,0.1),inset_0px_1.5px_2px_0px_rgba(0,0,85,0.02)]" />
@@ -1048,18 +1048,18 @@ export default function GInvoicingReport() {
             <div style={{ minWidth: '1400px' }}>
               {/* Table Header with Column Groups */}
               <div
-                className="grid bg-[rgba(0,0,85,0.02)]"
+                className="grid bg-[#F3F6FA]"
                 style={{ gridTemplateColumns: GRID_TEMPLATE }}
               >
                 {/* Empty cell above Cost Element (grouping row) */}
-                <div className="px-[12px] py-[8px] border-b border-[rgba(0,0,47,0.15)] bg-[rgba(0,0,85,0.02)]"></div>
+                <div className="px-[12px] py-[8px] border-b border-[#CDCED6] bg-[#F3F6FA]"></div>
 
                 {/* Task Planning / Funding Work Plan Group Header - spans 3 columns */}
                 <div
-                  className="px-[12px] py-[8px] border-b-[3px] border-[#147db9] bg-[rgba(20,125,185,0.05)] flex items-center"
+                  className="px-[12px] py-[8px] border-b-[3px] border-[#147DB9] bg-[rgba(20,125,185,0.05)] flex items-center"
                   style={{ gridColumn: 'span 3' }}
                 >
-                  <span className="font-['Inter:Bold',sans-serif] font-bold text-[14px] leading-[20px] text-[#147db9]">
+                  <span className="font-['Inter:Bold',sans-serif] font-bold text-[14px] leading-[20px] text-[#147DB9]">
                     Task Planning / Funding Work Plan
                   </span>
                 </div>
@@ -1076,23 +1076,23 @@ export default function GInvoicingReport() {
 
                 {/* Project Structure Reporting Group Header - spans 4 columns */}
                 <div
-                  className="px-[12px] py-[8px] border-b-[3px] border-[#ab6400] bg-[rgba(255,222,0,0.1)] flex items-center"
+                  className="px-[12px] py-[8px] border-b-[3px] border-[#AB6400] bg-[rgba(255,222,0,0.1)] flex items-center"
                   style={{ gridColumn: 'span 4' }}
                 >
-                  <span className="font-['Inter:Bold',sans-serif] font-bold text-[14px] leading-[20px] text-[#ab6400]">
+                  <span className="font-['Inter:Bold',sans-serif] font-bold text-[14px] leading-[20px] text-[#AB6400]">
                     Project Structure Reporting
                   </span>
                 </div>
 
                 {/* Cost Element column label (aligned with column header row) */}
-                <div className="px-[12px] py-[8px] border-b border-[rgba(0,0,47,0.15)] bg-[rgba(0,0,85,0.02)] flex items-center">
+                <div className="px-[12px] py-[8px] border-b border-[#CDCED6] bg-[#F3F6FA] flex items-center">
                   <span className="font-['Inter:Semi_Bold',sans-serif] font-semibold text-[13px] leading-[18px] text-[#1C2024] uppercase tracking-[0.5px]">
                     Cost Element
                   </span>
                 </div>
 
                 {/* Task Planning / Funding Work Plan Column Headers */}
-                <div className="px-[12px] py-[8px] border-b border-[rgba(0,0,47,0.15)] bg-[rgba(20,125,185,0.02)] cursor-pointer select-none hover:bg-[rgba(20,125,185,0.06)] flex items-center justify-end" onClick={() => reconHandleSort('approved')} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); reconHandleSort('approved'); } }}>
+                <div className="px-[12px] py-[8px] border-b border-[#CDCED6] bg-[rgba(20,125,185,0.02)] cursor-pointer select-none hover:bg-[rgba(20,125,185,0.06)] flex items-center justify-end" onClick={() => reconHandleSort('approved')} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); reconHandleSort('approved'); } }}>
                   <div className="flex items-center gap-[6px]">
                     <span className="font-['Inter:Semi_Bold',sans-serif] font-semibold text-[13px] leading-[18px] text-[#1C2024] uppercase tracking-[0.5px]">
                       Approved
@@ -1100,7 +1100,7 @@ export default function GInvoicingReport() {
                     <SortIndicator direction={reconGetDir('approved')} inactiveColor="#1C2024" />
                   </div>
                 </div>
-                <div className="px-[12px] py-[8px] border-b border-[rgba(0,0,47,0.15)] bg-[rgba(20,125,185,0.02)] cursor-pointer select-none hover:bg-[rgba(20,125,185,0.06)] flex items-center justify-end" onClick={() => reconHandleSort('authorized')} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); reconHandleSort('authorized'); } }}>
+                <div className="px-[12px] py-[8px] border-b border-[#CDCED6] bg-[rgba(20,125,185,0.02)] cursor-pointer select-none hover:bg-[rgba(20,125,185,0.06)] flex items-center justify-end" onClick={() => reconHandleSort('authorized')} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); reconHandleSort('authorized'); } }}>
                   <div className="flex items-center gap-[6px]">
                     <span className="font-['Inter:Semi_Bold',sans-serif] font-semibold text-[13px] leading-[18px] text-[#1C2024] uppercase tracking-[0.5px]">
                       Assigned
@@ -1108,7 +1108,7 @@ export default function GInvoicingReport() {
                     <SortIndicator direction={reconGetDir('authorized')} inactiveColor="#1C2024" />
                   </div>
                 </div>
-                <div className="px-[12px] py-[8px] border-b border-[rgba(0,0,47,0.15)] bg-[rgba(20,125,185,0.02)] cursor-pointer select-none hover:bg-[rgba(20,125,185,0.06)] flex items-center justify-end" onClick={() => reconHandleSort('delta')} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); reconHandleSort('delta'); } }}>
+                <div className="px-[12px] py-[8px] border-b border-[#CDCED6] bg-[rgba(20,125,185,0.02)] cursor-pointer select-none hover:bg-[rgba(20,125,185,0.06)] flex items-center justify-end" onClick={() => reconHandleSort('delta')} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); reconHandleSort('delta'); } }}>
                   <div className="flex items-center gap-[6px]">
                     <span className="font-['Inter:Semi_Bold',sans-serif] font-semibold text-[13px] leading-[18px] text-[#1C2024] uppercase tracking-[0.5px]">
                       Delta
@@ -1119,7 +1119,7 @@ export default function GInvoicingReport() {
                 </div>
 
                 {/* Budget Structure Reporting Column Headers */}
-                <div className="px-[12px] py-[8px] border-b border-[rgba(0,0,47,0.15)] bg-[rgba(230,126,34,0.02)] cursor-pointer select-none hover:bg-[rgba(230,126,34,0.06)] flex items-center justify-end" onClick={() => reconHandleSort('commitments')} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); reconHandleSort('commitments'); } }}>
+                <div className="px-[12px] py-[8px] border-b border-[#CDCED6] bg-[rgba(230,126,34,0.02)] cursor-pointer select-none hover:bg-[rgba(230,126,34,0.06)] flex items-center justify-end" onClick={() => reconHandleSort('commitments')} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); reconHandleSort('commitments'); } }}>
                   <div className="flex items-center gap-[6px]">
                     <span className="font-['Inter:Semi_Bold',sans-serif] font-semibold text-[13px] leading-[18px] text-[#1C2024] uppercase tracking-[0.5px]">
                       Commitments
@@ -1127,7 +1127,7 @@ export default function GInvoicingReport() {
                     <SortIndicator direction={reconGetDir('commitments')} inactiveColor="#1C2024" />
                   </div>
                 </div>
-                <div className="px-[12px] py-[8px] border-b border-[rgba(0,0,47,0.15)] bg-[rgba(230,126,34,0.02)] cursor-pointer select-none hover:bg-[rgba(230,126,34,0.06)] flex items-center justify-end" onClick={() => reconHandleSort('obligations')} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); reconHandleSort('obligations'); } }}>
+                <div className="px-[12px] py-[8px] border-b border-[#CDCED6] bg-[rgba(230,126,34,0.02)] cursor-pointer select-none hover:bg-[rgba(230,126,34,0.06)] flex items-center justify-end" onClick={() => reconHandleSort('obligations')} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); reconHandleSort('obligations'); } }}>
                   <div className="flex items-center gap-[6px]">
                     <span className="font-['Inter:Semi_Bold',sans-serif] font-semibold text-[13px] leading-[18px] text-[#1C2024] uppercase tracking-[0.5px]">
                       Gross Obligations
@@ -1135,7 +1135,7 @@ export default function GInvoicingReport() {
                     <SortIndicator direction={reconGetDir('obligations')} inactiveColor="#1C2024" />
                   </div>
                 </div>
-                <div className="px-[12px] py-[8px] border-b border-[rgba(0,0,47,0.15)] bg-[rgba(230,126,34,0.02)] cursor-pointer select-none hover:bg-[rgba(230,126,34,0.06)] flex items-center justify-end" onClick={() => reconHandleSort('expenditures')} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); reconHandleSort('expenditures'); } }}>
+                <div className="px-[12px] py-[8px] border-b border-[#CDCED6] bg-[rgba(230,126,34,0.02)] cursor-pointer select-none hover:bg-[rgba(230,126,34,0.06)] flex items-center justify-end" onClick={() => reconHandleSort('expenditures')} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); reconHandleSort('expenditures'); } }}>
                   <div className="flex items-center gap-[6px]">
                     <span className="font-['Inter:Semi_Bold',sans-serif] font-semibold text-[13px] leading-[18px] text-[#1C2024] uppercase tracking-[0.5px]">
                       Expenditures
@@ -1145,7 +1145,7 @@ export default function GInvoicingReport() {
                 </div>
 
                 {/* Project Structure Reporting Column Headers */}
-                <div className="px-[12px] py-[8px] border-b border-[rgba(0,0,47,0.15)] bg-[rgba(255,222,0,0.05)] cursor-pointer select-none hover:bg-[rgba(255,222,0,0.12)] flex items-center" onClick={() => reconHandleSort('projectStructure')} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); reconHandleSort('projectStructure'); } }}>
+                <div className="px-[12px] py-[8px] border-b border-[#CDCED6] bg-[rgba(255,222,0,0.05)] cursor-pointer select-none hover:bg-[rgba(255,222,0,0.12)] flex items-center" onClick={() => reconHandleSort('projectStructure')} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); reconHandleSort('projectStructure'); } }}>
                   <div className="flex items-center gap-[6px]">
                     <span className="font-['Inter:Semi_Bold',sans-serif] font-semibold text-[13px] leading-[18px] text-[#1C2024] uppercase tracking-[0.5px]">
                       Project structure
@@ -1153,7 +1153,7 @@ export default function GInvoicingReport() {
                     <SortIndicator direction={reconGetDir('projectStructure')} inactiveColor="#1C2024" />
                   </div>
                 </div>
-                <div className="px-[12px] py-[8px] border-b border-[rgba(0,0,47,0.15)] bg-[rgba(255,222,0,0.05)] cursor-pointer select-none hover:bg-[rgba(255,222,0,0.12)] flex items-center justify-end" onClick={() => reconHandleSort('psCommitments')} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); reconHandleSort('psCommitments'); } }}>
+                <div className="px-[12px] py-[8px] border-b border-[#CDCED6] bg-[rgba(255,222,0,0.05)] cursor-pointer select-none hover:bg-[rgba(255,222,0,0.12)] flex items-center justify-end" onClick={() => reconHandleSort('psCommitments')} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); reconHandleSort('psCommitments'); } }}>
                   <div className="flex items-center gap-[6px]">
                     <span className="font-['Inter:Semi_Bold',sans-serif] font-semibold text-[13px] leading-[18px] text-[#1C2024] uppercase tracking-[0.5px]">
                       Commitments
@@ -1161,7 +1161,7 @@ export default function GInvoicingReport() {
                     <SortIndicator direction={reconGetDir('psCommitments')} inactiveColor="#1C2024" />
                   </div>
                 </div>
-                <div className="px-[12px] py-[8px] border-b border-[rgba(0,0,47,0.15)] bg-[rgba(255,222,0,0.05)] cursor-pointer select-none hover:bg-[rgba(255,222,0,0.12)] flex items-center justify-end" onClick={() => reconHandleSort('psObligations')} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); reconHandleSort('psObligations'); } }}>
+                <div className="px-[12px] py-[8px] border-b border-[#CDCED6] bg-[rgba(255,222,0,0.05)] cursor-pointer select-none hover:bg-[rgba(255,222,0,0.12)] flex items-center justify-end" onClick={() => reconHandleSort('psObligations')} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); reconHandleSort('psObligations'); } }}>
                   <div className="flex items-center gap-[6px]">
                     <span className="font-['Inter:Semi_Bold',sans-serif] font-semibold text-[13px] leading-[18px] text-[#1C2024] uppercase tracking-[0.5px]">
                       Obligations
@@ -1169,7 +1169,7 @@ export default function GInvoicingReport() {
                     <SortIndicator direction={reconGetDir('psObligations')} inactiveColor="#1C2024" />
                   </div>
                 </div>
-                <div className="px-[12px] py-[8px] border-b border-[rgba(0,0,47,0.15)] bg-[rgba(255,222,0,0.05)] cursor-pointer select-none hover:bg-[rgba(255,222,0,0.12)] flex items-center justify-end" onClick={() => reconHandleSort('psExpenditures')} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); reconHandleSort('psExpenditures'); } }}>
+                <div className="px-[12px] py-[8px] border-b border-[#CDCED6] bg-[rgba(255,222,0,0.05)] cursor-pointer select-none hover:bg-[rgba(255,222,0,0.12)] flex items-center justify-end" onClick={() => reconHandleSort('psExpenditures')} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); reconHandleSort('psExpenditures'); } }}>
                   <div className="flex items-center gap-[6px]">
                     <span className="font-['Inter:Semi_Bold',sans-serif] font-semibold text-[13px] leading-[18px] text-[#1C2024] uppercase tracking-[0.5px]">
                       Expenditures
@@ -1221,7 +1221,7 @@ function GroupingInfoIcon() {
       <svg width={16} height={16} viewBox="0 0 16 16" fill="none" className="block">
         <path
           d="M8.16667 10.8333V8.16667M8.16667 5.5H8.17333M14.8333 8.16667C14.8333 11.8486 11.8486 14.8333 8.16667 14.8333C4.48477 14.8333 1.5 11.8486 1.5 8.16667C1.5 4.48477 4.48477 1.5 8.16667 1.5C11.8486 1.5 14.8333 4.48477 14.8333 8.16667Z"
-          stroke="#006496"
+          stroke="#00749E"
           strokeWidth="1.5"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -1238,9 +1238,9 @@ function GroupingInfoIcon() {
             zIndex: 1000,
           }}
         >
-          <div className="bg-[#1c2024] text-white text-[12px] leading-[16px] px-[10px] py-[6px] rounded-[4px] whitespace-nowrap font-['Inter:Regular',sans-serif] font-normal relative">
+          <div className="bg-[#1C2024] text-white text-[12px] leading-[16px] px-[10px] py-[6px] rounded-[4px] whitespace-nowrap font-['Inter:Regular',sans-serif] font-normal relative">
             Drag items to Active to group the table. Reorder to set grouping priority.
-            <div className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-t-[5px] border-t-[#1c2024]" />
+            <div className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-t-[5px] border-t-[#1C2024]" />
           </div>
         </div>,
         document.body
@@ -1281,7 +1281,7 @@ function DeltaInfoIcon() {
       <svg width={14} height={14} viewBox="0 0 16 16" fill="none" className="block">
         <path
           d="M8.16667 10.8333V8.16667M8.16667 5.5H8.17333M14.8333 8.16667C14.8333 11.8486 11.8486 14.8333 8.16667 14.8333C4.48477 14.8333 1.5 11.8486 1.5 8.16667C1.5 4.48477 4.48477 1.5 8.16667 1.5C11.8486 1.5 14.8333 4.48477 14.8333 8.16667Z"
-          stroke="#006496"
+          stroke="#00749E"
           strokeWidth="1.5"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -1298,9 +1298,9 @@ function DeltaInfoIcon() {
             zIndex: 1000,
           }}
         >
-          <div className="bg-[#1c2024] text-white text-[12px] leading-[16px] px-[10px] py-[6px] rounded-[4px] whitespace-nowrap font-['Inter:Regular',sans-serif] font-normal relative">
+          <div className="bg-[#1C2024] text-white text-[12px] leading-[16px] px-[10px] py-[6px] rounded-[4px] whitespace-nowrap font-['Inter:Regular',sans-serif] font-normal relative">
             Assigned - Project Structure Expenditures
-            <div className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-t-[5px] border-t-[#1c2024]" />
+            <div className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-t-[5px] border-t-[#1C2024]" />
           </div>
         </div>,
         document.body
@@ -1444,14 +1444,14 @@ function DraggableGroupingPill({
           borderColor: isOver
             ? 'rgba(0,75,114,0.5)'
             : isActive
-              ? '#147db9'
+              ? '#147DB9'
               : '#b9bbc6',
         }}
       />
       <span className="text-[#8b8d98] flex items-center">
         <GripVertical size={10} />
       </span>
-      <span className="font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] text-[#1c2024] whitespace-nowrap">
+      <span className="font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] text-[#1C2024] whitespace-nowrap">
         {label}
       </span>
     </div>
@@ -1480,14 +1480,14 @@ function FilterSelect({
       className="flex flex-col gap-[8px] items-start shrink-0"
       style={{ width: `${width}px` }}
     >
-      <span className="font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] text-[#1c2024] whitespace-nowrap">
+      <span className="font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] text-[#1C2024] whitespace-nowrap">
         {label}
       </span>
       <div className="relative w-full h-[32px]">
         <select
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="bg-white h-[32px] w-full pl-[12px] pr-[32px] rounded-[4px] border border-[rgba(0,6,46,0.2)] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1c2024] cursor-pointer appearance-none overflow-hidden text-ellipsis whitespace-nowrap"
+          className="bg-white h-[32px] w-full pl-[12px] pr-[32px] rounded-[4px] border border-[#B9BBC6] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] cursor-pointer appearance-none overflow-hidden text-ellipsis whitespace-nowrap"
           style={{ WebkitAppearance: 'none', MozAppearance: 'none' } as React.CSSProperties}
         >
           {options.map((opt) => (

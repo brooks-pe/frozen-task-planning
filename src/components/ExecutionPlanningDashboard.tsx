@@ -162,13 +162,13 @@ export default function ExecutionPlanningDashboard() {
                 Create Execution Plan
               </button>
               <button className="bg-white content-stretch flex gap-[8px] h-[32px] items-center justify-center px-[12px] relative rounded-[4px] shrink-0 cursor-pointer hover:bg-[#f5f5f5] transition-colors">
-                <div aria-hidden="true" className="absolute border border-[#1C2024] border-solid inset-0 pointer-events-none rounded-[4px]" />
+                <div aria-hidden="true" className="absolute border border-[#B9BBC6] border-solid inset-0 pointer-events-none rounded-[4px]" />
                 <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#1C2024] text-[14px] whitespace-nowrap">
                   <p className="leading-[20px]">Generate Brief</p>
                 </div>
               </button>
               <button className="bg-white content-stretch flex gap-[8px] h-[32px] items-center justify-center px-[12px] relative rounded-[4px] shrink-0 cursor-pointer hover:bg-[#f5f5f5] transition-colors">
-                <div aria-hidden="true" className="absolute border border-[#1C2024] border-solid inset-0 pointer-events-none rounded-[4px]" />
+                <div aria-hidden="true" className="absolute border border-[#B9BBC6] border-solid inset-0 pointer-events-none rounded-[4px]" />
                 <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#1C2024] text-[14px] whitespace-nowrap">
                   <p className="leading-[20px]">Export</p>
                 </div>
@@ -179,7 +179,7 @@ export default function ExecutionPlanningDashboard() {
           {/* Row 2: Content Header - Title, Subtitle, and Breadcrumbs */}
           <div className="relative flex flex-col gap-[12px] py-[16px]">
             {/* Decorative divider lines */}
-            <div aria-hidden="true" className="absolute border-[#004b72] border-b-[3px] border-solid border-t-[3px] inset-0 pointer-events-none" />
+            <div aria-hidden="true" className="absolute border-[#004B72] border-b-[3px] border-solid border-t-[3px] inset-0 pointer-events-none" />
             
             <div className="flex flex-col gap-[4px]">
               <h1 className="font-['Inter:Semi_Bold',sans-serif] font-semibold text-[32px] leading-[40px] text-[#1C2024]">
@@ -207,7 +207,7 @@ export default function ExecutionPlanningDashboard() {
           <CollapsibleFilterSection highContrast>
               <div className="flex items-end gap-[12px]">
                 <div className="flex flex-col gap-[8px] items-start shrink-0">
-                  <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1c2024] text-[14px]">Appropriation</p>
+                  <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1C2024] text-[14px]">Appropriation</p>
                   <SearchableFilterDropdown
                     value={appropriation}
                     onChange={setAppropriation}
@@ -215,7 +215,7 @@ export default function ExecutionPlanningDashboard() {
                   />
                 </div>
                 <div className="flex flex-col gap-[8px] items-start shrink-0">
-                  <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1c2024] text-[14px]">Funding Source</p>
+                  <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1C2024] text-[14px]">Funding Source</p>
                   <SearchableFilterDropdown
                     value={fundingSource}
                     onChange={setFundingSource}
@@ -233,7 +233,7 @@ export default function ExecutionPlanningDashboard() {
                   />
                 </div>
                 <div className="flex flex-col gap-[8px] items-start shrink-0">
-                  <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1c2024] text-[14px]">Appropriation Year</p>
+                  <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1C2024] text-[14px]">Appropriation Year</p>
                   <SearchableFilterDropdown
                     value={appropriationYear}
                     onChange={setAppropriationYear}
@@ -245,7 +245,7 @@ export default function ExecutionPlanningDashboard() {
                   />
                 </div>
                 <button 
-                  className="bg-transparent border-none cursor-pointer h-[32px] flex items-center px-[12px] rounded-[4px] hover:bg-[rgba(0,75,114,0.06)] transition-colors outline-none focus-visible:ring-[3px] focus-visible:ring-[rgba(0,75,114,0.35)]"
+                  className="bg-transparent border-none cursor-pointer h-[32px] flex items-center px-[12px] rounded-[4px] hover:bg-[rgba(0,75,114,0.06)] transition-colors outline-none focus-visible:ring-[3px] focus-visible:ring-[rgba(20,125,185,0.22)]"
                   onClick={handleClearTopFilters}
                   style={{ color: '#004B72' }}
                 >
@@ -260,231 +260,231 @@ export default function ExecutionPlanningDashboard() {
           <div className="grid gap-[24px] items-stretch relative" style={{ gridTemplateColumns: 'repeat(4, minmax(275px, 1fr))' }}>
             {/* All Increments Card */}
             <div className="flex items-stretch relative rounded-[5px] self-stretch" data-name="KPI-card">
-              <div aria-hidden="true" className="absolute border border-[#e0e1e6] border-solid inset-0 pointer-events-none rounded-[5px]" />
-              <div className="bg-[#004b72] h-full rounded-bl-[5px] rounded-tl-[5px] shrink-0 w-[12px]" data-name="Left-Border-Decoration" />
+              <div aria-hidden="true" className="absolute border border-[#CDCED6] border-solid inset-0 pointer-events-none rounded-[5px]" />
+              <div className="bg-[#004B72] h-full rounded-bl-[5px] rounded-tl-[5px] shrink-0 w-[12px]" data-name="Left-Border-Decoration" />
               <div className="flex flex-1 w-full min-w-0 flex-col gap-[16px] items-start p-[24px] relative" data-name="card content">
-                <p className="font-['Inter:Bold',sans-serif] font-bold leading-[24px] not-italic relative shrink-0 text-[#60646c] text-[16px]">All Increments</p>
+                <p className="font-['Inter:Bold',sans-serif] font-bold leading-[24px] not-italic relative shrink-0 text-[#60646C] text-[16px]">All Increments</p>
                 <div className="flex gap-[8px] items-center relative shrink-0">
-                  <p className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[normal] not-italic relative shrink-0 text-[32px] text-black tracking-[-1px] w-[42px] whitespace-pre-wrap">{kpiData.allIncrements.total}</p>
+                  <p className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[normal] not-italic relative shrink-0 text-[32px] text-[#1C2024] tracking-[-1px] w-[42px] whitespace-pre-wrap">{kpiData.allIncrements.total}</p>
                 </div>
                 <div className="flex flex-col items-start relative shrink-0 w-full">
                   <div className="flex gap-[8px] items-start relative w-full">
                     <div className="flex flex-col items-start justify-between pt-[2px] relative self-stretch shrink-0">
                       <div className="flex items-center justify-center relative shrink-0">
-                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646c] text-[14px]">Completed:</p>
+                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646C] text-[14px]">Completed:</p>
                       </div>
                       <div className="flex items-center justify-center relative shrink-0">
-                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646c] text-[14px]">In Progress:</p>
+                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646C] text-[14px]">In Progress:</p>
                       </div>
                     </div>
                     <div className="flex flex-col gap-[16px] items-start relative shrink-0">
                       <div className="bg-[rgba(0,179,238,0.12)] flex gap-[6px] items-center justify-center overflow-clip px-[8px] py-[4px] relative rounded-[4px] shrink-0 w-[40px]" data-name="pe-badge">
-                        <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[0] not-italic relative shrink-0 text-[#00749e] text-[14px] whitespace-nowrap">
+                        <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[0] not-italic relative shrink-0 text-[#00749E] text-[14px] whitespace-nowrap">
                           <p className="leading-[20px]">{kpiData.allIncrements.completed}</p>
                         </div>
                       </div>
                       <div className="bg-[rgba(255,222,0,0.24)] flex gap-[6px] items-center justify-center overflow-clip px-[8px] py-[4px] relative rounded-[4px] shrink-0 w-[40px]" data-name="pe-badge">
-                        <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[0] not-italic relative shrink-0 text-[#ab6400] text-[14px] whitespace-nowrap">
+                        <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[0] not-italic relative shrink-0 text-[#AB6400] text-[14px] whitespace-nowrap">
                           <p className="leading-[20px]">{kpiData.allIncrements.inProgress}</p>
                         </div>
                       </div>
                     </div>
                     <div className="flex flex-col items-end justify-between pt-[2px] relative self-stretch ml-auto">
                       <div className="flex items-center justify-center relative shrink-0">
-                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646c] text-[14px] text-right">{kpiData.allIncrements.completedAmount}</p>
+                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646C] text-[14px] text-right">{kpiData.allIncrements.completedAmount}</p>
                       </div>
                       <div className="flex items-center justify-center relative shrink-0">
-                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646c] text-[14px] text-right">{kpiData.allIncrements.inProgressAmount}</p>
+                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646C] text-[14px] text-right">{kpiData.allIncrements.inProgressAmount}</p>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div className="mt-auto w-full">
-                  <div className="w-full border-t border-[#e0e1e6] mt-[16px] mb-[8px]" />
-                  <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] not-italic relative shrink-0 text-[#60646c] text-[14px]">Across FY scope</p>
+                  <div className="w-full border-t border-[#CDCED6] mt-[16px] mb-[8px]" />
+                  <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] not-italic relative shrink-0 text-[#60646C] text-[14px]">Across FY scope</p>
                 </div>
               </div>
             </div>
 
             {/* Ready for Execution Card */}
             <div className="flex items-stretch relative rounded-[5px]" data-name="KPI-card">
-              <div aria-hidden="true" className="absolute border border-[#e0e1e6] border-solid inset-0 pointer-events-none rounded-[5px]" />
+              <div aria-hidden="true" className="absolute border border-[#CDCED6] border-solid inset-0 pointer-events-none rounded-[5px]" />
               <div className="flex flex-row items-center self-stretch">
-                <div className="bg-[#004b72] h-full rounded-bl-[5px] rounded-tl-[5px] shrink-0 w-[12px]" data-name="Left-Border-Decoration" />
+                <div className="bg-[#004B72] h-full rounded-bl-[5px] rounded-tl-[5px] shrink-0 w-[12px]" data-name="Left-Border-Decoration" />
               </div>
               <div className="flex flex-1 w-full min-w-0 flex-col gap-[16px] items-start p-[24px] relative" data-name="card content">
-                <p className="font-['Inter:Bold',sans-serif] font-bold leading-[24px] not-italic relative shrink-0 text-[#60646c] text-[16px]">Ready for Execution</p>
+                <p className="font-['Inter:Bold',sans-serif] font-bold leading-[24px] not-italic relative shrink-0 text-[#60646C] text-[16px]">Ready for Execution</p>
                 <div className="flex gap-[8px] items-center relative shrink-0">
-                  <p className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[normal] not-italic relative shrink-0 text-[32px] text-black tracking-[-1px] w-[42px] whitespace-pre-wrap">{kpiData.readyForExecution.total}</p>
+                  <p className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[normal] not-italic relative shrink-0 text-[32px] text-[#1C2024] tracking-[-1px] w-[42px] whitespace-pre-wrap">{kpiData.readyForExecution.total}</p>
                 </div>
                 <div className="flex flex-col items-start relative shrink-0 w-full">
                   <div className="flex gap-[16px] items-start relative w-full">
                     <div className="flex flex-col items-start justify-between pt-[2px] relative self-stretch shrink-0">
                       <div className="flex items-center justify-center relative shrink-0 w-[63px]">
-                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646c] text-[14px]">On Track:</p>
+                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646C] text-[14px]">On Track:</p>
                       </div>
                       <div className="flex items-center relative shrink-0 w-[63px]">
-                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646c] text-[14px]">At Risk:</p>
+                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646C] text-[14px]">At Risk:</p>
                       </div>
                       <div className="flex items-center justify-center relative shrink-0">
-                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646c] text-[14px]">Past:</p>
+                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646C] text-[14px]">Past:</p>
                       </div>
                     </div>
                     <div className="flex flex-col gap-[16px] items-start relative shrink-0">
                       <div className="bg-[rgba(0,164,51,0.1)] flex gap-[6px] items-center justify-center overflow-clip px-[8px] py-[4px] relative rounded-[4px] shrink-0 w-[40px]" data-name="pe-badge">
-                        <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[0] not-italic relative shrink-0 text-[14px] text-[rgba(0,113,63,0.87)] whitespace-nowrap">
+                        <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[0] not-italic relative shrink-0 text-[14px] text-[#218358] whitespace-nowrap">
                           <p className="leading-[20px]">{kpiData.readyForExecution.onTrack}</p>
                         </div>
                       </div>
                       <div className="bg-[rgba(255,222,0,0.24)] flex gap-[6px] items-center justify-center overflow-clip px-[8px] py-[4px] relative rounded-[4px] shrink-0 w-[40px]" data-name="pe-badge">
-                        <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[0] not-italic relative shrink-0 text-[#ab6400] text-[14px] whitespace-nowrap">
+                        <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[0] not-italic relative shrink-0 text-[#AB6400] text-[14px] whitespace-nowrap">
                           <p className="leading-[20px]">{kpiData.readyForExecution.atRisk}</p>
                         </div>
                       </div>
                       <div className="bg-[rgba(243,0,13,0.08)] flex gap-[6px] items-center justify-center overflow-clip px-[8px] py-[4px] relative rounded-[4px] shrink-0 w-[40px]" data-name="pe-badge">
-                        <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[0] not-italic relative shrink-0 text-[14px] text-[rgba(196,0,6,0.83)] whitespace-nowrap">
+                        <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[0] not-italic relative shrink-0 text-[14px] text-[#CE2C31] whitespace-nowrap">
                           <p className="leading-[20px]">{kpiData.readyForExecution.past}</p>
                         </div>
                       </div>
                     </div>
                     <div className="flex flex-col items-end justify-between pt-[2px] relative self-stretch ml-auto">
                       <div className="flex items-center justify-center relative shrink-0">
-                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646c] text-[14px] text-right">{kpiData.readyForExecution.onTrackAmount}</p>
+                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646C] text-[14px] text-right">{kpiData.readyForExecution.onTrackAmount}</p>
                       </div>
                       <div className="flex items-center justify-center relative shrink-0">
-                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646c] text-[14px] text-right">{kpiData.readyForExecution.atRiskAmount}</p>
+                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646C] text-[14px] text-right">{kpiData.readyForExecution.atRiskAmount}</p>
                       </div>
                       <div className="flex items-center justify-center relative shrink-0">
-                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646c] text-[14px] text-right">{kpiData.readyForExecution.pastAmount}</p>
+                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646C] text-[14px] text-right">{kpiData.readyForExecution.pastAmount}</p>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div className="mt-auto w-full">
-                  <div className="w-full border-t border-[#e0e1e6] mt-[16px] mb-[8px]" />
-                  <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] not-italic relative shrink-0 text-[#60646c] text-[14px]">{`Validated scope & funding`}</p>
+                  <div className="w-full border-t border-[#CDCED6] mt-[16px] mb-[8px]" />
+                  <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] not-italic relative shrink-0 text-[#60646C] text-[14px]">{`Validated scope & funding`}</p>
                 </div>
               </div>
             </div>
 
             {/* Awaiting BFM Processing Card */}
             <div className="flex items-stretch relative rounded-[5px]" data-name="KPI-card">
-              <div aria-hidden="true" className="absolute border border-[#e0e1e6] border-solid inset-0 pointer-events-none rounded-[5px]" />
+              <div aria-hidden="true" className="absolute border border-[#CDCED6] border-solid inset-0 pointer-events-none rounded-[5px]" />
               <div className="flex flex-row items-center self-stretch">
-                <div className="bg-[#004b72] h-full rounded-bl-[5px] rounded-tl-[5px] shrink-0 w-[12px]" data-name="Left-Border-Decoration" />
+                <div className="bg-[#004B72] h-full rounded-bl-[5px] rounded-tl-[5px] shrink-0 w-[12px]" data-name="Left-Border-Decoration" />
               </div>
               <div className="flex flex-1 w-full min-w-0 flex-col gap-[16px] items-start p-[24px] relative" data-name="card content">
-                <p className="font-['Inter:Bold',sans-serif] font-bold leading-[24px] not-italic relative shrink-0 text-[#60646c] text-[16px]">Awaiting BFM Processing</p>
+                <p className="font-['Inter:Bold',sans-serif] font-bold leading-[24px] not-italic relative shrink-0 text-[#60646C] text-[16px]">Awaiting BFM Processing</p>
                 <div className="flex gap-[8px] items-center relative shrink-0">
-                  <p className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[normal] not-italic relative shrink-0 text-[32px] text-black tracking-[-1px] w-[42px] whitespace-pre-wrap">{kpiData.awaitingBFM.total}</p>
+                  <p className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[normal] not-italic relative shrink-0 text-[32px] text-[#1C2024] tracking-[-1px] w-[42px] whitespace-pre-wrap">{kpiData.awaitingBFM.total}</p>
                 </div>
                 <div className="flex flex-col items-start relative shrink-0 w-full">
                   <div className="flex gap-[16px] items-start relative w-full">
                     <div className="flex flex-col items-start justify-between pt-[2px] relative self-stretch shrink-0">
                       <div className="flex items-center justify-center relative shrink-0">
-                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646c] text-[14px]">On Track:</p>
+                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646C] text-[14px]">On Track:</p>
                       </div>
                       <div className="flex items-center justify-center relative shrink-0">
-                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646c] text-[14px]">At Risk:</p>
+                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646C] text-[14px]">At Risk:</p>
                       </div>
                       <div className="flex items-center justify-center relative shrink-0">
-                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646c] text-[14px]">Past:</p>
+                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646C] text-[14px]">Past:</p>
                       </div>
                     </div>
                     <div className="flex flex-col gap-[16px] items-start relative shrink-0">
                       <div className="bg-[rgba(0,164,51,0.1)] flex gap-[6px] items-center justify-center overflow-clip px-[8px] py-[4px] relative rounded-[4px] shrink-0 w-[40px]" data-name="pe-badge">
-                        <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[0] not-italic relative shrink-0 text-[14px] text-[rgba(0,113,63,0.87)] whitespace-nowrap">
+                        <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[0] not-italic relative shrink-0 text-[14px] text-[#218358] whitespace-nowrap">
                           <p className="leading-[20px]">{kpiData.awaitingBFM.onTrack}</p>
                         </div>
                       </div>
                       <div className="bg-[rgba(255,222,0,0.24)] flex gap-[6px] items-center justify-center overflow-clip px-[8px] py-[4px] relative rounded-[4px] shrink-0 w-[40px]" data-name="pe-badge">
-                        <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[0] not-italic relative shrink-0 text-[#ab6400] text-[14px] whitespace-nowrap">
+                        <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[0] not-italic relative shrink-0 text-[#AB6400] text-[14px] whitespace-nowrap">
                           <p className="leading-[20px]">{kpiData.awaitingBFM.atRisk}</p>
                         </div>
                       </div>
                       <div className="bg-[rgba(243,0,13,0.08)] flex gap-[6px] items-center justify-center overflow-clip px-[8px] py-[4px] relative rounded-[4px] shrink-0 w-[40px]" data-name="pe-badge">
-                        <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[0] not-italic relative shrink-0 text-[14px] text-[rgba(196,0,6,0.83)] whitespace-nowrap">
+                        <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[0] not-italic relative shrink-0 text-[14px] text-[#CE2C31] whitespace-nowrap">
                           <p className="leading-[20px]">{kpiData.awaitingBFM.past}</p>
                         </div>
                       </div>
                     </div>
                     <div className="flex flex-col items-end justify-between pt-[2px] relative self-stretch ml-auto">
                       <div className="flex items-center justify-center relative shrink-0">
-                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646c] text-[14px] text-right">{kpiData.awaitingBFM.onTrackAmount}</p>
+                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646C] text-[14px] text-right">{kpiData.awaitingBFM.onTrackAmount}</p>
                       </div>
                       <div className="flex items-center justify-center relative shrink-0">
-                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646c] text-[14px] text-right">{kpiData.awaitingBFM.atRiskAmount}</p>
+                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646C] text-[14px] text-right">{kpiData.awaitingBFM.atRiskAmount}</p>
                       </div>
                       <div className="flex items-center justify-center relative shrink-0">
-                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646c] text-[14px] text-right">{kpiData.awaitingBFM.pastAmount}</p>
+                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646C] text-[14px] text-right">{kpiData.awaitingBFM.pastAmount}</p>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div className="mt-auto w-full">
-                  <div className="w-full border-t border-[#e0e1e6] mt-[16px] mb-[8px]" />
-                  <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] not-italic relative shrink-0 text-[#60646c] text-[14px]">Schedule, funding, or dependency</p>
+                  <div className="w-full border-t border-[#CDCED6] mt-[16px] mb-[8px]" />
+                  <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] not-italic relative shrink-0 text-[#60646C] text-[14px]">Schedule, funding, or dependency</p>
                 </div>
               </div>
             </div>
 
             {/* Increments Being Defined Card */}
             <div className="flex items-stretch relative rounded-[5px]" data-name="KPI-card">
-              <div aria-hidden="true" className="absolute border border-[#e0e1e6] border-solid inset-0 pointer-events-none rounded-[5px]" />
+              <div aria-hidden="true" className="absolute border border-[#CDCED6] border-solid inset-0 pointer-events-none rounded-[5px]" />
               <div className="flex flex-row items-center self-stretch">
-                <div className="bg-[#004b72] h-full rounded-bl-[5px] rounded-tl-[5px] shrink-0 w-[12px]" data-name="Left-Border-Decoration" />
+                <div className="bg-[#004B72] h-full rounded-bl-[5px] rounded-tl-[5px] shrink-0 w-[12px]" data-name="Left-Border-Decoration" />
               </div>
               <div className="flex flex-1 w-full min-w-0 flex-col gap-[16px] items-start p-[24px] relative" data-name="card content">
-                <p className="font-['Inter:Bold',sans-serif] font-bold leading-[24px] not-italic relative shrink-0 text-[#60646c] text-[16px]">Increments Being Defined</p>
+                <p className="font-['Inter:Bold',sans-serif] font-bold leading-[24px] not-italic relative shrink-0 text-[#60646C] text-[16px]">Increments Being Defined</p>
                 <div className="flex gap-[8px] items-center relative shrink-0">
-                  <p className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[normal] not-italic relative shrink-0 text-[32px] text-black tracking-[-1px] w-[42px] whitespace-pre-wrap">{kpiData.incrementsBeingDefined.total}</p>
+                  <p className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[normal] not-italic relative shrink-0 text-[32px] text-[#1C2024] tracking-[-1px] w-[42px] whitespace-pre-wrap">{kpiData.incrementsBeingDefined.total}</p>
                 </div>
                 <div className="flex flex-col items-start relative shrink-0 w-full">
                   <div className="flex gap-[16px] items-start relative w-full">
                     <div className="flex flex-col items-start justify-between pt-[2px] relative self-stretch shrink-0">
                       <div className="flex items-center justify-center relative shrink-0">
-                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646c] text-[14px]">On Track:</p>
+                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646C] text-[14px]">On Track:</p>
                       </div>
                       <div className="flex items-center justify-center relative shrink-0">
-                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646c] text-[14px]">At Risk:</p>
+                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646C] text-[14px]">At Risk:</p>
                       </div>
                       <div className="flex items-center justify-center relative shrink-0">
-                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646c] text-[14px]">Past:</p>
+                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646C] text-[14px]">Past:</p>
                       </div>
                     </div>
                     <div className="flex flex-col gap-[16px] items-start relative shrink-0">
                       <div className="bg-[rgba(0,164,51,0.1)] flex gap-[6px] items-center justify-center overflow-clip px-[8px] py-[4px] relative rounded-[4px] shrink-0 w-[40px]" data-name="pe-badge">
-                        <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[0] not-italic relative shrink-0 text-[14px] text-[rgba(0,113,63,0.87)] whitespace-nowrap">
+                        <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[0] not-italic relative shrink-0 text-[14px] text-[#218358] whitespace-nowrap">
                           <p className="leading-[20px]">{kpiData.incrementsBeingDefined.onTrack}</p>
                         </div>
                       </div>
                       <div className="bg-[rgba(255,222,0,0.24)] flex gap-[6px] items-center justify-center overflow-clip px-[8px] py-[4px] relative rounded-[4px] shrink-0 w-[40px]" data-name="pe-badge">
-                        <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[0] not-italic relative shrink-0 text-[#ab6400] text-[14px] whitespace-nowrap">
+                        <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[0] not-italic relative shrink-0 text-[#AB6400] text-[14px] whitespace-nowrap">
                           <p className="leading-[20px]">{kpiData.incrementsBeingDefined.atRisk}</p>
                         </div>
                       </div>
                       <div className="bg-[rgba(243,0,13,0.08)] flex gap-[6px] items-center justify-center overflow-clip px-[8px] py-[4px] relative rounded-[4px] shrink-0 w-[40px]" data-name="pe-badge">
-                        <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[0] not-italic relative shrink-0 text-[14px] text-[rgba(196,0,6,0.83)] whitespace-nowrap">
+                        <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[0] not-italic relative shrink-0 text-[14px] text-[#CE2C31] whitespace-nowrap">
                           <p className="leading-[20px]">{kpiData.incrementsBeingDefined.past}</p>
                         </div>
                       </div>
                     </div>
                     <div className="flex flex-col items-end justify-between pt-[2px] relative self-stretch ml-auto">
                       <div className="flex items-center justify-center relative shrink-0">
-                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646c] text-[14px] text-right">{kpiData.incrementsBeingDefined.onTrackAmount}</p>
+                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646C] text-[14px] text-right">{kpiData.incrementsBeingDefined.onTrackAmount}</p>
                       </div>
                       <div className="flex items-center justify-center relative shrink-0">
-                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646c] text-[14px] text-right">{kpiData.incrementsBeingDefined.atRiskAmount}</p>
+                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646C] text-[14px] text-right">{kpiData.incrementsBeingDefined.atRiskAmount}</p>
                       </div>
                       <div className="flex items-center justify-center relative shrink-0">
-                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646c] text-[14px] text-right">{kpiData.incrementsBeingDefined.pastAmount}</p>
+                        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic relative shrink-0 text-[#60646C] text-[14px] text-right">{kpiData.incrementsBeingDefined.pastAmount}</p>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div className="mt-auto w-full">
-                  <div className="w-full border-t border-[#e0e1e6] mt-[16px] mb-[8px]" />
-                  <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] not-italic relative shrink-0 text-[#60646c] text-[14px]">Requires approval or direction</p>
+                  <div className="w-full border-t border-[#CDCED6] mt-[16px] mb-[8px]" />
+                  <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] not-italic relative shrink-0 text-[#60646C] text-[14px]">Requires approval or direction</p>
                 </div>
               </div>
             </div>
@@ -524,7 +524,7 @@ function MetricCard({
   accentColor: string;
 }) {
   return (
-    <div className="bg-white rounded-[8px] border border-[rgba(0,0,47,0.15)] overflow-hidden">
+    <div className="bg-white rounded-[8px] border border-[#CDCED6] overflow-hidden">
       <div className="h-[6px]" style={{ backgroundColor: accentColor }} />
       <div className="p-[20px] flex flex-col gap-[12px]">
         <div className="flex items-start justify-between">
@@ -614,19 +614,19 @@ function PortfolioTable({ activeFilter }: { activeFilter: string }) {
   };
 
   return (
-    <div className="bg-white rounded-[5px] overflow-hidden border border-[#e0e1e6] relative">
+    <div className="bg-white rounded-[5px] overflow-hidden border border-[#CDCED6] relative">
       
       {/* Standardized Title Header — matches G-Invoicing / APM Acceptance / Reconciliation / Activity Distribution pattern */}
       <div className="bg-[#f9f9fb] relative w-full">
-        <div className="flex items-center px-[24px] py-[20px] w-full border-b-[2px] border-solid border-b-[#d0d1d6]">
+        <div className="flex items-center px-[24px] py-[20px] w-full border-b-[2px] border-solid border-b-[#CDCED6]">
           <div className="flex items-center gap-[16px] shrink-0 flex-wrap">
             <p className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[24px] not-italic text-[#1C2024] text-[18px] whitespace-nowrap">
               Execution Plans
             </p>
             {/* Vertical divider */}
-            <div className="w-[1px] h-[24px] bg-[#e0e1e6] shrink-0" />
+            <div className="w-[1px] h-[24px] bg-[#CDCED6] shrink-0" />
             <div className="bg-white h-[32px] relative rounded-[4px] w-[268px]">
-              <div aria-hidden="true" className="absolute border border-[rgba(0,6,46,0.2)] border-solid inset-0 pointer-events-none rounded-[4px]" />
+              <div aria-hidden="true" className="absolute border border-[#B9BBC6] border-solid inset-0 pointer-events-none rounded-[4px]" />
               <div className="flex items-center size-full px-[4px]">
                 <div className="flex items-center justify-center shrink-0 px-[2px]">
                   <SearchIcon />
@@ -636,7 +636,7 @@ function PortfolioTable({ activeFilter }: { activeFilter: string }) {
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
                   placeholder="Search..."
-                  className="flex-1 bg-transparent border-none outline-none font-['Inter:Regular',sans-serif] font-normal leading-[20px] not-italic text-[#1c2024] text-[14px] placeholder:text-[#60646c] px-[4px]"
+                  className="flex-1 bg-transparent border-none outline-none font-['Inter:Regular',sans-serif] font-normal leading-[20px] not-italic text-[#1C2024] text-[14px] placeholder:text-[#60646C] px-[4px]"
                 />
               </div>
               <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_1.5px_2px_0px_rgba(0,0,0,0.1),inset_0px_1.5px_2px_0px_rgba(0,0,85,0.02)]" />
@@ -660,7 +660,7 @@ function PortfolioTable({ activeFilter }: { activeFilter: string }) {
       <div className="relative">
         {/* Header Row */}
         <div
-          className="grid bg-[rgba(0,0,85,0.02)] border-b border-[rgba(0,0,47,0.15)]"
+          className="grid bg-[#F3F6FA] border-b border-[#CDCED6]"
           style={{ gridTemplateColumns: gridTemplate, padding: '12px 12px 12px 24px' }}
         >
           <TableHeader label="Plan" sortable activeSortDirection={getDirection('plan')} onSort={() => handleSort('plan')} />
@@ -687,14 +687,14 @@ function PortfolioTable({ activeFilter }: { activeFilter: string }) {
       </div>
 
       {/* Pagination Controls */}
-      <div className="bg-[rgba(0,0,85,0.02)] px-[24px] py-[12px] border-t border-[rgba(0,0,47,0.15)] flex items-center justify-between">
+      <div className="bg-[#F3F6FA] px-[24px] py-[12px] border-t border-[#CDCED6] flex items-center justify-between">
         <div className="flex items-center gap-[16px]">
           <span className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024]">
             Rows per page:
           </span>
           <div className="relative">
             <select
-              className="bg-white h-[32px] pl-[12px] pr-[32px] rounded-[4px] border border-[rgba(0,6,46,0.2)] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] cursor-pointer appearance-none"
+              className="bg-white h-[32px] pl-[12px] pr-[32px] rounded-[4px] border border-[#B9BBC6] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] cursor-pointer appearance-none"
               style={{ WebkitAppearance: 'none', MozAppearance: 'none' }}
               value={pageSize}
               onChange={(e) => handlePageSizeChange(Number(e.target.value))}
@@ -715,14 +715,14 @@ function PortfolioTable({ activeFilter }: { activeFilter: string }) {
           </span>
           <div className="flex items-center gap-[8px]">
             <button
-              className="bg-white hover:bg-[#F9F9FB] text-[#1C2024] font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] px-[12px] py-[6px] rounded-[4px] border border-[#1C2024] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-white hover:bg-[#F9F9FB] text-[#1C2024] font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] px-[12px] py-[6px] rounded-[4px] border border-[#B9BBC6] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               onClick={handlePreviousPage}
               disabled={currentPage === 1}
             >
               Previous
             </button>
             <button
-              className="bg-white hover:bg-[#F9F9FB] text-[#1C2024] font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] px-[12px] py-[6px] rounded-[4px] border border-[#1C2024] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-white hover:bg-[#F9F9FB] text-[#1C2024] font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px] px-[12px] py-[6px] rounded-[4px] border border-[#B9BBC6] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               onClick={handleNextPage}
               disabled={currentPage === totalPages}
             >
@@ -804,7 +804,7 @@ function TableRow({
 
   return (
     <div
-      className={`grid border-b border-[rgba(0,0,47,0.15)] transition-colors ${
+      className={`grid border-b border-[#CDCED6] transition-colors ${
         isHovered ? 'bg-[#F9F9FB]' : 'bg-white'
       }`}
       style={{ gridTemplateColumns: gridTemplate, padding: '12px 12px 12px 24px', minHeight: '48px' }}
@@ -937,3 +937,4 @@ function TableRow({
     </div>
   );
 }
+

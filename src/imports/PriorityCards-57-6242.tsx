@@ -12,7 +12,7 @@ function Frame1({ title, description, amount }: { title: string; description: st
   return (
     <div className="content-stretch flex flex-col items-start not-italic relative shrink-0 whitespace-pre-wrap">
       <p className="font-['Inter:Bold',sans-serif] font-bold leading-[20px] relative shrink-0 text-[#147DB9] text-[14px] w-full">{title}</p>
-      <div className="font-['Inter:Regular',sans-serif] font-normal leading-[0] relative shrink-0 text-[#60646c] text-[0px] w-full">
+      <div className="font-['Inter:Regular',sans-serif] font-normal leading-[0] relative shrink-0 text-[#60646C] text-[0px] w-full">
         <p className="leading-[20px] mb-0 text-[14px]">{description}</p>
         <p className="font-['Inter:Bold',sans-serif] font-bold leading-[26px] text-[18px] tracking-[-0.04px]">{amount}</p>
       </div>
@@ -23,7 +23,7 @@ function Frame1({ title, description, amount }: { title: string; description: st
 function GridPill({ status }: { status: string }) {
   const isPast = status === 'Past';
   const bgColor = isPast ? 'rgba(243,0,13,0.08)' : 'rgba(255,222,0,0.24)';
-  const textColor = isPast ? 'rgba(196,0,6,0.83)' : '#ab6400';
+  const textColor = isPast ? '#CE2C31' : '#AB6400';
   
   return (
     <div className="h-[28px] relative rounded-[100px] shrink-0 w-full" style={{ backgroundColor: bgColor }} data-name="grid-pill">
@@ -41,9 +41,9 @@ function GridPill({ status }: { status: string }) {
 function Frame24({ dueDate, status }: { dueDate: string; status: string }) {
   return (
     <div className="content-stretch flex flex-col gap-[4px] items-start relative shrink-0 w-[106px]">
-      <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[20px] not-italic relative shrink-0 text-[#1c2024] text-[0px] text-[14px] w-full whitespace-pre-wrap">
+      <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[20px] not-italic relative shrink-0 text-[#1C2024] text-[0px] text-[14px] w-full whitespace-pre-wrap">
         <p className="mb-0">Due Date:</p>
-        <p className="font-['Inter:Medium',sans-serif] font-medium text-[#60646c]">{dueDate}</p>
+        <p className="font-['Inter:Medium',sans-serif] font-medium text-[#60646C]">{dueDate}</p>
       </div>
       <GridPill status={status} />
     </div>
@@ -53,7 +53,7 @@ function Frame24({ dueDate, status }: { dueDate: string; status: string }) {
 function Frame11({ title, description, amount, dueDate, status }: { title: string; description: string; amount: string; dueDate: string; status: string }) {
   return (
     <div className="bg-white relative rounded-[5px] shrink-0 w-full">
-      <div aria-hidden="true" className="absolute border border-[#e0e1e6] border-solid inset-0 pointer-events-none rounded-[5px]" />
+      <div aria-hidden="true" className="absolute border border-[#CDCED6] border-solid inset-0 pointer-events-none rounded-[5px]" />
       <div className="content-stretch flex items-start justify-between p-[12px] relative w-full">
         <Frame1 title={title} description={description} amount={amount} />
         <Frame24 dueDate={dueDate} status={status} />
@@ -66,7 +66,7 @@ function Frame2({ title, description, amount }: { title: string; description: st
   return (
     <div className="content-stretch flex flex-col items-start not-italic relative shrink-0 whitespace-pre-wrap">
       <p className="font-['Inter:Bold',sans-serif] font-bold leading-[20px] relative shrink-0 text-[#147DB9] text-[14px] w-full">{title}</p>
-      <div className="font-['Inter:Regular',sans-serif] font-normal leading-[0] relative shrink-0 text-[#60646c] text-[0px] w-full">
+      <div className="font-['Inter:Regular',sans-serif] font-normal leading-[0] relative shrink-0 text-[#60646C] text-[0px] w-full">
         <p className="leading-[20px] mb-0 text-[14px]">{description}</p>
         <p className="font-['Inter:Bold',sans-serif] font-bold leading-[26px] text-[18px] tracking-[-0.04px]">{amount}</p>
       </div>
@@ -76,7 +76,7 @@ function Frame2({ title, description, amount }: { title: string; description: st
 
 function GridPill1({ status }: { status: string }) {
   const bgColor = status === 'At Risk' ? 'rgba(255,222,0,0.24)' : 'rgba(0,164,51,0.1)';
-  const textColor = status === 'At Risk' ? '#ab6400' : '#218358';
+  const textColor = status === 'At Risk' ? '#AB6400' : '#218358';
   
   return (
     <div className="h-[28px] relative rounded-[100px] shrink-0 w-full" style={{ backgroundColor: bgColor }} data-name="grid-pill">
@@ -94,9 +94,9 @@ function GridPill1({ status }: { status: string }) {
 function Frame25({ dueDate, status }: { dueDate: string; status: string }) {
   return (
     <div className="content-stretch flex flex-col gap-[4px] items-start relative shrink-0 w-[106px]">
-      <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[20px] not-italic relative shrink-0 text-[#1c2024] text-[0px] text-[14px] w-full whitespace-pre-wrap">
+      <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[20px] not-italic relative shrink-0 text-[#1C2024] text-[0px] text-[14px] w-full whitespace-pre-wrap">
         <p className="mb-0">Due Date:</p>
-        <p className="font-['Inter:Medium',sans-serif] font-medium text-[#60646c]">{dueDate}</p>
+        <p className="font-['Inter:Medium',sans-serif] font-medium text-[#60646C]">{dueDate}</p>
       </div>
       <GridPill1 status={status} />
     </div>
@@ -106,7 +106,7 @@ function Frame25({ dueDate, status }: { dueDate: string; status: string }) {
 function Frame3({ title, description, amount, dueDate, status }: { title: string; description: string; amount: string; dueDate: string; status: string }) {
   return (
     <div className="bg-white relative rounded-[5px] shrink-0 w-full">
-      <div aria-hidden="true" className="absolute border border-[#e0e1e6] border-solid inset-0 pointer-events-none rounded-[5px]" />
+      <div aria-hidden="true" className="absolute border border-[#CDCED6] border-solid inset-0 pointer-events-none rounded-[5px]" />
       <div className="content-stretch flex items-start justify-between p-[12px] relative w-full">
         <Frame2 title={title} description={description} amount={amount} />
         <Frame25 dueDate={dueDate} status={status} />
@@ -119,7 +119,7 @@ function Frame4({ title, description, amount }: { title: string; description: st
   return (
     <div className="content-stretch flex flex-col items-start not-italic relative shrink-0 whitespace-pre-wrap">
       <p className="font-['Inter:Bold',sans-serif] font-bold leading-[20px] relative shrink-0 text-[#147DB9] text-[14px] w-full">{title}</p>
-      <div className="font-['Inter:Regular',sans-serif] font-normal leading-[0] relative shrink-0 text-[#60646c] text-[0px] w-full">
+      <div className="font-['Inter:Regular',sans-serif] font-normal leading-[0] relative shrink-0 text-[#60646C] text-[0px] w-full">
         <p className="leading-[20px] mb-0 text-[14px]">{description}</p>
         <p className="font-['Inter:Bold',sans-serif] font-bold leading-[26px] text-[18px] tracking-[-0.04px]">{amount}</p>
       </div>
@@ -129,7 +129,7 @@ function Frame4({ title, description, amount }: { title: string; description: st
 
 function GridPill2({ status }: { status: string }) {
   const bgColor = status === 'At Risk' ? 'rgba(255,222,0,0.24)' : 'rgba(0,164,51,0.1)';
-  const textColor = status === 'At Risk' ? '#ab6400' : '#218358';
+  const textColor = status === 'At Risk' ? '#AB6400' : '#218358';
   
   return (
     <div className="h-[28px] relative rounded-[100px] shrink-0 w-full" style={{ backgroundColor: bgColor }} data-name="grid-pill">
@@ -147,9 +147,9 @@ function GridPill2({ status }: { status: string }) {
 function Frame26({ dueDate, status }: { dueDate: string; status: string }) {
   return (
     <div className="content-stretch flex flex-col gap-[4px] items-start relative shrink-0 w-[106px]">
-      <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[20px] not-italic relative shrink-0 text-[#1c2024] text-[0px] text-[14px] w-full whitespace-pre-wrap">
+      <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[20px] not-italic relative shrink-0 text-[#1C2024] text-[0px] text-[14px] w-full whitespace-pre-wrap">
         <p className="mb-0">Due Date:</p>
-        <p className="font-['Inter:Medium',sans-serif] font-medium text-[#60646c]">{dueDate}</p>
+        <p className="font-['Inter:Medium',sans-serif] font-medium text-[#60646C]">{dueDate}</p>
       </div>
       <GridPill2 status={status} />
     </div>
@@ -159,7 +159,7 @@ function Frame26({ dueDate, status }: { dueDate: string; status: string }) {
 function Frame12({ title, description, amount, dueDate, status }: { title: string; description: string; amount: string; dueDate: string; status: string }) {
   return (
     <div className="bg-white relative rounded-[5px] shrink-0 w-full">
-      <div aria-hidden="true" className="absolute border border-[#e0e1e6] border-solid inset-0 pointer-events-none rounded-[5px]" />
+      <div aria-hidden="true" className="absolute border border-[#CDCED6] border-solid inset-0 pointer-events-none rounded-[5px]" />
       <div className="content-stretch flex items-start justify-between p-[12px] relative w-full">
         <Frame4 title={title} description={description} amount={amount} />
         <Frame26 dueDate={dueDate} status={status} />
@@ -172,7 +172,7 @@ function Frame7({ title, description, amount }: { title: string; description: st
   return (
     <div className="content-stretch flex flex-col items-start not-italic relative shrink-0 whitespace-pre-wrap">
       <p className="font-['Inter:Bold',sans-serif] font-bold leading-[20px] relative shrink-0 text-[#147DB9] text-[14px] w-full">{title}</p>
-      <div className="font-['Inter:Regular',sans-serif] font-normal leading-[0] relative shrink-0 text-[#60646c] text-[0px] w-full">
+      <div className="font-['Inter:Regular',sans-serif] font-normal leading-[0] relative shrink-0 text-[#60646C] text-[0px] w-full">
         <p className="leading-[20px] mb-0 text-[14px]">{description}</p>
         <p className="font-['Inter:Bold',sans-serif] font-bold leading-[26px] text-[18px] tracking-[-0.04px]">{amount}</p>
       </div>
@@ -182,7 +182,7 @@ function Frame7({ title, description, amount }: { title: string; description: st
 
 function GridPill3({ status }: { status: string }) {
   const bgColor = status === 'On Track' ? 'rgba(0,164,51,0.1)' : 'rgba(255,222,0,0.24)';
-  const textColor = status === 'On Track' ? '#218358' : '#ab6400';
+  const textColor = status === 'On Track' ? '#218358' : '#AB6400';
   
   return (
     <div className="h-[28px] relative rounded-[100px] shrink-0 w-full" style={{ backgroundColor: bgColor }} data-name="grid-pill">
@@ -200,9 +200,9 @@ function GridPill3({ status }: { status: string }) {
 function Frame27({ dueDate, status }: { dueDate: string; status: string }) {
   return (
     <div className="content-stretch flex flex-col gap-[4px] items-start relative shrink-0 w-[106px]">
-      <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[20px] not-italic relative shrink-0 text-[#1c2024] text-[0px] text-[14px] w-full whitespace-pre-wrap">
+      <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[20px] not-italic relative shrink-0 text-[#1C2024] text-[0px] text-[14px] w-full whitespace-pre-wrap">
         <p className="mb-0">Due Date:</p>
-        <p className="font-['Inter:Medium',sans-serif] font-medium text-[#60646c]">{dueDate}</p>
+        <p className="font-['Inter:Medium',sans-serif] font-medium text-[#60646C]">{dueDate}</p>
       </div>
       <GridPill3 status={status} />
     </div>
@@ -212,7 +212,7 @@ function Frame27({ dueDate, status }: { dueDate: string; status: string }) {
 function Frame6({ title, description, amount, dueDate, status }: { title: string; description: string; amount: string; dueDate: string; status: string }) {
   return (
     <div className="bg-white relative rounded-[5px] shrink-0 w-full">
-      <div aria-hidden="true" className="absolute border border-[#e0e1e6] border-solid inset-0 pointer-events-none rounded-[5px]" />
+      <div aria-hidden="true" className="absolute border border-[#CDCED6] border-solid inset-0 pointer-events-none rounded-[5px]" />
       <div className="content-stretch flex items-start justify-between p-[12px] relative w-full">
         <Frame7 title={title} description={description} amount={amount} />
         <Frame27 dueDate={dueDate} status={status} />
@@ -225,7 +225,7 @@ function Frame9({ title, description, amount }: { title: string; description: st
   return (
     <div className="content-stretch flex flex-col items-start not-italic relative shrink-0 whitespace-pre-wrap">
       <p className="font-['Inter:Bold',sans-serif] font-bold leading-[20px] relative shrink-0 text-[#147DB9] text-[14px] w-full">{title}</p>
-      <div className="font-['Inter:Regular',sans-serif] font-normal leading-[0] relative shrink-0 text-[#60646c] text-[0px] w-full">
+      <div className="font-['Inter:Regular',sans-serif] font-normal leading-[0] relative shrink-0 text-[#60646C] text-[0px] w-full">
         <p className="leading-[20px] mb-0 text-[14px]">{description}</p>
         <p className="font-['Inter:Bold',sans-serif] font-bold leading-[26px] text-[18px] tracking-[-0.04px]">{amount}</p>
       </div>
@@ -235,7 +235,7 @@ function Frame9({ title, description, amount }: { title: string; description: st
 
 function GridPill4({ status }: { status: string }) {
   const bgColor = status === 'On Track' ? 'rgba(0,164,51,0.1)' : 'rgba(255,222,0,0.24)';
-  const textColor = status === 'On Track' ? '#218358' : '#ab6400';
+  const textColor = status === 'On Track' ? '#218358' : '#AB6400';
   
   return (
     <div className="h-[28px] relative rounded-[100px] shrink-0 w-full" style={{ backgroundColor: bgColor }} data-name="grid-pill">
@@ -253,9 +253,9 @@ function GridPill4({ status }: { status: string }) {
 function Frame28({ dueDate, status }: { dueDate: string; status: string }) {
   return (
     <div className="content-stretch flex flex-col gap-[4px] items-start relative shrink-0 w-[106px]">
-      <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[20px] not-italic relative shrink-0 text-[#1c2024] text-[0px] text-[14px] w-full whitespace-pre-wrap">
+      <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[20px] not-italic relative shrink-0 text-[#1C2024] text-[0px] text-[14px] w-full whitespace-pre-wrap">
         <p className="mb-0">Due Date:</p>
-        <p className="font-['Inter:Medium',sans-serif] font-medium text-[#60646c]">{dueDate}</p>
+        <p className="font-['Inter:Medium',sans-serif] font-medium text-[#60646C]">{dueDate}</p>
       </div>
       <GridPill4 status={status} />
     </div>
@@ -265,7 +265,7 @@ function Frame28({ dueDate, status }: { dueDate: string; status: string }) {
 function Frame8({ title, description, amount, dueDate, status }: { title: string; description: string; amount: string; dueDate: string; status: string }) {
   return (
     <div className="bg-white relative rounded-[5px] shrink-0 w-full">
-      <div aria-hidden="true" className="absolute border border-[#e0e1e6] border-solid inset-0 pointer-events-none rounded-[5px]" />
+      <div aria-hidden="true" className="absolute border border-[#CDCED6] border-solid inset-0 pointer-events-none rounded-[5px]" />
       <div className="content-stretch flex items-start justify-between p-[12px] relative w-full">
         <Frame9 title={title} description={description} amount={amount} />
         <Frame28 dueDate={dueDate} status={status} />
@@ -294,19 +294,19 @@ function ExpandedChildCard({
 }) {
   return (
     <div className="bg-white relative rounded-[5px] shrink-0 w-full">
-      <div aria-hidden="true" className="absolute border border-[#e0e1e6] border-solid inset-0 pointer-events-none rounded-[5px]" />
+      <div aria-hidden="true" className="absolute border border-[#CDCED6] border-solid inset-0 pointer-events-none rounded-[5px]" />
       <div className="content-stretch flex items-start justify-between p-[12px] relative w-full">
         <div className="content-stretch flex flex-col items-start not-italic relative shrink-0 whitespace-pre-wrap">
           <p className="font-['Inter:Bold',sans-serif] font-bold leading-[20px] relative shrink-0 text-[#147DB9] text-[14px] w-full">{title} →</p>
-          <div className="font-['Inter:Regular',sans-serif] font-normal leading-[0] relative shrink-0 text-[#60646c] text-[0px] w-full">
+          <div className="font-['Inter:Regular',sans-serif] font-normal leading-[0] relative shrink-0 text-[#60646C] text-[0px] w-full">
             <p className="leading-[20px] mb-0 text-[14px]">{description}</p>
             <p className="font-['Inter:Bold',sans-serif] font-bold leading-[26px] text-[18px] tracking-[-0.04px]">{amount}</p>
           </div>
         </div>
         <div className="content-stretch flex flex-col gap-[4px] items-start relative shrink-0 w-[106px]">
-          <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[20px] not-italic relative shrink-0 text-[#1c2024] text-[0px] text-[14px] w-full whitespace-pre-wrap">
+          <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[20px] not-italic relative shrink-0 text-[#1C2024] text-[0px] text-[14px] w-full whitespace-pre-wrap">
             <p className="mb-0">Due Date:</p>
-            <p className="font-['Inter:Medium',sans-serif] font-medium text-[#60646c]">{dueDate}</p>
+            <p className="font-['Inter:Medium',sans-serif] font-medium text-[#60646C]">{dueDate}</p>
           </div>
           <div className="h-[28px] relative rounded-[100px] shrink-0 w-full" style={{ backgroundColor: statusBg }} data-name="grid-pill">
             <div className="flex flex-row items-center justify-center size-full">
@@ -330,8 +330,8 @@ function PeButton({ isExpanded, onClick }: { isExpanded: boolean; onClick: () =>
       data-name="pe-button"
       onClick={onClick}
     >
-      <div aria-hidden="true" className="absolute border border-[#004b72] border-solid inset-0 pointer-events-none rounded-[4px]" />
-      <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#004b72] text-[14px] whitespace-nowrap">
+      <div aria-hidden="true" className="absolute border border-[#004B72] border-solid inset-0 pointer-events-none rounded-[4px]" />
+      <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#004B72] text-[14px] whitespace-nowrap">
         <p className="leading-[20px]">{isExpanded ? 'Collapse' : 'View All'}</p>
       </div>
     </div>
@@ -349,7 +349,7 @@ function Frame5({ isExpanded, onToggle, data }: { isExpanded: boolean; onToggle:
   
   return (
     <div className="bg-[#f9f9fb] flex-[1_0_0] min-h-px min-w-px relative rounded-[5px] transition-all duration-300" style={{ height: isExpanded ? 'auto' : undefined }}>
-      <div aria-hidden="true" className="absolute border border-[#e0e1e6] border-solid inset-0 pointer-events-none rounded-[5px]" />
+      <div aria-hidden="true" className="absolute border border-[#CDCED6] border-solid inset-0 pointer-events-none rounded-[5px]" />
       <div className="content-stretch flex flex-col gap-[16px] items-start p-[24px] relative w-full">
         <Frame />
         <Frame11 {...items[0]} />
@@ -361,7 +361,7 @@ function Frame5({ isExpanded, onToggle, data }: { isExpanded: boolean; onToggle:
           amount="$4,200,000"
           dueDate="25 Feb 2026"
           status="At Risk"
-          statusColor="#ab6400"
+          statusColor="#AB6400"
           statusBg="rgba(255, 222, 0, 0.24)"
         />
         <Frame6 
@@ -429,8 +429,8 @@ function Frame13() {
 function Frame15({ amount }: { amount: string }) {
   return (
     <div className="content-stretch flex flex-col font-['Inter:Bold',sans-serif] font-bold gap-[8px] items-start not-italic relative shrink-0 whitespace-pre-wrap">
-      <p className="leading-[20px] relative shrink-0 text-[#60646c] text-[14px] w-full">BFM Working Authorized Not Distributed to Projects</p>
-      <p className="leading-[28px] relative shrink-0 text-[#1c2024] text-[20px] tracking-[-0.08px] w-full">{amount}</p>
+      <p className="leading-[20px] relative shrink-0 text-[#60646C] text-[14px] w-full">BFM Working Authorized Not Distributed to Projects</p>
+      <p className="leading-[28px] relative shrink-0 text-[#1C2024] text-[20px] tracking-[-0.08px] w-full">{amount}</p>
     </div>
   );
 }
@@ -438,7 +438,7 @@ function Frame15({ amount }: { amount: string }) {
 function Frame14({ amount }: { amount: string }) {
   return (
     <div className="bg-white h-[96px] relative rounded-[5px] shrink-0 w-full">
-      <div aria-hidden="true" className="absolute border border-[#e0e1e6] border-solid inset-0 pointer-events-none rounded-[5px]" />
+      <div aria-hidden="true" className="absolute border border-[#CDCED6] border-solid inset-0 pointer-events-none rounded-[5px]" />
       <div className="content-stretch flex items-start p-[12px] relative size-full">
         <Frame15 amount={amount} />
       </div>
@@ -449,8 +449,8 @@ function Frame14({ amount }: { amount: string }) {
 function Frame17({ amount }: { amount: string }) {
   return (
     <div className="content-stretch flex flex-col font-['Inter:Bold',sans-serif] font-bold gap-[8px] items-start not-italic relative shrink-0 whitespace-pre-wrap">
-      <p className="leading-[20px] relative shrink-0 text-[#60646c] text-[14px] w-full">APM Authorized Not Distributed to Projects</p>
-      <p className="leading-[28px] relative shrink-0 text-[#1c2024] text-[20px] tracking-[-0.08px] w-full">{amount}</p>
+      <p className="leading-[20px] relative shrink-0 text-[#60646C] text-[14px] w-full">APM Authorized Not Distributed to Projects</p>
+      <p className="leading-[28px] relative shrink-0 text-[#1C2024] text-[20px] tracking-[-0.08px] w-full">{amount}</p>
     </div>
   );
 }
@@ -458,7 +458,7 @@ function Frame17({ amount }: { amount: string }) {
 function Frame16({ amount }: { amount: string }) {
   return (
     <div className="bg-white h-[96px] relative rounded-[5px] shrink-0 w-full">
-      <div aria-hidden="true" className="absolute border border-[#e0e1e6] border-solid inset-0 pointer-events-none rounded-[5px]" />
+      <div aria-hidden="true" className="absolute border border-[#CDCED6] border-solid inset-0 pointer-events-none rounded-[5px]" />
       <div className="content-stretch flex items-start p-[12px] relative size-full">
         <Frame17 amount={amount} />
       </div>
@@ -470,7 +470,7 @@ function Frame19({ title, description, amount }: { title: string; description: s
   return (
     <div className="content-stretch flex flex-col items-start not-italic relative shrink-0 whitespace-pre-wrap">
       <p className="font-['Inter:Bold',sans-serif] font-bold leading-[20px] relative shrink-0 text-[#147DB9] text-[14px] w-full">{title}</p>
-      <div className="font-['Inter:Regular',sans-serif] font-normal leading-[0] relative shrink-0 text-[#60646c] text-[0px] w-full">
+      <div className="font-['Inter:Regular',sans-serif] font-normal leading-[0] relative shrink-0 text-[#60646C] text-[0px] w-full">
         <p className="leading-[20px] mb-0 text-[14px]">{description}</p>
         <p className="font-['Inter:Bold',sans-serif] font-bold leading-[26px] text-[18px] tracking-[-0.04px]">{amount}</p>
       </div>
@@ -481,7 +481,7 @@ function Frame19({ title, description, amount }: { title: string; description: s
 function GridPill5({ status }: { status: string }) {
   const isPast = status === 'Past';
   const bgColor = isPast ? 'rgba(243,0,13,0.08)' : 'rgba(255,222,0,0.24)';
-  const textColor = isPast ? 'rgba(196,0,6,0.83)' : '#ab6400';
+  const textColor = isPast ? '#CE2C31' : '#AB6400';
   
   return (
     <div className="h-[28px] relative rounded-[100px] shrink-0 w-full" style={{ backgroundColor: bgColor }} data-name="grid-pill">
@@ -499,9 +499,9 @@ function GridPill5({ status }: { status: string }) {
 function Frame29({ dueDate, status }: { dueDate: string; status: string }) {
   return (
     <div className="content-stretch flex flex-col gap-[4px] items-start relative shrink-0 w-[106px]">
-      <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[20px] not-italic relative shrink-0 text-[#1c2024] text-[0px] text-[14px] w-full whitespace-pre-wrap">
+      <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[20px] not-italic relative shrink-0 text-[#1C2024] text-[0px] text-[14px] w-full whitespace-pre-wrap">
         <p className="mb-0">Due Date:</p>
-        <p className="font-['Inter:Medium',sans-serif] font-medium text-[#60646c]">{dueDate}</p>
+        <p className="font-['Inter:Medium',sans-serif] font-medium text-[#60646C]">{dueDate}</p>
       </div>
       <GridPill5 status={status} />
     </div>
@@ -511,7 +511,7 @@ function Frame29({ dueDate, status }: { dueDate: string; status: string }) {
 function Frame18({ title, description, amount, dueDate, status }: { title: string; description: string; amount: string; dueDate: string; status: string }) {
   return (
     <div className="bg-white relative rounded-[5px] shrink-0 w-full">
-      <div aria-hidden="true" className="absolute border border-[#e0e1e6] border-solid inset-0 pointer-events-none rounded-[5px]" />
+      <div aria-hidden="true" className="absolute border border-[#CDCED6] border-solid inset-0 pointer-events-none rounded-[5px]" />
       <div className="content-stretch flex items-start justify-between p-[12px] relative w-full">
         <Frame19 title={title} description={description} amount={amount} />
         <Frame29 dueDate={dueDate} status={status} />
@@ -524,7 +524,7 @@ function Frame21({ title, description, amount }: { title: string; description: s
   return (
     <div className="content-stretch flex flex-col items-start not-italic relative shrink-0 whitespace-pre-wrap">
       <p className="font-['Inter:Bold',sans-serif] font-bold leading-[20px] relative shrink-0 text-[#147DB9] text-[14px] w-full">{title}</p>
-      <div className="font-['Inter:Regular',sans-serif] font-normal leading-[0] relative shrink-0 text-[#60646c] text-[0px] w-full">
+      <div className="font-['Inter:Regular',sans-serif] font-normal leading-[0] relative shrink-0 text-[#60646C] text-[0px] w-full">
         <p className="leading-[20px] mb-0 text-[14px]">{description}</p>
         <p className="font-['Inter:Bold',sans-serif] font-bold leading-[26px] text-[18px] tracking-[-0.04px]">{amount}</p>
       </div>
@@ -535,7 +535,7 @@ function Frame21({ title, description, amount }: { title: string; description: s
 function GridPill6({ status }: { status: string }) {
   const isPast = status === 'Past';
   const bgColor = isPast ? 'rgba(243,0,13,0.08)' : 'rgba(255,222,0,0.24)';
-  const textColor = isPast ? 'rgba(196,0,6,0.83)' : '#ab6400';
+  const textColor = isPast ? '#CE2C31' : '#AB6400';
   
   return (
     <div className="h-[28px] relative rounded-[100px] shrink-0 w-full" style={{ backgroundColor: bgColor }} data-name="grid-pill">
@@ -553,9 +553,9 @@ function GridPill6({ status }: { status: string }) {
 function Frame30({ dueDate, status }: { dueDate: string; status: string }) {
   return (
     <div className="content-stretch flex flex-col gap-[4px] items-start relative shrink-0 w-[106px]">
-      <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[20px] not-italic relative shrink-0 text-[#1c2024] text-[0px] text-[14px] w-full whitespace-pre-wrap">
+      <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[20px] not-italic relative shrink-0 text-[#1C2024] text-[0px] text-[14px] w-full whitespace-pre-wrap">
         <p className="mb-0">Due Date:</p>
-        <p className="font-['Inter:Medium',sans-serif] font-medium text-[#60646c]">{dueDate}</p>
+        <p className="font-['Inter:Medium',sans-serif] font-medium text-[#60646C]">{dueDate}</p>
       </div>
       <GridPill6 status={status} />
     </div>
@@ -565,7 +565,7 @@ function Frame30({ dueDate, status }: { dueDate: string; status: string }) {
 function Frame20({ title, description, amount, dueDate, status }: { title: string; description: string; amount: string; dueDate: string; status: string }) {
   return (
     <div className="bg-white relative rounded-[5px] shrink-0 w-full">
-      <div aria-hidden="true" className="absolute border border-[#e0e1e6] border-solid inset-0 pointer-events-none rounded-[5px]" />
+      <div aria-hidden="true" className="absolute border border-[#CDCED6] border-solid inset-0 pointer-events-none rounded-[5px]" />
       <div className="content-stretch flex items-start justify-between p-[12px] relative w-full">
         <Frame21 title={title} description={description} amount={amount} />
         <Frame30 dueDate={dueDate} status={status} />
@@ -578,7 +578,7 @@ function Frame23({ title, description, amount }: { title: string; description: s
   return (
     <div className="content-stretch flex flex-col items-start not-italic relative shrink-0 whitespace-pre-wrap">
       <p className="font-['Inter:Bold',sans-serif] font-bold leading-[20px] relative shrink-0 text-[#147DB9] text-[14px] w-full">{title}</p>
-      <div className="font-['Inter:Regular',sans-serif] font-normal leading-[0] relative shrink-0 text-[#60646c] text-[0px] w-full">
+      <div className="font-['Inter:Regular',sans-serif] font-normal leading-[0] relative shrink-0 text-[#60646C] text-[0px] w-full">
         <p className="leading-[20px] mb-0 text-[14px]">{description}</p>
         <p className="font-['Inter:Bold',sans-serif] font-bold leading-[26px] text-[18px] tracking-[-0.04px]">{amount}</p>
       </div>
@@ -588,7 +588,7 @@ function Frame23({ title, description, amount }: { title: string; description: s
 
 function GridPill7({ status }: { status: string }) {
   const bgColor = status === 'At Risk' ? 'rgba(255,222,0,0.24)' : 'rgba(0,164,51,0.1)';
-  const textColor = status === 'At Risk' ? '#ab6400' : '#218358';
+  const textColor = status === 'At Risk' ? '#AB6400' : '#218358';
   
   return (
     <div className="h-[28px] relative rounded-[100px] shrink-0 w-full" style={{ backgroundColor: bgColor }} data-name="grid-pill">
@@ -606,9 +606,9 @@ function GridPill7({ status }: { status: string }) {
 function Frame31({ dueDate, status }: { dueDate: string; status: string }) {
   return (
     <div className="content-stretch flex flex-col gap-[4px] items-start relative shrink-0 w-[106px]">
-      <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[20px] not-italic relative shrink-0 text-[#1c2024] text-[0px] text-[14px] w-full whitespace-pre-wrap">
+      <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[20px] not-italic relative shrink-0 text-[#1C2024] text-[0px] text-[14px] w-full whitespace-pre-wrap">
         <p className="mb-0">Due Date:</p>
-        <p className="font-['Inter:Medium',sans-serif] font-medium text-[#60646c]">{dueDate}</p>
+        <p className="font-['Inter:Medium',sans-serif] font-medium text-[#60646C]">{dueDate}</p>
       </div>
       <GridPill7 status={status} />
     </div>
@@ -618,7 +618,7 @@ function Frame31({ dueDate, status }: { dueDate: string; status: string }) {
 function Frame22({ title, description, amount, dueDate, status }: { title: string; description: string; amount: string; dueDate: string; status: string }) {
   return (
     <div className="bg-white relative rounded-[5px] shrink-0 w-full">
-      <div aria-hidden="true" className="absolute border border-[#e0e1e6] border-solid inset-0 pointer-events-none rounded-[5px]" />
+      <div aria-hidden="true" className="absolute border border-[#CDCED6] border-solid inset-0 pointer-events-none rounded-[5px]" />
       <div className="content-stretch flex items-start justify-between p-[12px] relative w-full">
         <Frame23 title={title} description={description} amount={amount} />
         <Frame31 dueDate={dueDate} status={status} />
@@ -634,8 +634,8 @@ function PeButton1({ isExpanded, onClick }: { isExpanded: boolean; onClick: () =
       data-name="pe-button"
       onClick={onClick}
     >
-      <div aria-hidden="true" className="absolute border border-[#004b72] border-solid inset-0 pointer-events-none rounded-[4px]" />
-      <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#004b72] text-[14px] whitespace-nowrap">
+      <div aria-hidden="true" className="absolute border border-[#004B72] border-solid inset-0 pointer-events-none rounded-[4px]" />
+      <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#004B72] text-[14px] whitespace-nowrap">
         <p className="leading-[20px]">{isExpanded ? 'Collapse' : 'View All'}</p>
       </div>
     </div>
@@ -659,7 +659,7 @@ function Frame10({ isExpanded, onToggle, data }: { isExpanded: boolean; onToggle
   
   return (
     <div className="bg-[#f9f9fb] flex-[1_0_0] h-full min-h-px min-w-px relative rounded-[5px] transition-all duration-300" style={{ height: isExpanded ? 'auto' : undefined }}>
-      <div aria-hidden="true" className="absolute border border-[#e0e1e6] border-solid inset-0 pointer-events-none rounded-[5px]" />
+      <div aria-hidden="true" className="absolute border border-[#CDCED6] border-solid inset-0 pointer-events-none rounded-[5px]" />
       <div className="content-stretch flex flex-col gap-[16px] items-start p-[24px] relative size-full">
         <Frame13 />
         <Frame14 amount={bfmWorking} />
@@ -677,7 +677,7 @@ function Frame10({ isExpanded, onToggle, data }: { isExpanded: boolean; onToggle
               amount="$4,500,000"
               dueDate="18 Feb 2026"
               status="At Risk"
-              statusColor="#ab6400"
+              statusColor="#AB6400"
               statusBg="rgba(255, 222, 0, 0.24)"
             />
             <ExpandedChildCard 
@@ -686,7 +686,7 @@ function Frame10({ isExpanded, onToggle, data }: { isExpanded: boolean; onToggle
               amount="$2,900,000"
               dueDate="25 Feb 2026"
               status="At Risk"
-              statusColor="#ab6400"
+              statusColor="#AB6400"
               statusBg="rgba(255, 222, 0, 0.24)"
             />
             <ExpandedChildCard 
@@ -695,7 +695,7 @@ function Frame10({ isExpanded, onToggle, data }: { isExpanded: boolean; onToggle
               amount="$7,200,000"
               dueDate="1 Mar 2026"
               status="At Risk"
-              statusColor="#ab6400"
+              statusColor="#AB6400"
               statusBg="rgba(255, 222, 0, 0.24)"
             />
             <ExpandedChildCard 

@@ -282,8 +282,8 @@ function ButtonRow() {
         className="bg-white content-stretch flex gap-[8px] h-[32px] items-center justify-center px-[12px] relative rounded-[4px] shrink-0 cursor-pointer hover:bg-[#f5f5f5] transition-colors" 
         data-name="pe-button"
       >
-        <div aria-hidden="true" className="absolute border border-[#004b72] border-solid inset-0 pointer-events-none rounded-[4px]" />
-        <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#004b72] text-[14px] whitespace-nowrap">
+        <div aria-hidden="true" className="absolute border border-[#004B72] border-solid inset-0 pointer-events-none rounded-[4px]" />
+        <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#004B72] text-[14px] whitespace-nowrap">
           <p className="leading-[20px]">← Back to Funding Authorization</p>
         </div>
       </Link>
@@ -292,8 +292,8 @@ function ButtonRow() {
         className="bg-white content-stretch flex gap-[8px] h-[32px] items-center justify-center px-[12px] relative rounded-[4px] shrink-0 cursor-pointer hover:bg-[#f5f5f5] transition-colors" 
         data-name="pe-button"
       >
-        <div aria-hidden="true" className="absolute border border-[#004b72] border-solid inset-0 pointer-events-none rounded-[4px]" />
-        <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#004b72] text-[14px] whitespace-nowrap">
+        <div aria-hidden="true" className="absolute border border-[#004B72] border-solid inset-0 pointer-events-none rounded-[4px]" />
+        <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#004B72] text-[14px] whitespace-nowrap">
           <p className="leading-[20px]">Go to Activity Distribution →</p>
         </div>
       </Link>
@@ -301,8 +301,8 @@ function ButtonRow() {
         className="bg-white content-stretch flex gap-[8px] h-[32px] items-center justify-center px-[12px] relative rounded-[4px] shrink-0 cursor-pointer hover:bg-[#f5f5f5] transition-colors" 
         data-name="pe-button"
       >
-        <div aria-hidden="true" className="absolute border border-[rgba(0,8,48,0.27)] border-solid inset-0 pointer-events-none rounded-[4px]" />
-        <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#1c2024] text-[14px] whitespace-nowrap">
+        <div aria-hidden="true" className="absolute border border-[#B9BBC6] border-solid inset-0 pointer-events-none rounded-[4px]" />
+        <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#1C2024] text-[14px] whitespace-nowrap">
           <p className="leading-[20px]">Export</p>
         </div>
       </button>
@@ -314,7 +314,7 @@ function PePageHeader() {
   return (
     <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-name="pe-page-header">
       <div className="content-stretch flex flex-col gap-[12px] items-start py-[16px] relative shrink-0 w-full">
-        <div aria-hidden="true" className="absolute border-[#004b72] border-b-[3px] border-solid border-t-[3px] inset-0 pointer-events-none" />
+        <div aria-hidden="true" className="absolute border-[#004B72] border-b-[3px] border-solid border-t-[3px] inset-0 pointer-events-none" />
         <HeaderAndSubtitle />
         <SyncPointBreadcrumb items={[
           { label: 'Home', path: '/' },
@@ -329,10 +329,10 @@ function PePageHeader() {
 function HeaderAndSubtitle() {
   return (
     <div className="content-stretch flex flex-col gap-[4px] items-start relative shrink-0 w-full" data-name="header-and-subtitle">
-      <h1 className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[40px] not-italic text-[#1c2024] text-[32px]">
+      <h1 className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[40px] not-italic text-[#1C2024] text-[32px]">
         APM Distribution
       </h1>
-      <p className="font-['Inter:Regular',sans-serif] font-normal leading-[24px] not-italic text-[#60646c] text-[18px]">
+      <p className="font-['Inter:Regular',sans-serif] font-normal leading-[24px] not-italic text-[#60646C] text-[18px]">
         Enter the authorized values for each activity. Authorized values cannot exceed the control amount.
       </p>
     </div>
@@ -360,19 +360,19 @@ function FiltersRow() {
     <CollapsibleFilterSection highContrast>
       <div className="content-stretch flex gap-[12px] items-end relative shrink-0" data-name="left-filters">
         <div className="flex flex-col gap-[8px] items-start shrink-0">
-          <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1c2024] text-[14px]">Program</p>
+          <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1C2024] text-[14px]">Program</p>
           <SearchableFilterDropdown value={program} onChange={setProgram} options={['All Programs', 'PMS 420', 'PMS 495', 'PMS 501']} />
         </div>
         <div className="flex flex-col gap-[8px] items-start shrink-0">
-          <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1c2024] text-[14px]">Appropriation</p>
+          <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1C2024] text-[14px]">Appropriation</p>
           <SearchableFilterDropdown value={appropriation} onChange={setAppropriation} options={['All Appropriations', 'O&MN', 'RDTEN', 'OPN', 'SCN', 'WPN']} />
         </div>
         <div className="flex flex-col gap-[8px] items-start shrink-0">
-          <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1c2024] text-[14px]">Appropriation Year</p>
+          <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1C2024] text-[14px]">Appropriation Year</p>
           <SearchableFilterDropdown value={appropriationYear} onChange={setAppropriationYear} options={['All Appropriation Years', 'FY24', 'FY25', 'FY26', 'FY27']} />
         </div>
         <div className="flex flex-col gap-[8px] items-start shrink-0">
-          <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1c2024] text-[14px]">Funding Source</p>
+          <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1C2024] text-[14px]">Funding Source</p>
           <SearchableFilterDropdown value={fundingSource} onChange={setFundingSource} options={['All Funding Sources', '1B1B/C011B10-SO', '1B1B/C011B10-SX', '1B1B/C011B10-SR']} />
         </div>
         {/* Active Years / All Radio Toggle */}
@@ -389,12 +389,12 @@ function FiltersRow() {
                   </svg>
                 ) : (
                   <div className="w-full h-full rounded-full bg-[#f9f9fb] relative">
-                    <div aria-hidden="true" className="absolute border border-[rgba(0,6,46,0.2)] border-solid inset-0 pointer-events-none rounded-full" />
+                    <div aria-hidden="true" className="absolute border border-[#B9BBC6] border-solid inset-0 pointer-events-none rounded-full" />
                   </div>
                 )}
               </div>
             </div>
-            <span className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1c2024]">Active Years</span>
+            <span className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024]">Active Years</span>
           </label>
           <label className="flex items-center gap-[8px] cursor-pointer select-none">
             <input type="radio" name="yearFilter" value="all" checked={yearFilter === 'all'} onChange={() => setYearFilter('all')} className="sr-only" />
@@ -407,17 +407,17 @@ function FiltersRow() {
                   </svg>
                 ) : (
                   <div className="w-full h-full rounded-full bg-[#f9f9fb] relative">
-                    <div aria-hidden="true" className="absolute border border-[rgba(0,6,46,0.2)] border-solid inset-0 pointer-events-none rounded-full" />
+                    <div aria-hidden="true" className="absolute border border-[#B9BBC6] border-solid inset-0 pointer-events-none rounded-full" />
                   </div>
                 )}
               </div>
             </div>
-            <span className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1c2024]">All</span>
+            <span className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024]">All</span>
           </label>
         </div>
         <button 
           onClick={handleClearFilters}
-          className="bg-transparent border-none cursor-pointer h-[32px] flex items-center px-[12px] rounded-[4px] hover:bg-[rgba(0,75,114,0.06)] transition-colors outline-none focus-visible:ring-[3px] focus-visible:ring-[rgba(0,75,114,0.35)]"
+          className="bg-transparent border-none cursor-pointer h-[32px] flex items-center px-[12px] rounded-[4px] hover:bg-[rgba(0,75,114,0.06)] transition-colors outline-none focus-visible:ring-[3px] focus-visible:ring-[rgba(20,125,185,0.22)]"
           data-name="clear-filters-button"
           style={{ color: '#004B72' }}
         >
@@ -439,7 +439,7 @@ function KPICards() {
         value="$100M"
         detail="Last sync:"
         detailValue="13 Jan 2026 08:10 ET"
-        accentColor="#004b72"
+        accentColor="#004B72"
       />
       <KPICard
         label="Total"
@@ -447,7 +447,7 @@ function KPICards() {
         value="$100M"
         detail="Published + Effective:"
         detailValue="10 Jan 2026"
-        accentColor="#004b72"
+        accentColor="#004B72"
       />
       <KPICard
         label="Total"
@@ -455,7 +455,7 @@ function KPICards() {
         value="$12M"
         detail="BFM Unallocated"
         detailValue=""
-        accentColor="#004b72"
+        accentColor="#004B72"
       />
       <KPICard
         label="Total"
@@ -463,7 +463,7 @@ function KPICards() {
         value="$70M"
         detail="Includes pending adjustments"
         detailValue=""
-        accentColor="#004b72"
+        accentColor="#004B72"
       />
       <KPICard
         label="Total Remaining"
@@ -471,7 +471,7 @@ function KPICards() {
         value="$18M"
         detail="Available to Allocate"
         detailValue="4% Remaining"
-        accentColor="#004b72"
+        accentColor="#004B72"
         highlight
       />
     </div>
@@ -499,12 +499,12 @@ function KPICard({
   if (highlight) {
     return (
       <div className="content-stretch flex items-stretch relative rounded-[5px] shrink-0" style={{ minWidth: '185px' }}>
-        <div aria-hidden="true" className="absolute border border-[#e0e1e6] border-solid inset-0 pointer-events-none rounded-[5px]" />
+        <div aria-hidden="true" className="absolute border border-[#CDCED6] border-solid inset-0 pointer-events-none rounded-[5px]" />
         <div className="flex flex-row items-stretch self-stretch">
           <div className="h-full rounded-bl-[5px] rounded-tl-[5px] shrink-0 w-[12px]" style={{ backgroundColor: accentColor }} />
         </div>
         <div className="flex flex-1 w-full min-w-0 flex-col gap-[8px] items-start not-italic p-[24px] relative whitespace-pre-wrap">
-          <div className="font-['Inter:Bold',sans-serif] font-bold leading-[20px] relative shrink-0 text-[#60646c] text-[14px] w-full">
+          <div className="font-['Inter:Bold',sans-serif] font-bold leading-[20px] relative shrink-0 text-[#60646C] text-[14px] w-full">
             <p className="mb-0">Total</p>
             <p>Remaining</p>
           </div>
@@ -513,12 +513,12 @@ function KPICard({
           </p>
           <div className="mt-auto w-full">
             <div className="bg-[rgba(255,222,0,0.24)] flex gap-[4px] h-[28px] items-center px-[10px] rounded-[100px] shrink-0 w-fit">
-              <p className="font-['Inter:Bold',sans-serif] font-bold leading-[20px] text-[#ab6400] text-[14px] whitespace-nowrap">
+              <p className="font-['Inter:Bold',sans-serif] font-bold leading-[20px] text-[#AB6400] text-[14px] whitespace-nowrap">
                 {detail}
               </p>
             </div>
-            <div className="w-full border-t border-[#e0e1e6] mt-[16px] mb-[8px]" />
-            <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] relative shrink-0 text-[#60646c] text-[14px] w-full">
+            <div className="w-full border-t border-[#CDCED6] mt-[16px] mb-[8px]" />
+            <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] relative shrink-0 text-[#60646C] text-[14px] w-full">
               {detailValue}
             </p>
           </div>
@@ -530,12 +530,12 @@ function KPICard({
   // Regular KPI card treatment
   return (
     <div className="content-stretch flex items-stretch relative rounded-[5px] shrink-0" style={{ minWidth: '185px' }}>
-      <div aria-hidden="true" className="absolute border border-[#e0e1e6] border-solid inset-0 pointer-events-none rounded-[5px]" />
+      <div aria-hidden="true" className="absolute border border-[#CDCED6] border-solid inset-0 pointer-events-none rounded-[5px]" />
       <div className="flex flex-row items-stretch self-stretch">
         <div className="h-full rounded-bl-[5px] rounded-tl-[5px] shrink-0 w-[12px]" style={{ backgroundColor: accentColor }} />
       </div>
       <div className="flex flex-1 w-full min-w-0 flex-col gap-[8px] items-start not-italic p-[24px] relative whitespace-pre-wrap">
-        <div className="font-['Inter:Bold',sans-serif] font-bold leading-[20px] relative shrink-0 text-[#60646c] text-[14px] w-full">
+        <div className="font-['Inter:Bold',sans-serif] font-bold leading-[20px] relative shrink-0 text-[#60646C] text-[14px] w-full">
           {subtitle ? (
             <>
               <p className="mb-0">{label}</p>
@@ -549,8 +549,8 @@ function KPICard({
           {value}
         </p>
         <div className="mt-auto w-full">
-          <div className="w-full border-t border-[#e0e1e6] mt-[16px] mb-[8px]" />
-          <div className={`font-['Inter:Regular',sans-serif] font-normal leading-[20px] relative shrink-0 text-[#60646c] text-[14px] w-full`}>
+          <div className="w-full border-t border-[#CDCED6] mt-[16px] mb-[8px]" />
+          <div className={`font-['Inter:Regular',sans-serif] font-normal leading-[20px] relative shrink-0 text-[#60646C] text-[14px] w-full`}>
             {detailValue ? (
               <>
                 <p className="mb-0">{detail}</p>
@@ -577,16 +577,16 @@ function TableSection({
   return (
     <div className="content-stretch flex flex-col gap-0 items-start relative shrink-0 w-full" data-name="table-section">
       {/* Standardized Title Header — matches Dashboard / Activity Distribution / Funding Distribution / Funding Authorization / Reconciliation / APM Acceptance / G-Invoicing pattern */}
-      <div className="bg-[#F9F9FB] relative rounded-tl-[5px] rounded-tr-[5px] w-full border border-solid border-[#e0e1e6] border-b-0">
-        <div className="flex items-center px-[24px] py-[20px] w-full border-b-[2px] border-solid border-b-[#d0d1d6]">
+      <div className="bg-[#F9F9FB] relative rounded-tl-[5px] rounded-tr-[5px] w-full border border-solid border-[#CDCED6] border-b-0">
+        <div className="flex items-center px-[24px] py-[20px] w-full border-b-[2px] border-solid border-b-[#CDCED6]">
           <div className="flex items-center gap-[16px] shrink-0 flex-wrap">
             <p className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[24px] not-italic text-[#1C2024] text-[18px] whitespace-nowrap">
               Funding Source Authorizations
             </p>
             {/* Vertical divider */}
-            <div className="w-[1px] h-[24px] bg-[#e0e1e6] shrink-0" />
+            <div className="w-[1px] h-[24px] bg-[#CDCED6] shrink-0" />
             <div className="bg-white h-[32px] relative rounded-[4px] w-[268px]">
-              <div aria-hidden="true" className="absolute border border-[rgba(0,6,46,0.2)] border-solid inset-0 pointer-events-none rounded-[4px]" />
+              <div aria-hidden="true" className="absolute border border-[#B9BBC6] border-solid inset-0 pointer-events-none rounded-[4px]" />
               <div className="flex items-center size-full px-[4px]">
                 <div className="flex items-center justify-center shrink-0 px-[2px]">
                   <SearchIcon />
@@ -596,7 +596,7 @@ function TableSection({
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
                   placeholder="Search..."
-                  className="flex-1 bg-transparent border-none outline-none font-['Inter:Regular',sans-serif] font-normal leading-[20px] not-italic text-[#1c2024] text-[14px] placeholder:text-[#60646c] px-[4px]"
+                  className="flex-1 bg-transparent border-none outline-none font-['Inter:Regular',sans-serif] font-normal leading-[20px] not-italic text-[#1C2024] text-[14px] placeholder:text-[#60646C] px-[4px]"
                 />
               </div>
               <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_1.5px_2px_0px_rgba(0,0,0,0.1),inset_0px_1.5px_2px_0px_rgba(0,0,85,0.02)]" />
@@ -641,28 +641,28 @@ function DataTable({
 
   return (
     <div className="bg-white content-stretch flex flex-col items-stretch relative shrink-0 w-full min-w-0 rounded-bl-[5px] rounded-br-[5px]" data-name="table">
-      <div aria-hidden="true" className="absolute border-b border-l border-r border-[#e0e1e6] border-solid inset-0 pointer-events-none rounded-bl-[5px] rounded-br-[5px]" />
+      <div aria-hidden="true" className="absolute border-b border-l border-r border-[#CDCED6] border-solid inset-0 pointer-events-none rounded-bl-[5px] rounded-br-[5px]" />
       
       {/* Header Row */}
       <div 
-        className="bg-[#f9f9fb] border-t border-b border-l border-r border-[#e0e1e6] w-full grid"
+        className="bg-[#f9f9fb] border-t border-b border-l border-r border-[#CDCED6] w-full grid"
         style={{ gridTemplateColumns: '48px 1fr 1fr 1fr 1fr' }}
         data-name="table-header"
       >
         <div className="px-[12px] py-[12px] flex items-center justify-center min-w-0"></div>
-        <div className="px-[12px] py-[12px] flex items-center gap-[6px] min-w-0 cursor-pointer select-none hover:bg-[rgba(0,0,85,0.04)]" onClick={() => handleSort('apmPortfolio')} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSort('apmPortfolio'); } }}>
+        <div className="px-[12px] py-[12px] flex items-center gap-[6px] min-w-0 cursor-pointer select-none hover:bg-[#EAF0F6]" onClick={() => handleSort('apmPortfolio')} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSort('apmPortfolio'); } }}>
           <p className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[18px] text-[#1C2024] text-[13px] uppercase tracking-[0.5px] truncate">FUNDING SOURCE</p>
           <SortIndicator direction={getDirection('apmPortfolio')} inactiveColor="#1C2024" />
         </div>
-        <div className="px-[12px] py-[12px] flex items-center justify-end gap-[6px] min-w-0 pt-[12px] pr-[12px] pb-[12px] pl-[24px] cursor-pointer select-none hover:bg-[rgba(0,0,85,0.04)]" onClick={() => handleSort('approvedTasking')} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSort('approvedTasking'); } }}>
+        <div className="px-[12px] py-[12px] flex items-center justify-end gap-[6px] min-w-0 pt-[12px] pr-[12px] pb-[12px] pl-[24px] cursor-pointer select-none hover:bg-[#EAF0F6]" onClick={() => handleSort('approvedTasking')} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSort('approvedTasking'); } }}>
           <p className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[18px] text-[#1C2024] text-[13px] uppercase tracking-[0.5px] truncate">APPROVED TASKING</p>
           <SortIndicator direction={getDirection('approvedTasking')} inactiveColor="#1C2024" />
         </div>
-        <div className="px-[12px] py-[12px] flex items-center justify-end gap-[6px] min-w-0 cursor-pointer select-none hover:bg-[rgba(0,0,85,0.04)]" onClick={() => handleSort('onWorkPlan')} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSort('onWorkPlan'); } }}>
+        <div className="px-[12px] py-[12px] flex items-center justify-end gap-[6px] min-w-0 cursor-pointer select-none hover:bg-[#EAF0F6]" onClick={() => handleSort('onWorkPlan')} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSort('onWorkPlan'); } }}>
           <p className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[18px] text-[#1C2024] text-[13px] uppercase tracking-[0.5px] truncate">ON WORK PLAN</p>
           <SortIndicator direction={getDirection('onWorkPlan')} inactiveColor="#1C2024" />
         </div>
-        <div className="px-[12px] py-[12px] flex items-center justify-end gap-[6px] min-w-0 pt-[12px] pr-[12px] pb-[12px] pl-[0px] cursor-pointer select-none hover:bg-[rgba(0,0,85,0.04)]" onClick={() => handleSort('apmAuthorized')} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSort('apmAuthorized'); } }}>
+        <div className="px-[12px] py-[12px] flex items-center justify-end gap-[6px] min-w-0 pt-[12px] pr-[12px] pb-[12px] pl-[0px] cursor-pointer select-none hover:bg-[#EAF0F6]" onClick={() => handleSort('apmAuthorized')} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSort('apmAuthorized'); } }}>
           <p className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[18px] text-[#1C2024] text-[13px] uppercase tracking-[0.5px] truncate">APM AUTHORIZED</p>
           <SortIndicator direction={getDirection('apmAuthorized')} inactiveColor="#1C2024" />
         </div>
@@ -686,7 +686,7 @@ function APMRow({
   return (
     <div className="contents">
       <div 
-        className={`w-full border-b border-[#e0e1e6] hover:bg-[#fafafa] transition-colors grid ${isExpanded ? 'bg-white' : ''}`}
+        className={`w-full border-b border-[#CDCED6] hover:bg-[#fafafa] transition-colors grid ${isExpanded ? 'bg-white' : ''}`}
         style={{ gridTemplateColumns: '48px 1fr 1fr 1fr 1fr' }}
       >
         <div className="px-[12px] py-[12px] flex items-center justify-center min-w-0">
@@ -696,29 +696,29 @@ function APMRow({
             aria-label={isExpanded ? 'Collapse row' : 'Expand row'}
           >
             {isExpanded ? (
-              <ChevronDown className="size-[16px] text-[#1c2024]" />
+              <ChevronDown className="size-[16px] text-[#1C2024]" />
             ) : (
-              <ChevronRight className="size-[16px] text-[#1c2024] opacity-40" />
+              <ChevronRight className="size-[16px] text-[#1C2024] opacity-40" />
             )}
           </button>
         </div>
         <div className="px-[12px] py-[12px] flex items-center min-w-0">
-          <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] text-[#1c2024] truncate text-[14px]">
+          <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] text-[#1C2024] truncate text-[14px]">
             {row.apmPortfolio}
           </p>
         </div>
         <div className="px-[12px] py-[12px] flex items-center justify-end text-right min-w-0 pt-[12px] pr-[12px] pb-[12px] pl-[24px]">
-          <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] truncate text-[14px]">
+          <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1C2024] truncate text-[14px]">
             {row.approvedTasking}
           </p>
         </div>
         <div className="px-[12px] py-[12px] flex items-center justify-end text-right min-w-0">
-          <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] truncate text-[14px]">
+          <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1C2024] truncate text-[14px]">
             {row.onWorkPlan}
           </p>
         </div>
         <div className="px-[12px] py-[12px] flex items-center justify-end text-right min-w-0 pt-[12px] pr-[12px] pb-[12px] pl-[0px]">
-          <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] truncate text-[14px]">
+          <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1C2024] truncate text-[14px]">
             {row.apmAuthorized}
           </p>
         </div>
@@ -752,7 +752,7 @@ function ChildRowComponent({
       <div 
         className={`w-full hover:bg-[#fafafa] transition-colors grid ${
           'bg-white'
-        } border-b border-[#e0e1e6]`}
+        } border-b border-[#CDCED6]`}
         style={{ gridTemplateColumns: '48px 1fr 1fr 1fr 1fr' }}
       >
         {/* Chevron column */}
@@ -764,13 +764,13 @@ function ChildRowComponent({
               aria-label={isDetailExpanded ? 'Collapse detail panel' : 'Expand detail panel'}
             >
               {isDetailExpanded ? (
-                <ChevronDown className="size-[16px] text-[#1c2024]" size={16} />
+                <ChevronDown className="size-[16px] text-[#1C2024]" size={16} />
               ) : (
-                <ChevronRight className="size-[16px] text-[#1c2024] opacity-40" size={16} />
+                <ChevronRight className="size-[16px] text-[#1C2024] opacity-40" size={16} />
               )}
             </button>
           ) : (
-            <ChevronRight className="size-[16px] text-[#1c2024] opacity-40" size={16} />
+            <ChevronRight className="size-[16px] text-[#1C2024] opacity-40" size={16} />
           )}
         </div>
         {/* Activity name - clickable for expandable row, indented */}
@@ -778,28 +778,28 @@ function ChildRowComponent({
           {isExpandable ? (
             <button
               onClick={() => setIsDetailExpanded(!isDetailExpanded)}
-              className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px] truncate cursor-pointer hover:underline text-left"
+              className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1C2024] text-[14px] truncate cursor-pointer hover:underline text-left"
             >
               {child.name}
             </button>
           ) : (
-            <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px] truncate">
+            <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1C2024] text-[14px] truncate">
               {child.name}
             </p>
           )}
         </div>
         <div className="px-[12px] py-[12px] flex items-center justify-end text-right min-w-0 pt-[12px] pr-[12px] pb-[12px] pl-[24px]">
-          <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px] truncate">
+          <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1C2024] text-[14px] truncate">
             {child.approvedTasking}
           </p>
         </div>
         <div className="px-[12px] py-[12px] flex items-center justify-end text-right min-w-0">
-          <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px] truncate">
+          <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1C2024] text-[14px] truncate">
             {child.onWorkPlan}
           </p>
         </div>
         <div className="px-[12px] py-[12px] flex items-center justify-end text-right min-w-0 pt-[12px] pr-[12px] pb-[12px] pl-[0px]">
-          <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px] truncate">
+          <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1C2024] text-[14px] truncate">
             {child.apmAuthorized}
           </p>
         </div>
@@ -955,7 +955,7 @@ function DetailPanel({
   };
 
   return (
-    <div className="w-full border-b border-[#e0e1e6]" style={{ gridColumn: '1 / -1' }}>
+    <div className="w-full border-b border-[#CDCED6]" style={{ gridColumn: '1 / -1' }}>
       <div className="bg-white overflow-visible">
         {/* Activities Table */}
         <div className="bg-white overflow-visible">
@@ -974,9 +974,9 @@ function DetailPanel({
                   {/* Activity Row - uses contents to participate in parent grid */}
                   <div className="contents group/actrow">
                     {/* Empty spacer in chevron column for hierarchy indent */}
-                    <div className={`col-start-1 py-[12px] border-b border-[rgba(0,0,47,0.15)] ${needsTopBorder ? 'border-t border-t-[rgba(0,0,47,0.15)]' : ''} group-hover/actrow:bg-[#F9F9FB] transition-colors ${isExpanded ? 'bg-white' : ''}`} />
+                    <div className={`col-start-1 py-[12px] border-b border-[#CDCED6] ${needsTopBorder ? 'border-t border-t-[rgba(0,0,47,0.15)]' : ''} group-hover/actrow:bg-[#F5F7FA] transition-colors ${isExpanded ? 'bg-white' : ''}`} />
                     {/* Activity chevron + name combined in name column for deeper indent */}
-                    <div className={`pl-[12px] pr-[12px] py-[12px] border-b border-[rgba(0,0,47,0.15)] ${needsTopBorder ? 'border-t border-t-[rgba(0,0,47,0.15)]' : ''} group-hover/actrow:bg-[#F9F9FB] transition-colors flex items-center gap-[8px] ${isExpanded ? 'bg-white' : ''}`}>
+                    <div className={`pl-[12px] pr-[12px] py-[12px] border-b border-[#CDCED6] ${needsTopBorder ? 'border-t border-t-[rgba(0,0,47,0.15)]' : ''} group-hover/actrow:bg-[#F5F7FA] transition-colors flex items-center gap-[8px] ${isExpanded ? 'bg-white' : ''}`}>
                       {isExpandable ? (
                         <button
                           onClick={() => toggleActivity(activity.id)}
@@ -984,49 +984,49 @@ function DetailPanel({
                           aria-label={isExpanded ? 'Collapse activity' : 'Expand activity'}
                         >
                           {isExpanded ? (
-                            <ChevronDown className="size-[16px] text-[#1c2024]" />
+                            <ChevronDown className="size-[16px] text-[#1C2024]" />
                           ) : (
-                            <ChevronRight className="size-[16px] text-[#1c2024] opacity-40" />
+                            <ChevronRight className="size-[16px] text-[#1C2024] opacity-40" />
                           )}
                         </button>
                       ) : (
                         <span className="shrink-0 flex items-center justify-center">
-                          <ChevronRight className="size-[16px] text-[#1c2024] opacity-40" />
+                          <ChevronRight className="size-[16px] text-[#1C2024] opacity-40" />
                         </span>
                       )}
                       {isExpandable ? (
                         <button
                           onClick={() => toggleActivity(activity.id)}
-                          className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] text-[#1c2024] text-[14px] truncate cursor-pointer hover:underline text-left"
+                          className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] text-[#1C2024] text-[14px] truncate cursor-pointer hover:underline text-left"
                           title={`Activity: ${activity.name}`}
                         >
                           {activity.name}
                         </button>
                       ) : (
                         <p 
-                          className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] text-[#1c2024] text-[14px] truncate"
+                          className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] text-[#1C2024] text-[14px] truncate"
                           title={`Activity: ${activity.name}`}
                         >
                           {activity.name}
                         </p>
                       )}
                     </div>
-                    <div className={`px-[12px] py-[12px] border-b border-[rgba(0,0,47,0.15)] ${needsTopBorder ? 'border-t border-t-[rgba(0,0,47,0.15)]' : ''} group-hover/actrow:bg-[#F9F9FB] transition-colors flex items-center justify-end text-right ${isExpanded ? 'bg-white' : ''}`}>
-                      <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px]">
+                    <div className={`px-[12px] py-[12px] border-b border-[#CDCED6] ${needsTopBorder ? 'border-t border-t-[rgba(0,0,47,0.15)]' : ''} group-hover/actrow:bg-[#F5F7FA] transition-colors flex items-center justify-end text-right ${isExpanded ? 'bg-white' : ''}`}>
+                      <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1C2024] text-[14px]">
                         {activity.approvedTasking}
                       </p>
                     </div>
-                    <div className={`px-[12px] py-[12px] border-b border-[rgba(0,0,47,0.15)] ${needsTopBorder ? 'border-t border-t-[rgba(0,0,47,0.15)]' : ''} group-hover/actrow:bg-[#F9F9FB] transition-colors flex items-center justify-end text-right ${isExpanded ? 'bg-white' : ''}`}>
-                      <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px]">
+                    <div className={`px-[12px] py-[12px] border-b border-[#CDCED6] ${needsTopBorder ? 'border-t border-t-[rgba(0,0,47,0.15)]' : ''} group-hover/actrow:bg-[#F5F7FA] transition-colors flex items-center justify-end text-right ${isExpanded ? 'bg-white' : ''}`}>
+                      <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1C2024] text-[14px]">
                         {activity.onWorkPlan}
                       </p>
                     </div>
-                    <div className={`px-[12px] py-[12px] border-b border-[rgba(0,0,47,0.15)] ${needsTopBorder ? 'border-t border-t-[rgba(0,0,47,0.15)]' : ''} group-hover/actrow:bg-[#F9F9FB] transition-colors flex items-center justify-end ${isExpanded ? 'bg-white' : ''}`}>
+                    <div className={`px-[12px] py-[12px] border-b border-[#CDCED6] ${needsTopBorder ? 'border-t border-t-[rgba(0,0,47,0.15)]' : ''} group-hover/actrow:bg-[#F5F7FA] transition-colors flex items-center justify-end ${isExpanded ? 'bg-white' : ''}`}>
                       <input
                         type="text"
                         value={activity.apmAuthorized}
                         onChange={(e) => handleActivityValueChange(activity.id, e.target.value)}
-                        className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px] w-[120px] text-right px-[4px] py-[2px] border border-[#e0e1e6] rounded-[3px]"
+                        className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1C2024] text-[14px] w-[120px] text-right px-[4px] py-[2px] border border-[#CDCED6] rounded-[3px]"
                       />
                     </div>
                   </div>
@@ -1034,10 +1034,10 @@ function DetailPanel({
                   {/* Expanded sub-table - only for NSWC PC */}
                   {isExpandable && isExpanded && activity.subActivities && (
                     <div className="contents">
-                      <div className="col-span-5 bg-[rgba(20,125,185,0.09)] border-l-[6px] border-l-[#147db9] overflow-visible ml-[48px]" style={{ gridColumn: '1 / -1' }}>
+                      <div className="col-span-5 bg-[#E8F3F9] border-l-[6px] border-l-[#147DB9] overflow-visible ml-[48px]" style={{ gridColumn: '1 / -1' }}>
                         <div className="pt-[24px] pr-[16px] pb-[16px] pl-[16px] overflow-visible">
                           {/* Nested table for sub-activities */}
-                          <div className="bg-white rounded-[4px] border border-[rgba(0,0,47,0.15)] overflow-visible">
+                          <div className="bg-white rounded-[4px] border border-[#CDCED6] overflow-visible">
                             {/* Nested table header */}
                             <div
                               className="grid"
@@ -1046,38 +1046,38 @@ function DetailPanel({
                                 backgroundColor: '#F9F9FB',
                               }}
                             >
-                              <div className="px-[12px] py-[9px] border-b border-[rgba(0,0,47,0.15)]">
+                              <div className="px-[12px] py-[9px] border-b border-[#CDCED6]">
                                 {/* Empty chevron column */}
                               </div>
-                              <div className="px-[12px] py-[9px] border-b border-[rgba(0,0,47,0.15)]">
+                              <div className="px-[12px] py-[9px] border-b border-[#CDCED6]">
                                 <span className="font-['Inter:Semi_Bold',sans-serif] font-semibold text-[13px] leading-[18px] text-[#1C2024] uppercase tracking-[0.5px]">
                                   INC-ID
                                 </span>
                               </div>
-                              <div className="px-[12px] py-[9px] border-b border-[rgba(0,0,47,0.15)]">
+                              <div className="px-[12px] py-[9px] border-b border-[#CDCED6]">
                                 <span className="font-['Inter:Semi_Bold',sans-serif] font-semibold text-[13px] leading-[18px] text-[#1C2024] uppercase tracking-[0.5px]">
                                   PURPOSE
                                 </span>
                               </div>
-                              <div className="px-[12px] py-[9px] border-b border-[rgba(0,0,47,0.15)]">
+                              <div className="px-[12px] py-[9px] border-b border-[#CDCED6]">
                                 <span className="font-['Inter:Semi_Bold',sans-serif] font-semibold text-[13px] leading-[18px] text-[#1C2024] uppercase tracking-[0.5px]">
                                   NEED DATE
                                 </span>
                               </div>
-                              <div className="px-[12px] py-[9px] border-b border-[rgba(0,0,47,0.15)]">
+                              <div className="px-[12px] py-[9px] border-b border-[#CDCED6]">
                                 <span className="font-['Inter:Semi_Bold',sans-serif] font-semibold text-[13px] leading-[18px] text-[#1C2024] uppercase tracking-[0.5px]">
                                   STATUS
                                 </span>
                               </div>
-                              <div className="px-[12px] py-[9px] border-b border-[rgba(0,0,47,0.15)] text-right">
+                              <div className="px-[12px] py-[9px] border-b border-[#CDCED6] text-right">
                                 <span className="font-['Inter:Semi_Bold',sans-serif] font-semibold text-[13px] leading-[18px] text-[#1C2024] uppercase tracking-[0.5px]">
                                   AMOUNT
                                 </span>
                               </div>
-                              <div className="px-[12px] py-[9px] border-b border-[rgba(0,0,47,0.15)]">
+                              <div className="px-[12px] py-[9px] border-b border-[#CDCED6]">
                                 {/* Empty spacer column */}
                               </div>
-                              <div className="px-[12px] py-[9px] border-b border-[rgba(0,0,47,0.15)]">
+                              <div className="px-[12px] py-[9px] border-b border-[#CDCED6]">
                                 {/* Empty actions column header */}
                               </div>
                             </div>
@@ -1092,26 +1092,26 @@ function DetailPanel({
                               {activity.subActivities.map((subActivity) => (
                                 <div key={subActivity.id} className="contents group/nested">
                                   {/* Empty chevron column */}
-                                  <div className="px-[12px] py-[12px] border-b border-[rgba(0,0,47,0.15)] bg-white group-hover/nested:bg-[rgba(0,0,85,0.02)]">
+                                  <div className="px-[12px] py-[12px] border-b border-[#CDCED6] bg-white group-hover/nested:bg-[#F5F7FA]">
                                     {/* Empty */}
                                   </div>
 
                                   {/* Sub-Activity Name */}
-                                  <div className="px-[12px] py-[12px] border-b border-[rgba(0,0,47,0.15)] bg-white group-hover/nested:bg-[rgba(0,0,85,0.02)] flex items-center">
+                                  <div className="px-[12px] py-[12px] border-b border-[#CDCED6] bg-white group-hover/nested:bg-[#F5F7FA] flex items-center">
                                     <span className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024]">
                                       {subActivity.name}
                                     </span>
                                   </div>
 
                                   {/* Approved Tasking */}
-                                  <div className="px-[12px] py-[12px] border-b border-[rgba(0,0,47,0.15)] bg-white group-hover/nested:bg-[rgba(0,0,85,0.02)] flex items-center">
+                                  <div className="px-[12px] py-[12px] border-b border-[#CDCED6] bg-white group-hover/nested:bg-[#F5F7FA] flex items-center">
                                     <span className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024]">
                                       {subActivity.approvedTasking}
                                     </span>
                                   </div>
 
                                   {/* On Work Plan */}
-                                  <div className="px-[12px] py-[12px] border-b border-[rgba(0,0,47,0.15)] bg-white group-hover/nested:bg-[rgba(0,0,85,0.02)] flex items-center">
+                                  <div className="px-[12px] py-[12px] border-b border-[#CDCED6] bg-white group-hover/nested:bg-[#F5F7FA] flex items-center">
                                     <div className="flex flex-col items-start">
                                       <span className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024]">
                                         {subActivity.onWorkPlan.split(' DC: ')[0]}
@@ -1123,26 +1123,26 @@ function DetailPanel({
                                   </div>
 
                                   {/* APM Authorized */}
-                                  <div className="px-[12px] py-[12px] border-b border-[rgba(0,0,47,0.15)] bg-white group-hover/nested:bg-[rgba(0,0,85,0.02)] flex items-center">
+                                  <div className="px-[12px] py-[12px] border-b border-[#CDCED6] bg-white group-hover/nested:bg-[#F5F7FA] flex items-center">
                                     <span className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024]">
                                       {subActivity.apmAuthorized}
                                     </span>
                                   </div>
 
                                   {/* Amount */}
-                                  <div className="px-[12px] py-[12px] border-b border-[rgba(0,0,47,0.15)] bg-white group-hover/nested:bg-[rgba(0,0,85,0.02)] flex items-center justify-end text-right">
+                                  <div className="px-[12px] py-[12px] border-b border-[#CDCED6] bg-white group-hover/nested:bg-[#F5F7FA] flex items-center justify-end text-right">
                                     <span className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024]">
                                       {subActivity.amount}
                                     </span>
                                   </div>
 
                                   {/* Empty spacer column */}
-                                  <div className="px-[12px] py-[12px] border-b border-[rgba(0,0,47,0.15)] bg-white group-hover/nested:bg-[rgba(0,0,85,0.02)]">
+                                  <div className="px-[12px] py-[12px] border-b border-[#CDCED6] bg-white group-hover/nested:bg-[#F5F7FA]">
                                     {/* Empty */}
                                   </div>
 
                                   {/* Kebab actions column */}
-                                  <div className="px-[12px] py-[12px] border-b border-[rgba(0,0,47,0.15)] bg-white group-hover/nested:bg-[rgba(0,0,85,0.02)] flex items-center justify-center">
+                                  <div className="px-[12px] py-[12px] border-b border-[#CDCED6] bg-white group-hover/nested:bg-[#F5F7FA] flex items-center justify-center">
                                     <div className="relative">
                                       <button 
                                         onClick={() => setOpenMenuId(openMenuId === subActivity.id ? null : subActivity.id)}
@@ -1156,17 +1156,17 @@ function DetailPanel({
                                             className="fixed inset-0 z-[100]"
                                             onClick={() => setOpenMenuId(null)}
                                           />
-                                          <div className="absolute right-0 top-full mt-[4px] z-[101] bg-white rounded-[8px] p-[8px] min-w-[200px] shadow-[0px_12px_32px_-16px_rgba(0,9,50,0.12),0px_12px_60px_0px_rgba(0,0,0,0.15)] border border-[rgba(0,0,51,0.06)]">
+                                          <div className="absolute right-0 top-full mt-[4px] z-[101] bg-white rounded-[8px] p-[8px] min-w-[200px] shadow-[0px_12px_32px_-16px_rgba(0,9,50,0.12),0px_12px_60px_0px_rgba(0,0,0,0.15)] border border-[#CDCED6]">
                                             {subActivity.apmAuthorized === 'Completed' ? (
                                               <button
                                                 onClick={() => {
                                                   setOpenMenuId(null);
                                                   // View Increment action
                                                 }}
-                                                className="w-full bg-white hover:bg-[rgba(0,0,85,0.02)] h-[32px] rounded-[4px] flex items-center gap-[8px] px-[12px] transition-colors"
+                                                className="w-full bg-white hover:bg-[#F5F7FA] h-[32px] rounded-[4px] flex items-center gap-[8px] px-[12px] transition-colors"
                                               >
                                                 <PeEye />
-                                                <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px]">
+                                                <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1C2024] text-[14px]">
                                                   View Increment
                                                 </p>
                                               </button>
@@ -1177,10 +1177,10 @@ function DetailPanel({
                                                     setOpenMenuId(null);
                                                     // View Increment action
                                                   }}
-                                                  className="w-full bg-white hover:bg-[rgba(0,0,85,0.02)] h-[32px] rounded-[4px] flex items-center gap-[8px] px-[12px] transition-colors mb-[8px]"
+                                                  className="w-full bg-white hover:bg-[#F5F7FA] h-[32px] rounded-[4px] flex items-center gap-[8px] px-[12px] transition-colors mb-[8px]"
                                                 >
                                                   <PeEye />
-                                                  <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px]">
+                                                  <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1C2024] text-[14px]">
                                                     View Increment
                                                   </p>
                                                 </button>
@@ -1189,10 +1189,10 @@ function DetailPanel({
                                                     setOpenMenuId(null);
                                                     // Recall Increment action
                                                   }}
-                                                  className="w-full bg-white hover:bg-[rgba(0,0,85,0.02)] h-[32px] rounded-[4px] flex items-center gap-[8px] px-[12px] transition-colors mb-[8px]"
+                                                  className="w-full bg-white hover:bg-[#F5F7FA] h-[32px] rounded-[4px] flex items-center gap-[8px] px-[12px] transition-colors mb-[8px]"
                                                 >
                                                   <PeUndo />
-                                                  <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px]">
+                                                  <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1C2024] text-[14px]">
                                                     Recall Increment
                                                   </p>
                                                 </button>
@@ -1201,10 +1201,10 @@ function DetailPanel({
                                                     setOpenMenuId(null);
                                                     // Cancel Increment action
                                                   }}
-                                                  className="w-full bg-white hover:bg-[rgba(0,0,85,0.02)] h-[32px] rounded-[4px] flex items-center gap-[8px] px-[12px] transition-colors"
+                                                  className="w-full bg-white hover:bg-[#F5F7FA] h-[32px] rounded-[4px] flex items-center gap-[8px] px-[12px] transition-colors"
                                                 >
                                                   <PeDelete />
-                                                  <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px]">
+                                                  <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1C2024] text-[14px]">
                                                     Cancel Increment
                                                   </p>
                                                 </button>
@@ -1224,26 +1224,26 @@ function DetailPanel({
                                 return (
                                 <div key={newRow.id} className="contents group/nested">
                                   {/* Empty chevron column - with left accent border for active draft */}
-                                  <div className={`px-[12px] py-[12px] border-b border-[rgba(0,0,47,0.15)] ${isActiveDraft ? 'bg-[rgba(20,125,185,0.03)] border-l-[3px] border-l-[#147DB9]' : 'bg-white'} group-hover/nested:bg-[rgba(0,0,85,0.02)]`}>
+                                  <div className={`px-[12px] py-[12px] border-b border-[#CDCED6] ${isActiveDraft ? 'bg-[#F3F8FC] border-l-[3px] border-l-[#147DB9]' : 'bg-white'} group-hover/nested:bg-[#F5F7FA]`}>
                                     {/* Empty */}
                                   </div>
 
                                   {/* INC-ID - Read-only */}
-                                  <div className={`px-[12px] py-[12px] border-b border-[rgba(0,0,47,0.15)] ${isActiveDraft ? 'bg-[rgba(20,125,185,0.03)]' : 'bg-white'} group-hover/nested:bg-[rgba(0,0,85,0.02)] flex items-center`}>
+                                  <div className={`px-[12px] py-[12px] border-b border-[#CDCED6] ${isActiveDraft ? 'bg-[#F3F8FC]' : 'bg-white'} group-hover/nested:bg-[#F5F7FA] flex items-center`}>
                                     <span className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024]">
                                       {newRow.incId}
                                     </span>
                                   </div>
 
                                   {/* Purpose - Editable or Read-only */}
-                                  <div className={`px-[12px] py-[12px] border-b border-[rgba(0,0,47,0.15)] ${isActiveDraft ? 'bg-[rgba(20,125,185,0.03)]' : 'bg-white'} group-hover/nested:bg-[rgba(0,0,85,0.02)]`}>
+                                  <div className={`px-[12px] py-[12px] border-b border-[#CDCED6] ${isActiveDraft ? 'bg-[#F3F8FC]' : 'bg-white'} group-hover/nested:bg-[#F5F7FA]`}>
                                     {isActiveDraft ? (
                                       <div className="flex flex-col gap-[4px]">
                                         <input
                                           type="text"
                                           value={newRow.purpose}
                                           onChange={(e) => handleNewRowChange(activity.id, newRow.id, 'purpose', e.target.value)}
-                                          className={`w-full bg-white font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] border ${validationErrors[activity.id]?.purpose ? 'border-[#C1292E]' : 'border-[rgba(0,0,47,0.15)]'} rounded-[4px] px-[8px] py-[4px] focus:outline-none focus:ring-2 focus:ring-[#004b72]`}
+                                          className={`w-full bg-white font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] border ${validationErrors[activity.id]?.purpose ? 'border-[#C1292E]' : 'border-[#CDCED6]'} rounded-[4px] px-[8px] py-[4px] focus:outline-none focus:ring-2 focus:ring-[rgba(20,125,185,0.2)]`}
                                           placeholder=""
                                         />
                                         {validationErrors[activity.id]?.purpose && (
@@ -1260,28 +1260,28 @@ function DetailPanel({
                                   </div>
 
                                   {/* Need Date - Empty */}
-                                  <div className={`px-[12px] py-[12px] border-b border-[rgba(0,0,47,0.15)] ${isActiveDraft ? 'bg-[rgba(20,125,185,0.03)]' : 'bg-white'} group-hover/nested:bg-[rgba(0,0,85,0.02)] flex items-center`}>
+                                  <div className={`px-[12px] py-[12px] border-b border-[#CDCED6] ${isActiveDraft ? 'bg-[#F3F8FC]' : 'bg-white'} group-hover/nested:bg-[#F5F7FA] flex items-center`}>
                                     <span className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024]">
                                       {newRow.needDate}
                                     </span>
                                   </div>
 
                                   {/* Status - Read-only (defaults to "APM Distribution") */}
-                                  <div className={`px-[12px] py-[12px] border-b border-[rgba(0,0,47,0.15)] ${isActiveDraft ? 'bg-[rgba(20,125,185,0.03)]' : 'bg-white'} group-hover/nested:bg-[rgba(0,0,85,0.02)] flex items-center`}>
+                                  <div className={`px-[12px] py-[12px] border-b border-[#CDCED6] ${isActiveDraft ? 'bg-[#F3F8FC]' : 'bg-white'} group-hover/nested:bg-[#F5F7FA] flex items-center`}>
                                     <span className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024]">
                                       {newRow.status}
                                     </span>
                                   </div>
 
                                   {/* Amount - Editable or Read-only */}
-                                  <div className={`px-[12px] py-[12px] border-b border-[rgba(0,0,47,0.15)] ${isActiveDraft ? 'bg-[rgba(20,125,185,0.03)]' : 'bg-white'} group-hover/nested:bg-[rgba(0,0,85,0.02)]`}>
+                                  <div className={`px-[12px] py-[12px] border-b border-[#CDCED6] ${isActiveDraft ? 'bg-[#F3F8FC]' : 'bg-white'} group-hover/nested:bg-[#F5F7FA]`}>
                                     {isActiveDraft ? (
                                       <div className="flex flex-col gap-[4px]">
                                         <input
                                           type="text"
                                           value={newRow.amount}
                                           onChange={(e) => handleNewRowChange(activity.id, newRow.id, 'amount', e.target.value)}
-                                          className={`w-full bg-white font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] border ${validationErrors[activity.id]?.amount ? 'border-[#C1292E]' : 'border-[rgba(0,0,47,0.15)]'} rounded-[4px] px-[8px] py-[4px] focus:outline-none focus:ring-2 focus:ring-[#004b72]`}
+                                          className={`w-full bg-white font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] border ${validationErrors[activity.id]?.amount ? 'border-[#C1292E]' : 'border-[#CDCED6]'} rounded-[4px] px-[8px] py-[4px] focus:outline-none focus:ring-2 focus:ring-[rgba(20,125,185,0.2)]`}
                                           placeholder=""
                                         />
                                         {validationErrors[activity.id]?.amount && (
@@ -1298,12 +1298,12 @@ function DetailPanel({
                                   </div>
 
                                   {/* Empty spacer column */}
-                                  <div className={`px-[12px] py-[12px] border-b border-[rgba(0,0,47,0.15)] ${isActiveDraft ? 'bg-[rgba(20,125,185,0.03)]' : 'bg-white'} group-hover/nested:bg-[rgba(0,0,85,0.02)]`}>
+                                  <div className={`px-[12px] py-[12px] border-b border-[#CDCED6] ${isActiveDraft ? 'bg-[#F3F8FC]' : 'bg-white'} group-hover/nested:bg-[#F5F7FA]`}>
                                     {/* Empty */}
                                   </div>
 
                                   {/* Kebab actions column for new rows - shows after save */}
-                                  <div className={`px-[12px] py-[12px] border-b border-[rgba(0,0,47,0.15)] ${isActiveDraft ? 'bg-[rgba(20,125,185,0.03)]' : 'bg-white'} group-hover/nested:bg-[rgba(0,0,85,0.02)] flex items-center justify-center`}>
+                                  <div className={`px-[12px] py-[12px] border-b border-[#CDCED6] ${isActiveDraft ? 'bg-[#F3F8FC]' : 'bg-white'} group-hover/nested:bg-[#F5F7FA] flex items-center justify-center`}>
                                     {!isActiveDraft && (
                                       <div className="relative">
                                         <button 
@@ -1318,17 +1318,17 @@ function DetailPanel({
                                               className="fixed inset-0 z-[100]"
                                               onClick={() => setOpenMenuId(null)}
                                             />
-                                            <div className="absolute right-0 top-full mt-[4px] z-[101] bg-white rounded-[8px] p-[8px] min-w-[200px] shadow-[0px_12px_32px_-16px_rgba(0,9,50,0.12),0px_12px_60px_0px_rgba(0,0,0,0.15)] border border-[rgba(0,0,51,0.06)]">
+                                            <div className="absolute right-0 top-full mt-[4px] z-[101] bg-white rounded-[8px] p-[8px] min-w-[200px] shadow-[0px_12px_32px_-16px_rgba(0,9,50,0.12),0px_12px_60px_0px_rgba(0,0,0,0.15)] border border-[#CDCED6]">
                                               {newRow.status === 'Completed' ? (
                                                 <button
                                                   onClick={() => {
                                                     setOpenMenuId(null);
                                                     // View Increment action
                                                   }}
-                                                  className="w-full bg-white hover:bg-[rgba(0,0,85,0.02)] h-[32px] rounded-[4px] flex items-center gap-[8px] px-[12px] transition-colors"
+                                                  className="w-full bg-white hover:bg-[#F5F7FA] h-[32px] rounded-[4px] flex items-center gap-[8px] px-[12px] transition-colors"
                                                 >
                                                   <PeEye />
-                                                  <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px]">
+                                                  <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1C2024] text-[14px]">
                                                     View Increment
                                                   </p>
                                                 </button>
@@ -1339,10 +1339,10 @@ function DetailPanel({
                                                       setOpenMenuId(null);
                                                       // View Increment action
                                                     }}
-                                                    className="w-full bg-white hover:bg-[rgba(0,0,85,0.02)] h-[32px] rounded-[4px] flex items-center gap-[8px] px-[12px] transition-colors mb-[8px]"
+                                                    className="w-full bg-white hover:bg-[#F5F7FA] h-[32px] rounded-[4px] flex items-center gap-[8px] px-[12px] transition-colors mb-[8px]"
                                                   >
                                                     <PeEye />
-                                                    <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px]">
+                                                    <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1C2024] text-[14px]">
                                                       View Increment
                                                     </p>
                                                   </button>
@@ -1351,10 +1351,10 @@ function DetailPanel({
                                                       setOpenMenuId(null);
                                                       // Recall Increment action
                                                     }}
-                                                    className="w-full bg-white hover:bg-[rgba(0,0,85,0.02)] h-[32px] rounded-[4px] flex items-center gap-[8px] px-[12px] transition-colors mb-[8px]"
+                                                    className="w-full bg-white hover:bg-[#F5F7FA] h-[32px] rounded-[4px] flex items-center gap-[8px] px-[12px] transition-colors mb-[8px]"
                                                   >
                                                     <PeUndo />
-                                                    <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px]">
+                                                    <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1C2024] text-[14px]">
                                                       Recall Increment
                                                     </p>
                                                   </button>
@@ -1363,10 +1363,10 @@ function DetailPanel({
                                                       setOpenMenuId(null);
                                                       // Cancel Increment action
                                                     }}
-                                                    className="w-full bg-white hover:bg-[rgba(0,0,85,0.02)] h-[32px] rounded-[4px] flex items-center gap-[8px] px-[12px] transition-colors"
+                                                    className="w-full bg-white hover:bg-[#F5F7FA] h-[32px] rounded-[4px] flex items-center gap-[8px] px-[12px] transition-colors"
                                                   >
                                                     <PeDelete />
-                                                    <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px]">
+                                                    <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1C2024] text-[14px]">
                                                       Cancel Increment
                                                     </p>
                                                   </button>
@@ -1389,7 +1389,7 @@ function DetailPanel({
                             {!draftRowId[activity.id] ? (
                               <button 
                                 onClick={() => handleAddNewRow(activity.id)}
-                                className="bg-[#004b72] flex gap-[8px] h-[32px] items-center justify-center px-[12px] rounded-[4px] cursor-pointer hover:bg-[#003d5c] transition-colors"
+                                className="bg-[#004B72] flex gap-[8px] h-[32px] items-center justify-center px-[12px] rounded-[4px] cursor-pointer hover:bg-[#003d5c] transition-colors"
                               >
                                 <svg className="shrink-0 size-[16px]" fill="none" viewBox="0 0 16 16">
                                   <path d="M5.33333 8H10.6667M8 5.33333V10.6667M3.33333 2H12.6667C13.403 2 14 2.59695 14 3.33333V12.6667C14 13.403 13.403 14 12.6667 14H3.33333C2.59695 14 2 13.403 2 12.6667V3.33333C2 2.59695 2.59695 2 3.33333 2Z" stroke="white" strokeLinecap="round" strokeLinejoin="round" />
@@ -1413,9 +1413,9 @@ function DetailPanel({
                                 {/* Save Button - Secondary Style */}
                                 <button 
                                   onClick={() => handleSave(activity.id)}
-                                  className="bg-white border border-[#004b72] flex gap-[8px] h-[32px] items-center justify-center px-[12px] rounded-[4px] cursor-pointer hover:bg-[#f5f5f5] transition-colors"
+                                  className="bg-white border border-[#004B72] flex gap-[8px] h-[32px] items-center justify-center px-[12px] rounded-[4px] cursor-pointer hover:bg-[#f5f5f5] transition-colors"
                                 >
-                                  <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[14px] text-[#004b72] whitespace-nowrap">
+                                  <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[14px] text-[#004B72] whitespace-nowrap">
                                     <p className="leading-[20px]">Save</p>
                                   </div>
                                 </button>
@@ -1423,7 +1423,7 @@ function DetailPanel({
                                 {/* Save and Publish Button - Primary Style */}
                                 <button 
                                   onClick={() => handleSave(activity.id)}
-                                  className="bg-[#004b72] flex gap-[8px] h-[32px] items-center justify-center px-[12px] rounded-[4px] cursor-pointer hover:bg-[#003d5c] transition-colors"
+                                  className="bg-[#004B72] flex gap-[8px] h-[32px] items-center justify-center px-[12px] rounded-[4px] cursor-pointer hover:bg-[#003d5c] transition-colors"
                                 >
                                   <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[14px] text-white whitespace-nowrap">
                                     <p className="leading-[20px]">Save and Publish</p>
@@ -1462,16 +1462,16 @@ function MetricCard({
   isLast?: boolean;
 }) {
   return (
-    <div className={`flex flex-col gap-[8px] p-[12px] ${!isLast ? 'border-r border-[#e0e1e6]' : ''} ${isFirst ? 'rounded-bl-[5px] rounded-tl-[5px]' : ''} ${isLast ? 'rounded-br-[5px] rounded-tr-[5px]' : ''}`}>
-      <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] text-[#60646c] text-[14px]">
+    <div className={`flex flex-col gap-[8px] p-[12px] ${!isLast ? 'border-r border-[#CDCED6]' : ''} ${isFirst ? 'rounded-bl-[5px] rounded-tl-[5px]' : ''} ${isLast ? 'rounded-br-[5px] rounded-tr-[5px]' : ''}`}>
+      <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] text-[#60646C] text-[14px]">
         {label}
       </p>
       <div className="flex items-center justify-start p-[4px]">
-        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[26px] text-[#1c2024] text-[18px] tracking-[-0.04px]">
+        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[26px] text-[#1C2024] text-[18px] tracking-[-0.04px]">
           {value}
         </p>
       </div>
-      <div className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#60646c] text-[14px]">
+      <div className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#60646C] text-[14px]">
         <p className="mb-0">{detail}</p>
         <p>{detailValue}</p>
       </div>
@@ -1485,7 +1485,7 @@ function PeClockFading() {
     <div className="relative shrink-0 size-[16px]" data-name="pe-clock-fading">
       <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 16 16">
         <g clipPath="url(#clip0_2004_29472)" id="pe-clock-fading">
-          <path d="M8 1.33333C9.29343 1.3331 10.559 1.70912 11.6425 2.41557C12.7259 3.12202 13.5805 4.12839 14.102 5.31202C14.6235 6.49566 14.7894 7.80544 14.5795 9.08172C14.3697 10.358 13.7931 11.5457 12.92 12.5M8 4V8L10.6667 9.33333M1.66667 5.91667C1.45423 6.56244 1.34182 7.2369 1.33333 7.91667M1.88664 10.6667C2.26097 11.5279 2.81303 12.3003 3.50664 12.9333M3.09066 3.48995C3.27668 3.28744 3.47506 3.09663 3.68466 2.91862M5.7627 14.28C7.42516 14.8723 9.25463 14.7812 10.85 14.0267" id="Vector" stroke="#ab6400" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M8 1.33333C9.29343 1.3331 10.559 1.70912 11.6425 2.41557C12.7259 3.12202 13.5805 4.12839 14.102 5.31202C14.6235 6.49566 14.7894 7.80544 14.5795 9.08172C14.3697 10.358 13.7931 11.5457 12.92 12.5M8 4V8L10.6667 9.33333M1.66667 5.91667C1.45423 6.56244 1.34182 7.2369 1.33333 7.91667M1.88664 10.6667C2.26097 11.5279 2.81303 12.3003 3.50664 12.9333M3.09066 3.48995C3.27668 3.28744 3.47506 3.09663 3.68466 2.91862M5.7627 14.28C7.42516 14.8723 9.25463 14.7812 10.85 14.0267" id="Vector" stroke="#AB6400" strokeLinecap="round" strokeLinejoin="round" />
         </g>
         <defs>
           <clipPath id="clip0_2004_29472">
@@ -1501,7 +1501,7 @@ function UnsavedChangesBadge() {
   return (
     <div className="bg-[rgba(255,222,0,0.24)] flex gap-[4px] h-[28px] items-center px-[10px] rounded-[100px] shrink-0">
       <PeClockFading />
-      <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[0] not-italic overflow-hidden shrink-0 text-[#ab6400] text-[14px] text-ellipsis whitespace-nowrap">
+      <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[0] not-italic overflow-hidden shrink-0 text-[#AB6400] text-[14px] text-ellipsis whitespace-nowrap">
         <p className="leading-[20px] overflow-hidden">3 Unsaved Changes</p>
       </div>
     </div>
@@ -1510,17 +1510,17 @@ function UnsavedChangesBadge() {
 
 function BottomActionArea() {
   return (
-    <div className="sticky bottom-0 z-20 bg-white px-[24px] py-[12px] flex items-center justify-between border-t border-[#E0E1E6]" style={{ boxShadow: '0 -6px 16px rgba(0,0,0,0.08)' }}>
+    <div className="sticky bottom-0 z-20 bg-white px-[24px] py-[12px] flex items-center justify-between border-t border-[#CDCED6]" style={{ boxShadow: '0 -6px 16px rgba(0,0,0,0.08)' }}>
       <div />
       <div className="flex items-center gap-[12px]">
         <UnsavedChangesBadge />
         <button className="bg-white flex gap-[8px] h-[32px] items-center justify-center px-[12px] rounded-[4px] shrink-0 relative cursor-pointer hover:bg-[#f5f5f5] transition-colors">
-          <div aria-hidden="true" className="absolute border border-[#004b72] border-solid inset-0 pointer-events-none rounded-[4px]" />
-          <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#004b72] text-[14px] whitespace-nowrap">
+          <div aria-hidden="true" className="absolute border border-[#004B72] border-solid inset-0 pointer-events-none rounded-[4px]" />
+          <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#004B72] text-[14px] whitespace-nowrap">
             <p className="leading-[20px]">Save All</p>
           </div>
         </button>
-        <button className="bg-[#004b72] flex gap-[8px] h-[32px] items-center justify-center px-[12px] rounded-[4px] shrink-0 cursor-pointer hover:bg-[#003d5c] transition-colors">
+        <button className="bg-[#004B72] flex gap-[8px] h-[32px] items-center justify-center px-[12px] rounded-[4px] shrink-0 cursor-pointer hover:bg-[#003d5c] transition-colors">
           <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[14px] text-white whitespace-nowrap">
             <p className="leading-[20px]">Publish All</p>
           </div>
@@ -1529,3 +1529,4 @@ function BottomActionArea() {
     </div>
   );
 }
+

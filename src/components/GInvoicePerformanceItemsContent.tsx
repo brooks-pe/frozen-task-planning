@@ -346,12 +346,12 @@ function SegmentedControl({
   return (
     <div className="flex flex-col gap-[8px] items-start shrink-0">
       {!hideLabel && (
-        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1c2024] text-[14px]">
+        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1C2024] text-[14px]">
           {label}
         </p>
       )}
       <div
-        className="inline-flex w-fit h-[32px] items-center rounded-[4px] shrink-0 bg-[#F5F5F7] border border-solid border-[#e0e1e6] p-[2px] overflow-hidden box-border"
+        className="inline-flex w-fit h-[32px] items-center rounded-[4px] shrink-0 bg-[#F5F5F7] border border-solid border-[#CDCED6] p-[2px] overflow-hidden box-border"
         role="radiogroup"
         aria-label={label}
       >
@@ -411,7 +411,7 @@ function InlineCheckboxGroup({
 
   return (
     <div className="flex flex-col gap-[8px] items-start shrink-0">
-      <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1c2024] text-[14px]">
+      <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1C2024] text-[14px]">
         {label}
       </p>
       <div className="flex gap-[16px] items-center h-[32px]" role="group" aria-label={label}>
@@ -443,7 +443,7 @@ function InlineCheckboxGroup({
                 className="sr-only"
                 aria-label={option.label}
               />
-              <span className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] not-italic text-[#1c2024] text-[14px]">
+              <span className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] not-italic text-[#1C2024] text-[14px]">
                 {option.label}
               </span>
             </label>
@@ -475,7 +475,7 @@ function RowStatusControl({
 
   return (
     <div
-      className="inline-flex items-center rounded-[4px] bg-[#F5F5F7] border border-solid border-[#e0e1e6] p-[2px]"
+      className="inline-flex items-center rounded-[4px] bg-[#F5F5F7] border border-solid border-[#CDCED6] p-[2px]"
       role="radiogroup"
       aria-label="SyncPoint Status"
     >
@@ -539,14 +539,14 @@ function KebabMenu({ rowId, onViewStatusHistory }: { rowId: string; onViewStatus
         <KebabIcon />
       </button>
       {isOpen && (
-        <div className="absolute right-0 top-full mt-[2px] bg-white rounded-[8px] shadow-[0px_12px_32px_-16px_rgba(0,9,50,0.12),0px_12px_60px_0px_rgba(0,0,0,0.15)] border border-[rgba(0,0,51,0.06)] z-50 min-w-[180px]">
+        <div className="absolute right-0 top-full mt-[2px] bg-white rounded-[8px] shadow-[0px_12px_32px_-16px_rgba(0,9,50,0.12),0px_12px_60px_0px_rgba(0,0,0,0.15)] border border-[#CDCED6] z-50 min-w-[180px]">
           <div className="p-[8px]">
             <button
               onClick={() => {
                 setIsOpen(false);
                 onViewStatusHistory(rowId);
               }}
-              className="w-full text-left bg-white hover:bg-[#e8e9ec] rounded-[4px] px-[12px] py-[8px] cursor-pointer transition-colors border-none font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1c2024]"
+              className="w-full text-left bg-white hover:bg-[#e8e9ec] rounded-[4px] px-[12px] py-[8px] cursor-pointer transition-colors border-none font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024]"
             >
               View Status History
             </button>
@@ -605,7 +605,7 @@ function StatusPill({ status }: { status: 'not-reviewed' | 'accepted' | 'rejecte
     rejected: 'Rejected',
   };
   return (
-    <span className="inline-flex items-center px-[8px] py-[2px] rounded-[3px] text-[12px] font-['Inter:Regular',sans-serif] font-normal leading-[16px] not-italic whitespace-nowrap bg-[rgba(0,179,238,0.12)] border border-solid border-[rgba(0,133,191,0.62)] text-[#1c2024]">
+    <span className="inline-flex items-center px-[8px] py-[2px] rounded-[3px] text-[12px] font-['Inter:Regular',sans-serif] font-normal leading-[16px] not-italic whitespace-nowrap bg-[rgba(0,179,238,0.12)] border border-solid border-[rgba(0,133,191,0.62)] text-[#1C2024]">
       {labels[status]}
     </span>
   );
@@ -647,7 +647,7 @@ function StatusHistoryModal({
             {/* Header */}
             <div className="shrink-0 px-[24px] pt-[24px] pb-[16px] flex items-start justify-between">
               <div className="flex flex-col gap-[4px]">
-                <p className="font-['Inter:Bold',sans-serif] font-bold leading-[28px] not-italic text-[#1c2024] text-[20px] tracking-[-0.08px]">
+                <p className="font-['Inter:Bold',sans-serif] font-bold leading-[28px] not-italic text-[#1C2024] text-[20px] tracking-[-0.08px]">
                   Status History
                 </p>
                 <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] not-italic text-[rgba(0,7,20,0.62)] text-[14px]">
@@ -666,7 +666,7 @@ function StatusHistoryModal({
             </div>
 
             {/* Divider */}
-            <div className="shrink-0 h-px bg-[rgba(0,0,47,0.15)] mx-[24px]" />
+            <div className="shrink-0 h-px bg-[#D9D9E0] mx-[24px]" />
 
             {/* Body (scrollable) */}
             <div className="flex-1 overflow-y-auto px-[24px] py-[24px]">
@@ -684,7 +684,7 @@ function StatusHistoryModal({
                         </span>
                       </div>
                       {entry.comment && (
-                        <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] not-italic text-[#1c2024] text-[14px] whitespace-pre-wrap pl-[2px]">
+                        <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] not-italic text-[#1C2024] text-[14px] whitespace-pre-wrap pl-[2px]">
                           &ldquo;{entry.comment}&rdquo;
                         </p>
                       )}
@@ -698,13 +698,13 @@ function StatusHistoryModal({
             </div>
 
             {/* Divider */}
-            <div className="shrink-0 h-px bg-[rgba(0,0,47,0.15)] mx-[24px]" />
+            <div className="shrink-0 h-px bg-[#D9D9E0] mx-[24px]" />
 
             {/* Footer */}
             <div className="shrink-0 px-[24px] py-[16px] flex items-center justify-end">
               <button
                 onClick={onClose}
-                className="bg-[#004b72] flex gap-[8px] h-[32px] items-center justify-center px-[12px] rounded-[4px] shrink-0 cursor-pointer hover:bg-[#003d5c] transition-colors border-none"
+                className="bg-[#004B72] flex gap-[8px] h-[32px] items-center justify-center px-[12px] rounded-[4px] shrink-0 cursor-pointer hover:bg-[#003d5c] transition-colors border-none"
               >
                 <span className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[14px] text-white whitespace-nowrap">
                   Close
@@ -712,7 +712,7 @@ function StatusHistoryModal({
               </button>
             </div>
           </div>
-          <div aria-hidden="true" className="absolute border border-[rgba(0,0,51,0.06)] border-solid inset-0 pointer-events-none rounded-[12px] shadow-[0px_16px_36px_-20px_rgba(0,6,46,0.2),0px_16px_64px_0px_rgba(0,0,85,0.02),0px_12px_60px_0px_rgba(0,0,0,0.15)]" />
+          <div aria-hidden="true" className="absolute border border-[#CDCED6] border-solid inset-0 pointer-events-none rounded-[12px] shadow-[0px_16px_36px_-20px_rgba(0,6,46,0.2),0px_16px_64px_0px_rgba(0,0,85,0.02),0px_12px_60px_0px_rgba(0,0,0,0.15)]" />
         </div>
       </div>
     </>
@@ -766,7 +766,7 @@ function FilterDropdown({
 
   return (
     <div className="flex flex-col gap-[8px] items-start shrink-0 relative" style={{ width }} ref={ref}>
-      <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1c2024] text-[14px]">
+      <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1C2024] text-[14px]">
         {label}
       </p>
       <div
@@ -782,18 +782,18 @@ function FilterDropdown({
         <div className="flex flex-row items-center overflow-clip rounded-[inherit] size-full">
           <div className="flex items-center justify-between px-[12px] size-full">
             <p className={`font-['Inter:Regular',sans-serif] font-normal leading-[20px] not-italic text-[14px] overflow-hidden text-ellipsis whitespace-nowrap ${
-              value ? 'text-[#1c2024]' : 'text-[#80838d]'
+              value ? 'text-[#1C2024]' : 'text-[#80838d]'
             }`}>
               {value || 'Select...'}
             </p>
             <ChevronDownIcon size={16} />
           </div>
         </div>
-        <div aria-hidden="true" className="absolute border border-[rgba(0,6,46,0.2)] border-solid inset-0 pointer-events-none rounded-[4px]" />
+        <div aria-hidden="true" className="absolute border border-[#B9BBC6] border-solid inset-0 pointer-events-none rounded-[4px]" />
       </div>
       {isInteractive && isOpen && (
         <div
-          className="absolute left-0 top-full mt-[4px] z-50 bg-white rounded-[8px] border border-solid border-[rgba(0,0,51,0.06)] py-[4px] w-[200px] max-h-[280px] overflow-y-auto"
+          className="absolute left-0 top-full mt-[4px] z-50 bg-white rounded-[8px] border border-solid border-[#CDCED6] py-[4px] w-[200px] max-h-[280px] overflow-y-auto"
           style={{ boxShadow: '0px 8px 24px -8px rgba(0,9,50,0.12), 0px 8px 40px 0px rgba(0,0,0,0.08)' }}
           role="listbox"
         >
@@ -810,8 +810,8 @@ function FilterDropdown({
                 }}
                 className={`w-full text-left px-[12px] py-[8px] border-none cursor-pointer transition-colors font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] not-italic ${
                   isSelected
-                    ? 'bg-[rgba(0,179,238,0.08)] text-[#1c2024]'
-                    : 'bg-white text-[#1c2024] hover:bg-[#f0f0f3]'
+                    ? 'bg-[rgba(0,179,238,0.08)] text-[#1C2024]'
+                    : 'bg-white text-[#1C2024] hover:bg-[#f0f0f3]'
                 }`}
               >
                 {option}
@@ -969,7 +969,7 @@ function QuickSetDropdown({
 
   return (
     <div className="flex flex-col gap-[8px] items-start shrink-0 w-[167px] relative" ref={ref}>
-      <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1c2024] text-[14px]">
+      <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1C2024] text-[14px]">
         Quick Set
       </p>
       <div
@@ -985,18 +985,18 @@ function QuickSetDropdown({
         <div className="flex flex-row items-center overflow-clip rounded-[inherit] size-full">
           <div className="flex items-center justify-between px-[12px] size-full">
             <p className={`font-['Inter:Regular',sans-serif] font-normal leading-[20px] not-italic text-[14px] overflow-hidden text-ellipsis whitespace-nowrap ${
-              value ? 'text-[#1c2024]' : 'text-[#80838d]'
+              value ? 'text-[#1C2024]' : 'text-[#80838d]'
             }`}>
               {value ? getQuickSetLabel(value) : 'Select...'}
             </p>
             <ChevronDownIcon size={16} />
           </div>
         </div>
-        <div aria-hidden="true" className="absolute border border-[rgba(0,6,46,0.2)] border-solid inset-0 pointer-events-none rounded-[4px]" />
+        <div aria-hidden="true" className="absolute border border-[#B9BBC6] border-solid inset-0 pointer-events-none rounded-[4px]" />
       </div>
       {isOpen && (
         <div
-          className="absolute left-0 top-full mt-[4px] z-50 bg-white rounded-[8px] border border-solid border-[rgba(0,0,51,0.06)] py-[4px] w-[200px]"
+          className="absolute left-0 top-full mt-[4px] z-50 bg-white rounded-[8px] border border-solid border-[#CDCED6] py-[4px] w-[200px]"
           style={{ boxShadow: '0px 8px 24px -8px rgba(0,9,50,0.12), 0px 8px 40px 0px rgba(0,0,0,0.08)' }}
           role="listbox"
         >
@@ -1013,8 +1013,8 @@ function QuickSetDropdown({
                 }}
                 className={`w-full text-left px-[12px] py-[8px] border-none cursor-pointer transition-colors font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] not-italic ${
                   isSelected
-                    ? 'bg-[rgba(0,179,238,0.08)] text-[#1c2024]'
-                    : 'bg-white text-[#1c2024] hover:bg-[#f0f0f3]'
+                    ? 'bg-[rgba(0,179,238,0.08)] text-[#1C2024]'
+                    : 'bg-white text-[#1C2024] hover:bg-[#f0f0f3]'
                 }`}
               >
                 {option.label}
@@ -1104,7 +1104,7 @@ function CalendarPopover({
   return (
     <div
       ref={popoverRef}
-      className="absolute left-0 top-full mt-[4px] z-50 bg-white rounded-[8px] border border-solid border-[rgba(0,0,51,0.06)] p-[12px] w-[252px]"
+      className="absolute left-0 top-full mt-[4px] z-50 bg-white rounded-[8px] border border-solid border-[#CDCED6] p-[12px] w-[252px]"
       style={{ boxShadow: '0px 8px 24px -8px rgba(0,9,50,0.12), 0px 8px 40px 0px rgba(0,0,0,0.08)' }}
     >
       {/* Month / Year navigation */}
@@ -1118,7 +1118,7 @@ function CalendarPopover({
             <path d="M8.75 10.5L5.25 7L8.75 3.5" stroke="#60646C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </button>
-        <span className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1c2024] text-[14px]">
+        <span className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1C2024] text-[14px]">
           {MONTH_NAMES[viewMonth]} {viewYear}
         </span>
         <button
@@ -1165,10 +1165,10 @@ function CalendarPopover({
                 disabled
                   ? 'text-[#c8c9cd] cursor-not-allowed bg-transparent'
                   : isSelected
-                  ? 'bg-[#004b72] text-white'
+                  ? 'bg-[#004B72] text-white'
                   : isToday
-                  ? 'bg-[rgba(0,179,238,0.08)] text-[#1c2024] hover:bg-[rgba(0,179,238,0.16)]'
-                  : 'bg-transparent text-[#1c2024] hover:bg-[#f0f0f3]'
+                  ? 'bg-[rgba(0,179,238,0.08)] text-[#1C2024] hover:bg-[rgba(0,179,238,0.16)]'
+                  : 'bg-transparent text-[#1C2024] hover:bg-[#f0f0f3]'
               }`}
             >
               {day}
@@ -1214,7 +1214,7 @@ function DateField({
 
   return (
     <div className="flex flex-col gap-[8px] items-start shrink-0 w-[167px] relative" ref={wrapperRef}>
-      <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1c2024] text-[14px]">
+      <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1C2024] text-[14px]">
         {label}
       </p>
       <div
@@ -1226,12 +1226,12 @@ function DateField({
         aria-label={`${label}: ${hasValue ? value : 'MM/DD/YYYY'}. Click to open calendar.`}
         aria-expanded={isOpen}
       >
-        <div aria-hidden="true" className="absolute border border-[rgba(0,6,46,0.2)] border-solid inset-0 pointer-events-none rounded-[4px]" />
+        <div aria-hidden="true" className="absolute border border-[#B9BBC6] border-solid inset-0 pointer-events-none rounded-[4px]" />
         <div className="flex flex-row items-center size-full">
           <div className="flex items-center px-[4px] size-full">
             <div className="flex-1 h-full flex items-center">
               <p className={`font-['Inter:Regular',sans-serif] font-normal leading-[20px] not-italic text-[14px] px-[4px] ${
-                hasValue ? 'text-[#1c2024]' : 'text-[#80838d]'
+                hasValue ? 'text-[#1C2024]' : 'text-[#80838d]'
               }`}>
                 {hasValue ? value : 'MM/DD/YYYY'}
               </p>
@@ -1448,15 +1448,15 @@ export default function GInvoicePerformanceItemsContent() {
       <div className="flex items-start justify-between overflow-clip pb-[12px] w-full">
         <VersionDropdown />
         <div className="flex gap-[24px] items-start shrink-0">
-          <button className="bg-[#004b72] flex gap-[8px] h-[32px] items-center justify-center px-[12px] rounded-[4px] shrink-0 cursor-pointer border-none hover:bg-[#003a57] transition-colors">
+          <button className="bg-[#004B72] flex gap-[8px] h-[32px] items-center justify-center px-[12px] rounded-[4px] shrink-0 cursor-pointer border-none hover:bg-[#003a57] transition-colors">
             <ImportIcon />
             <span className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[14px] text-white whitespace-nowrap">
               Import Performance Data
             </span>
           </button>
           <button className="bg-white flex gap-[8px] h-[32px] items-center justify-center px-[12px] relative rounded-[4px] shrink-0 cursor-pointer border-none hover:bg-[#f5f5f5] transition-colors">
-            <div aria-hidden="true" className="absolute border border-[rgba(0,8,48,0.27)] border-solid inset-0 pointer-events-none rounded-[4px]" />
-            <span className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1c2024] text-[14px] whitespace-nowrap">
+            <div aria-hidden="true" className="absolute border border-[#B9BBC6] border-solid inset-0 pointer-events-none rounded-[4px]" />
+            <span className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1C2024] text-[14px] whitespace-nowrap">
               Export
             </span>
           </button>
@@ -1465,12 +1465,12 @@ export default function GInvoicePerformanceItemsContent() {
 
       {/* Page Header */}
       <div className="flex flex-col gap-[12px] items-start py-[16px] w-full relative">
-        <div aria-hidden="true" className="absolute border-[#004b72] border-b-[3px] border-solid border-t-[3px] inset-0 pointer-events-none" />
+        <div aria-hidden="true" className="absolute border-[#004B72] border-b-[3px] border-solid border-t-[3px] inset-0 pointer-events-none" />
         <div className="flex flex-col gap-[4px] items-start w-full">
-          <h1 className="font-['Inter',sans-serif] font-semibold leading-[40px] not-italic text-[#1c2024] text-[32px] tracking-[0px]">
+          <h1 className="font-['Inter',sans-serif] font-semibold leading-[40px] not-italic text-[#1C2024] text-[32px] tracking-[0px]">
             G-Invoicing Reports
           </h1>
-          <p className="font-['Inter',sans-serif] font-medium leading-[24px] not-italic text-[#60646c] text-[18px] tracking-[0px]">
+          <p className="font-['Inter',sans-serif] font-medium leading-[24px] not-italic text-[#60646C] text-[18px] tracking-[0px]">
             Review G-Invoicing reports and invoice performance data.
           </p>
         </div>
@@ -1591,7 +1591,7 @@ export default function GInvoicePerformanceItemsContent() {
               {/* Clear Filters — ghost button, inline */}
               <button
                 onClick={handleClearFilters}
-                className="bg-transparent border-none cursor-pointer h-[32px] flex items-center px-[12px] rounded-[4px] hover:bg-[rgba(0,75,114,0.06)] transition-colors outline-none focus-visible:ring-[3px] focus-visible:ring-[rgba(0,75,114,0.35)]"
+                className="bg-transparent border-none cursor-pointer h-[32px] flex items-center px-[12px] rounded-[4px] hover:bg-[rgba(0,75,114,0.06)] transition-colors outline-none focus-visible:ring-[3px] focus-visible:ring-[rgba(20,125,185,0.22)]"
                 style={{ color: '#004B72' }}
               >
                 <span className="font-['Inter:Medium',sans-serif] font-medium text-[14px] leading-[20px]">
@@ -1604,17 +1604,17 @@ export default function GInvoicePerformanceItemsContent() {
       {/* Table Section */}
       <div className="w-full mt-[24px]">
         {/* Table Header Toolbar */}
-        <div className="bg-[#f9f9fb] relative rounded-tl-[5px] rounded-tr-[5px] w-full border border-solid border-[#e0e1e6] border-b-0">
-          <div className="flex items-center justify-between px-[24px] py-[20px] w-full border-b-[2px] border-solid border-b-[#d0d1d6]">
+        <div className="bg-[#f9f9fb] relative rounded-tl-[5px] rounded-tr-[5px] w-full border border-solid border-[#CDCED6] border-b-0">
+          <div className="flex items-center justify-between px-[24px] py-[20px] w-full border-b-[2px] border-solid border-b-[#CDCED6]">
             {/* Left: Title | Search | Collapse All */}
             <div className="flex items-center gap-[16px] shrink-0">
-              <p className="font-['Inter',sans-serif] font-semibold leading-[24px] not-italic text-[#1c2024] text-[18px] tracking-[0px] whitespace-nowrap">
+              <p className="font-['Inter',sans-serif] font-semibold leading-[24px] not-italic text-[#1C2024] text-[18px] tracking-[0px] whitespace-nowrap">
                 Performance Items
               </p>
               {/* Vertical divider */}
-              <div className="w-[1px] h-[24px] bg-[#e0e1e6] shrink-0" />
+              <div className="w-[1px] h-[24px] bg-[#CDCED6] shrink-0" />
               <div className="bg-white h-[32px] relative rounded-[4px] w-[268px]">
-                <div aria-hidden="true" className="absolute border border-[rgba(0,6,46,0.2)] border-solid inset-0 pointer-events-none rounded-[4px]" />
+                <div aria-hidden="true" className="absolute border border-[#B9BBC6] border-solid inset-0 pointer-events-none rounded-[4px]" />
                 <div className="flex items-center size-full px-[4px]">
                   <div className="flex items-center justify-center shrink-0 px-[2px]">
                     <SearchIcon />
@@ -1624,7 +1624,7 @@ export default function GInvoicePerformanceItemsContent() {
                     value={searchValue}
                     onChange={(e) => setSearchValue(e.target.value)}
                     placeholder="Search..."
-                    className="flex-1 bg-transparent border-none outline-none font-['Inter:Regular',sans-serif] font-normal leading-[20px] not-italic text-[#1c2024] text-[14px] placeholder:text-[#60646c] px-[4px]"
+                    className="flex-1 bg-transparent border-none outline-none font-['Inter:Regular',sans-serif] font-normal leading-[20px] not-italic text-[#1C2024] text-[14px] placeholder:text-[#60646C] px-[4px]"
                   />
                 </div>
                 <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_1.5px_2px_0px_rgba(0,0,0,0.1),inset_0px_1.5px_2px_0px_rgba(0,0,85,0.02)]" />
@@ -1642,7 +1642,7 @@ export default function GInvoicePerformanceItemsContent() {
 
             {/* Right: Bulk Status Update inline */}
             <div className="flex items-center gap-[12px] shrink-0">
-              <span className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1c2024] text-[14px] whitespace-nowrap">
+              <span className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1C2024] text-[14px] whitespace-nowrap">
                 Bulk Status Update:
               </span>
               <SegmentedControl
@@ -1661,16 +1661,16 @@ export default function GInvoicePerformanceItemsContent() {
         </div>
 
         {/* Table Grid Container */}
-        <div className="border border-t-0 border-solid border-[#e0e1e6] rounded-b-[5px] overflow-hidden">
+        <div className="border border-t-0 border-solid border-[#CDCED6] rounded-b-[5px] overflow-hidden">
           <div className="overflow-x-auto w-full max-w-full">
           <div style={{ width: 'max-content', minWidth: '100%' }}>
           {/* Column Headers */}
           <div
-            className="grid w-full bg-[rgba(0,0,85,0.02)] min-h-[64px]"
+            className="grid w-full bg-[#F3F6FA] min-h-[64px]"
             style={{ gridTemplateColumns: GRID_TEMPLATE_COLUMNS }}
           >
             {/* Chevron placeholder */}
-            <div className="flex items-center justify-center p-[12px] border-b border-solid border-[rgba(0,0,47,0.15)]" />
+            <div className="flex items-center justify-center p-[12px] border-b border-solid border-[#CDCED6]" />
 
             <HeaderCell label="Performance ID" sortable activeSortDirection={sortColumn === 'performanceId' ? sortDirection : null} onSort={() => handleSort('performanceId')} />
             <HeaderCell label="ACRN" sortable activeSortDirection={sortColumn === 'acrn' ? sortDirection : null} onSort={() => handleSort('acrn')} />
@@ -1686,7 +1686,7 @@ export default function GInvoicePerformanceItemsContent() {
             <HeaderCell label="SyncPoint Status" className={statusColumnPulse ? 'bg-[rgba(0,179,238,0.08)]' : ''} />
 
             {/* Kebab placeholder */}
-            <div className="flex items-center justify-center px-[4px] py-[12px] border-b border-solid border-[rgba(0,0,47,0.15)]" />
+            <div className="flex items-center justify-center px-[4px] py-[12px] border-b border-solid border-[#CDCED6]" />
           </div>
 
           {/* Data Rows */}
@@ -1707,13 +1707,13 @@ export default function GInvoicePerformanceItemsContent() {
                   onClick={() => toggleDoc(doc.id)}
                 >
                   <div
-                    className="flex items-center p-[12px] border-b border-t border-solid border-[rgba(0,0,47,0.15)]"
+                    className="flex items-center p-[12px] border-b border-t border-solid border-[#CDCED6]"
                     style={{ gridColumn: '1 / -1', display: 'flex', gap: '12px', paddingLeft: '12px' }}
                   >
                     <div className={`transition-transform ${isExpanded ? 'rotate-0' : '-rotate-90'}`}>
                       <ChevronDownIcon size={16} className="text-black" />
                     </div>
-                    <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1c2024] text-[14px] overflow-hidden text-ellipsis whitespace-nowrap flex-1">
+                    <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1C2024] text-[14px] overflow-hidden text-ellipsis whitespace-nowrap flex-1">
                       {doc.label}
                     </p>
                   </div>
@@ -1733,12 +1733,12 @@ export default function GInvoicePerformanceItemsContent() {
                       }`}
                       style={{
                         gridTemplateColumns: GRID_TEMPLATE_COLUMNS,
-                        boxShadow: isSelected ? 'inset 3px 0 0 0 #004b72' : 'none',
+                        boxShadow: isSelected ? 'inset 3px 0 0 0 #004B72' : 'none',
                       }}
                       onClick={() => setSelectedRowId(row.id)}
                     >
                       {/* Chevron placeholder */}
-                      <div className="flex items-center justify-center p-[12px] border-b border-solid border-[rgba(0,0,47,0.15)]" />
+                      <div className="flex items-center justify-center p-[12px] border-b border-solid border-[#CDCED6]" />
 
                       <DataCell value={row.performanceId} />
                       <DataCell value={row.acrn} />
@@ -1767,7 +1767,7 @@ export default function GInvoicePerformanceItemsContent() {
                       <DataCell value={row.approver} />
 
                       {/* SyncPoint Status */}
-                      <div className={`flex items-center pl-[12px] pr-[16px] py-[12px] border-b border-solid border-[rgba(0,0,47,0.15)] overflow-hidden transition-[background-color] duration-[400ms] ease-in-out ${statusColumnPulse ? 'bg-[rgba(0,179,238,0.08)]' : ''}`}>
+                      <div className={`flex items-center pl-[12px] pr-[16px] py-[12px] border-b border-solid border-[#CDCED6] overflow-hidden transition-[background-color] duration-[400ms] ease-in-out ${statusColumnPulse ? 'bg-[rgba(0,179,238,0.08)]' : ''}`}>
                         <RowStatusControl
                           status={rowStatuses[row.id] || 'not-reviewed'}
                           rowId={row.id}
@@ -1777,7 +1777,7 @@ export default function GInvoicePerformanceItemsContent() {
                       </div>
 
                       {/* Kebab */}
-                      <div className="flex items-center justify-center px-[4px] py-[12px] border-b border-solid border-[rgba(0,0,47,0.15)]">
+                      <div className="flex items-center justify-center px-[4px] py-[12px] border-b border-solid border-[#CDCED6]">
                         <KebabMenu rowId={row.id} onViewStatusHistory={setStatusHistoryRowId} />
                       </div>
                     </div>
@@ -1823,7 +1823,7 @@ function HeaderCell({
 }) {
   return (
     <div
-      className={`flex items-center p-[12px] gap-[8px] border-b border-solid border-[rgba(0,0,47,0.15)] overflow-hidden transition-[background-color] duration-[400ms] ease-in-out ${sortable ? 'cursor-pointer select-none hover:bg-[rgba(0,0,85,0.04)]' : ''} ${align === 'right' ? 'justify-end' : ''} ${className}`}
+      className={`flex items-center p-[12px] gap-[8px] border-b border-solid border-[#CDCED6] overflow-hidden transition-[background-color] duration-[400ms] ease-in-out ${sortable ? 'cursor-pointer select-none hover:bg-[#EAF0F6]' : ''} ${align === 'right' ? 'justify-end' : ''} ${className}`}
       onClick={sortable ? onSort : undefined}
       role={sortable ? 'button' : undefined}
       tabIndex={sortable ? 0 : undefined}
@@ -1837,7 +1837,7 @@ function HeaderCell({
           {label}
         </p>
         {sortable && (
-          <span className={`shrink-0 flex items-center ${activeSortDirection ? 'text-[#004b72]' : 'text-[#1C2024]'}`}>
+          <span className={`shrink-0 flex items-center ${activeSortDirection ? 'text-[#004B72]' : 'text-[#1C2024]'}`}>
             {activeSortDirection === 'asc' ? (
               <ArrowUpIcon />
             ) : activeSortDirection === 'desc' ? (
@@ -1858,13 +1858,14 @@ function HeaderCell({
 function DataCell({ value, align = 'left' }: { value: string; align?: 'left' | 'right' }) {
   return (
     <div
-      className={`flex items-center py-[12px] pl-[12px] border-b border-solid border-[rgba(0,0,47,0.15)] overflow-hidden ${
+      className={`flex items-center py-[12px] pl-[12px] border-b border-solid border-[#CDCED6] overflow-hidden ${
         align === 'right' ? 'justify-end pr-[20px]' : 'pr-[12px]'
       }`}
     >
-      <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] not-italic text-[#1c2024] text-[14px] overflow-hidden text-ellipsis whitespace-nowrap">
+      <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] not-italic text-[#1C2024] text-[14px] overflow-hidden text-ellipsis whitespace-nowrap">
         {value || '24,487.25'}
       </p>
     </div>
   );
 }
+

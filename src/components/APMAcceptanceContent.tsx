@@ -28,12 +28,12 @@ function SegmentedControl({
   return (
     <div className="flex flex-col gap-[8px] items-start shrink-0">
       {!hideLabel && (
-        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1c2024] text-[14px]">
+        <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1C2024] text-[14px]">
           {label}
         </p>
       )}
       <div
-        className="inline-flex w-fit h-[32px] items-center rounded-[4px] shrink-0 bg-[#F5F5F7] border border-solid border-[#e0e1e6] p-[2px] overflow-hidden box-border"
+        className="inline-flex w-fit h-[32px] items-center rounded-[4px] shrink-0 bg-[#F5F5F7] border border-solid border-[#CDCED6] p-[2px] overflow-hidden box-border"
         role="radiogroup"
         aria-label={label}
       >
@@ -86,7 +86,7 @@ function RowStatusControl({
 
   return (
     <div
-      className="inline-flex items-center rounded-[4px] bg-[#F5F5F7] border border-solid border-[#e0e1e6] p-[2px]"
+      className="inline-flex items-center rounded-[4px] bg-[#F5F5F7] border border-solid border-[#CDCED6] p-[2px]"
       role="radiogroup"
       aria-label="Review Status"
     >
@@ -226,8 +226,8 @@ function ButtonRow() {
         className="bg-white content-stretch flex gap-[8px] h-[32px] items-center justify-center px-[12px] relative rounded-[4px] shrink-0 cursor-pointer hover:bg-[#f5f5f5] transition-colors" 
         data-name="pe-button"
       >
-        <div aria-hidden="true" className="absolute border border-[#004b72] border-solid inset-0 pointer-events-none rounded-[4px]" />
-        <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#004b72] text-[14px] whitespace-nowrap">
+        <div aria-hidden="true" className="absolute border border-[#004B72] border-solid inset-0 pointer-events-none rounded-[4px]" />
+        <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#004B72] text-[14px] whitespace-nowrap">
           <p className="leading-[20px]">← Back to Activity Distribution</p>
         </div>
       </Link>
@@ -236,8 +236,8 @@ function ButtonRow() {
         className="bg-white content-stretch flex gap-[8px] h-[32px] items-center justify-center px-[12px] relative rounded-[4px] shrink-0 cursor-pointer hover:bg-[#f5f5f5] transition-colors" 
         data-name="pe-button"
       >
-        <div aria-hidden="true" className="absolute border border-[#004b72] border-solid inset-0 pointer-events-none rounded-[4px]" />
-        <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#004b72] text-[14px] whitespace-nowrap">
+        <div aria-hidden="true" className="absolute border border-[#004B72] border-solid inset-0 pointer-events-none rounded-[4px]" />
+        <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#004B72] text-[14px] whitespace-nowrap">
           <p className="leading-[20px]">Go to BFM Processing →</p>
         </div>
       </Link>
@@ -245,8 +245,8 @@ function ButtonRow() {
         className="bg-white content-stretch flex gap-[8px] h-[32px] items-center justify-center px-[12px] relative rounded-[4px] shrink-0 cursor-pointer hover:bg-[#f5f5f5] transition-colors" 
         data-name="pe-button"
       >
-        <div aria-hidden="true" className="absolute border border-[rgba(0,8,48,0.27)] border-solid inset-0 pointer-events-none rounded-[4px]" />
-        <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#1c2024] text-[14px] whitespace-nowrap">
+        <div aria-hidden="true" className="absolute border border-[#B9BBC6] border-solid inset-0 pointer-events-none rounded-[4px]" />
+        <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#1C2024] text-[14px] whitespace-nowrap">
           <p className="leading-[20px]">Export</p>
         </div>
       </button>
@@ -258,7 +258,7 @@ function PePageHeader() {
   return (
     <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-name="pe-page-header">
       <div className="content-stretch flex flex-col gap-[12px] items-start py-[16px] relative shrink-0 w-full">
-        <div aria-hidden="true" className="absolute border-[#004b72] border-b-[3px] border-solid border-t-[3px] inset-0 pointer-events-none" />
+        <div aria-hidden="true" className="absolute border-[#004B72] border-b-[3px] border-solid border-t-[3px] inset-0 pointer-events-none" />
         <HeaderAndSubtitle />
         <SyncPointBreadcrumb items={[
           { label: 'Home', path: '/' },
@@ -273,10 +273,10 @@ function PePageHeader() {
 function HeaderAndSubtitle() {
   return (
     <div className="content-stretch flex flex-col gap-[4px] items-start relative shrink-0 w-full" data-name="header-and-subtitle">
-      <h1 className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[40px] not-italic text-[#1c2024] text-[32px]">
+      <h1 className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[40px] not-italic text-[#1C2024] text-[32px]">
         APM Acceptance
       </h1>
-      <p className="font-['Inter:Regular',sans-serif] font-normal leading-[24px] not-italic text-[#60646c] text-[18px]">
+      <p className="font-['Inter:Regular',sans-serif] font-normal leading-[24px] not-italic text-[#60646C] text-[18px]">
         Accept or reject funds.
       </p>
     </div>
@@ -302,19 +302,19 @@ function FiltersRow() {
     <CollapsibleFilterSection highContrast>
       <div className="content-stretch flex gap-[12px] items-end relative shrink-0" data-name="left-filters">
         <div className="flex flex-col gap-[8px] items-start shrink-0">
-          <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1c2024] text-[14px]">Program</p>
+          <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1C2024] text-[14px]">Program</p>
           <SearchableFilterDropdown value={program} onChange={setProgram} options={['All Programs', 'LCS', 'DDG', 'CVN']} />
         </div>
         <div className="flex flex-col gap-[8px] items-start shrink-0">
-          <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1c2024] text-[14px]">Appropriation</p>
+          <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1C2024] text-[14px]">Appropriation</p>
           <SearchableFilterDropdown value={appropriation} onChange={setAppropriation} options={['All Appropriations', 'O&MN', 'RDTEN', 'OPN', 'SCN', 'WPN']} />
         </div>
         <div className="flex flex-col gap-[8px] items-start shrink-0">
-          <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1c2024] text-[14px]">Appropriation Year</p>
+          <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1C2024] text-[14px]">Appropriation Year</p>
           <SearchableFilterDropdown value={appropriationYear} onChange={setAppropriationYear} options={['All Appropriation Years', 'FY24', 'FY25', 'FY26', 'FY27']} />
         </div>
         <div className="flex flex-col gap-[8px] items-start shrink-0">
-          <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1c2024] text-[14px]">Funding Source</p>
+          <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1C2024] text-[14px]">Funding Source</p>
           <SearchableFilterDropdown value={fundingSource} onChange={setFundingSource} options={['All Funding Sources', 'BLI 1210/H0014', 'BLI 1600/LM008', 'BLI 1601/MC002']} />
         </div>
         {/* Active Years / All Radio Toggle */}
@@ -331,12 +331,12 @@ function FiltersRow() {
                   </svg>
                 ) : (
                   <div className="w-full h-full rounded-full bg-[#f9f9fb] relative">
-                    <div aria-hidden="true" className="absolute border border-[rgba(0,6,46,0.2)] border-solid inset-0 pointer-events-none rounded-full" />
+                    <div aria-hidden="true" className="absolute border border-[#B9BBC6] border-solid inset-0 pointer-events-none rounded-full" />
                   </div>
                 )}
               </div>
             </div>
-            <span className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1c2024]">Active Years</span>
+            <span className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024]">Active Years</span>
           </label>
           <label className="flex items-center gap-[8px] cursor-pointer select-none">
             <input type="radio" name="yearFilter" value="all" checked={yearFilter === 'all'} onChange={() => setYearFilter('all')} className="sr-only" />
@@ -349,17 +349,17 @@ function FiltersRow() {
                   </svg>
                 ) : (
                   <div className="w-full h-full rounded-full bg-[#f9f9fb] relative">
-                    <div aria-hidden="true" className="absolute border border-[rgba(0,6,46,0.2)] border-solid inset-0 pointer-events-none rounded-full" />
+                    <div aria-hidden="true" className="absolute border border-[#B9BBC6] border-solid inset-0 pointer-events-none rounded-full" />
                   </div>
                 )}
               </div>
             </div>
-            <span className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1c2024]">All</span>
+            <span className="font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024]">All</span>
           </label>
         </div>
         <button 
           onClick={handleClearFilters}
-          className="bg-transparent border-none cursor-pointer h-[32px] flex items-center px-[12px] rounded-[4px] hover:bg-[rgba(0,75,114,0.06)] transition-colors outline-none focus-visible:ring-[3px] focus-visible:ring-[rgba(0,75,114,0.35)]"
+          className="bg-transparent border-none cursor-pointer h-[32px] flex items-center px-[12px] rounded-[4px] hover:bg-[rgba(0,75,114,0.06)] transition-colors outline-none focus-visible:ring-[3px] focus-visible:ring-[rgba(20,125,185,0.22)]"
           data-name="clear-filters-button"
           style={{ color: '#004B72' }}
         >
@@ -379,32 +379,32 @@ function KPICards() {
         label={<>Total<br />ERP Authorized (YTD)</>}
         value="$100M"
         detail="Last sync: 13 Jan 2026 08:10 ET"
-        accentColor="#004b72"
+        accentColor="#004B72"
       />
       <KPICard
         label={<>Total<br />BFM Working Authorized</>}
         value="$100M"
         detail="Published • Effective: 10 Jan 2026"
-        accentColor="#004b72"
+        accentColor="#004B72"
       />
       <KPICard
         label={<>Total<br />Holdback / Reserve</>}
         value="$12M"
         detail="BFM controlled"
-        accentColor="#004b72"
+        accentColor="#004B72"
       />
       <KPICard
         label={<>Total<br />Allocated to APMs</>}
         value="$70M"
         detail="Includes pending adjustments"
-        accentColor="#004b72"
+        accentColor="#004B72"
       />
       <KPICard
         label={<>Total<br />Remaining</>}
         value="$18M"
         pillText="Available to Allocate"
         helperText="4% Remaining"
-        accentColor="#004b72"
+        accentColor="#004B72"
       />
     </div>
   );
@@ -429,12 +429,12 @@ function KPICard({
 }) {
   return (
     <div className="content-stretch flex items-stretch relative rounded-[5px] shrink-0" style={{ minWidth: '185px' }}>
-      <div aria-hidden="true" className="absolute border border-[#e0e1e6] border-solid inset-0 pointer-events-none rounded-[5px]" />
+      <div aria-hidden="true" className="absolute border border-[#CDCED6] border-solid inset-0 pointer-events-none rounded-[5px]" />
       <div className="flex flex-row items-stretch self-stretch">
         <div className="h-full rounded-bl-[5px] rounded-tl-[5px] shrink-0 w-[12px]" style={{ backgroundColor: accentColor }} />
       </div>
       <div className="flex flex-1 w-full min-w-0 flex-col gap-[8px] items-start not-italic p-[24px] relative whitespace-pre-wrap">
-        <div className="font-['Inter:Bold',sans-serif] font-bold leading-[20px] relative shrink-0 text-[#60646c] text-[14px] w-full">
+        <div className="font-['Inter:Bold',sans-serif] font-bold leading-[20px] relative shrink-0 text-[#60646C] text-[14px] w-full">
           {label}
         </div>
         <p className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[normal] relative shrink-0 text-[32px] text-black tracking-[-1px] w-full">
@@ -443,21 +443,21 @@ function KPICard({
         {pillText ? (
           <div className="mt-auto w-full">
             <div className="bg-[rgba(255,222,0,0.24)] content-stretch flex gap-[4px] h-[28px] items-center px-[10px] relative rounded-[100px] shrink-0 w-fit">
-              <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[0] not-italic overflow-hidden relative shrink-0 text-[#ab6400] text-[14px] text-ellipsis whitespace-nowrap">
+              <div className="flex flex-col font-['Inter:Bold',sans-serif] font-bold justify-center leading-[0] not-italic overflow-hidden relative shrink-0 text-[#AB6400] text-[14px] text-ellipsis whitespace-nowrap">
                 <p className="leading-[20px] overflow-hidden">{pillText}</p>
               </div>
             </div>
-            <div className="w-full border-t border-[#e0e1e6] mt-[16px] mb-[8px]" />
+            <div className="w-full border-t border-[#CDCED6] mt-[16px] mb-[8px]" />
             {helperText && (
-              <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] relative shrink-0 text-[#60646c] text-[14px] w-full">
+              <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] relative shrink-0 text-[#60646C] text-[14px] w-full">
                 {helperText}
               </p>
             )}
           </div>
         ) : (
           <div className="mt-auto w-full">
-            <div className="w-full border-t border-[#e0e1e6] mt-[16px] mb-[8px]" />
-            <div className={`font-['Inter:Regular',sans-serif] font-normal leading-[20px] relative shrink-0 text-[14px] w-full ${highlight ? 'text-[#147db9]' : 'text-[#60646c]'}`}>
+            <div className="w-full border-t border-[#CDCED6] mt-[16px] mb-[8px]" />
+            <div className={`font-['Inter:Regular',sans-serif] font-normal leading-[20px] relative shrink-0 text-[14px] w-full ${highlight ? 'text-[#147DB9]' : 'text-[#60646C]'}`}>
               {detail}
             </div>
           </div>
@@ -508,17 +508,17 @@ function ActivitiesTable({
   return (
     <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-name="table-section">
       {/* Top Surface (Header Area) — matches G-Invoicing toolbar pattern */}
-      <div className="bg-[#f9f9fb] relative rounded-tl-[5px] rounded-tr-[5px] w-full border border-solid border-[#e0e1e6] border-b-0">
-        <div className="flex items-center justify-between px-[24px] py-[20px] w-full border-b-[2px] border-solid border-b-[#d0d1d6]">
+      <div className="bg-[#f9f9fb] relative rounded-tl-[5px] rounded-tr-[5px] w-full border border-solid border-[#CDCED6] border-b-0">
+        <div className="flex items-center justify-between px-[24px] py-[20px] w-full border-b-[2px] border-solid border-b-[#CDCED6]">
           {/* Left: Title | Search | Expand All */}
           <div className="flex items-center gap-[16px] shrink-0">
-            <p className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[normal] not-italic text-[#1c2024] text-[20px] tracking-[-1px] whitespace-nowrap">
+            <p className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[normal] not-italic text-[#1C2024] text-[20px] tracking-[-1px] whitespace-nowrap">
               Execution Plans
             </p>
             {/* Vertical divider */}
-            <div className="w-[1px] h-[24px] bg-[#e0e1e6] shrink-0" />
+            <div className="w-[1px] h-[24px] bg-[#CDCED6] shrink-0" />
             <div className="bg-white h-[32px] relative rounded-[4px] w-[268px]">
-              <div aria-hidden="true" className="absolute border border-[rgba(0,6,46,0.2)] border-solid inset-0 pointer-events-none rounded-[4px]" />
+              <div aria-hidden="true" className="absolute border border-[#B9BBC6] border-solid inset-0 pointer-events-none rounded-[4px]" />
               <div className="flex items-center size-full px-[4px]">
                 <div className="flex items-center justify-center shrink-0 px-[2px]">
                   <SearchIcon />
@@ -528,7 +528,7 @@ function ActivitiesTable({
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
                   placeholder="Search..."
-                  className="flex-1 bg-transparent border-none outline-none font-['Inter:Regular',sans-serif] font-normal leading-[20px] not-italic text-[#1c2024] text-[14px] placeholder:text-[#60646c] px-[4px]"
+                  className="flex-1 bg-transparent border-none outline-none font-['Inter:Regular',sans-serif] font-normal leading-[20px] not-italic text-[#1C2024] text-[14px] placeholder:text-[#60646C] px-[4px]"
                 />
               </div>
               <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_1.5px_2px_0px_rgba(0,0,0,0.1),inset_0px_1.5px_2px_0px_rgba(0,0,85,0.02)]" />
@@ -546,7 +546,7 @@ function ActivitiesTable({
 
           {/* Right: Bulk Status Update inline */}
           <div className="flex items-center gap-[12px] shrink-0">
-            <span className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1c2024] text-[14px] whitespace-nowrap">
+            <span className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] not-italic text-[#1C2024] text-[14px] whitespace-nowrap">
               Bulk Status Update:
             </span>
             <SegmentedControl
@@ -599,19 +599,19 @@ function DataTable({
   const GRID_COLS = '48px 1.5fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 240px';
 
   const hdr = (label: string, col: AASortCol, align?: 'right') => (
-    <div className={`px-[12px] py-[12px] flex items-center gap-[6px] min-w-0 cursor-pointer select-none hover:bg-[rgba(0,0,85,0.04)] ${align === 'right' ? 'justify-end text-right' : ''}`} onClick={() => handleSort(col)} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSort(col); } }}>
-      <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] text-[#1c2024] text-[14px] truncate">{label}</p>
+    <div className={`px-[12px] py-[12px] flex items-center gap-[6px] min-w-0 cursor-pointer select-none hover:bg-[#EAF0F6] ${align === 'right' ? 'justify-end text-right' : ''}`} onClick={() => handleSort(col)} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSort(col); } }}>
+      <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] text-[#1C2024] text-[14px] truncate">{label}</p>
       <SortIndicator direction={getDirection(col)} inactiveColor="#1C2024" />
     </div>
   );
 
   return (
     <div className="bg-white content-stretch flex flex-col items-stretch relative shrink-0 w-full min-w-0 rounded-b-[5px]" data-name="table">
-      <div aria-hidden="true" className="absolute border-l border-r border-b border-[#e0e1e6] border-solid inset-0 pointer-events-none rounded-b-[5px]" />
+      <div aria-hidden="true" className="absolute border-l border-r border-b border-[#CDCED6] border-solid inset-0 pointer-events-none rounded-b-[5px]" />
       
       {/* Header Row */}
       <div 
-        className="bg-[#f9f9fb] border-b border-[#e0e1e6] w-full grid"
+        className="bg-[#f9f9fb] border-b border-[#CDCED6] w-full grid"
         style={{ gridTemplateColumns: GRID_COLS }}
         data-name="table-header"
       >
@@ -626,7 +626,7 @@ function DataTable({
         {hdr('FUNDING', 'funding', 'right')}
         {/* ACTIONS column - not sortable */}
         <div className="px-[12px] py-[12px] flex items-center min-w-0">
-          <p className="font-['Inter:Bold',sans-serif] font-bold leading-[20px] text-[#1c2024] text-[14px] truncate">ACTIONS</p>
+          <p className="font-['Inter:Bold',sans-serif] font-bold leading-[20px] text-[#1C2024] text-[14px] truncate">ACTIONS</p>
         </div>
       </div>
       
@@ -661,7 +661,7 @@ function ActivityTableRow({
   return (
     <>
       <div 
-        className={`w-full border-b border-[#e0e1e6] hover:bg-[#fafafa] transition-colors grid ${isExpanded ? 'bg-[#f9f9fb]' : ''}`}
+        className={`w-full border-b border-[#CDCED6] hover:bg-[#fafafa] transition-colors grid ${isExpanded ? 'bg-[#f9f9fb]' : ''}`}
         style={{ gridTemplateColumns: gridCols }}
       >
         <div className="px-[12px] py-[12px] flex items-center justify-center min-w-0">
@@ -672,9 +672,9 @@ function ActivityTableRow({
               aria-label={isExpanded ? 'Collapse row' : 'Expand row'}
             >
               {isExpanded ? (
-                <ChevronDown className="size-[16px] text-[#1c2024]" />
+                <ChevronDown className="size-[16px] text-[#1C2024]" />
               ) : (
-                <ChevronRight className="size-[16px] text-[#1c2024] opacity-40" />
+                <ChevronRight className="size-[16px] text-[#1C2024] opacity-40" />
               )}
             </button>
           ) : (
@@ -683,47 +683,47 @@ function ActivityTableRow({
               aria-label="Expand row"
               disabled
             >
-              <ChevronRight className="size-[16px] text-[#1c2024] opacity-40" />
+              <ChevronRight className="size-[16px] text-[#1C2024] opacity-40" />
             </button>
           )}
         </div>
         <div className="px-[12px] py-[12px] flex items-center min-w-0">
-          <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] text-[#1c2024] text-[14px] truncate">
+          <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] text-[#1C2024] text-[14px] truncate">
             {row.plan}
           </p>
         </div>
         <div className="px-[12px] py-[12px] flex items-center min-w-0">
-          <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px] truncate">
+          <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1C2024] text-[14px] truncate">
             {row.activity}
           </p>
         </div>
         <div className="px-[12px] py-[12px] flex items-center min-w-0">
-          <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px] truncate">
+          <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1C2024] text-[14px] truncate">
             {row.fundingSource}
           </p>
         </div>
         <div className="px-[12px] py-[12px] flex items-center min-w-0">
-          <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px] truncate">
+          <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1C2024] text-[14px] truncate">
             {row.project}
           </p>
         </div>
         <div className="px-[12px] py-[12px] flex items-center min-w-0">
-          <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px] truncate">
+          <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1C2024] text-[14px] truncate">
             {row.appnYear}
           </p>
         </div>
         <div className="px-[12px] py-[12px] flex items-center min-w-0">
-          <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px] truncate">
+          <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1C2024] text-[14px] truncate">
             {row.purpose}
           </p>
         </div>
         <div className="px-[12px] py-[12px] flex items-center min-w-0">
-          <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px] whitespace-pre-line">
+          <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1C2024] text-[14px] whitespace-pre-line">
             {row.needDates}
           </p>
         </div>
         <div className="px-[12px] py-[12px] flex items-center justify-end text-right min-w-0">
-          <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px] truncate">
+          <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1C2024] text-[14px] truncate">
             {row.funding}
           </p>
         </div>
@@ -781,44 +781,44 @@ function DetailPanel({
   };
 
   return (
-    <div className="w-full border-b border-[#e0e1e6]" style={{ gridColumn: '1 / -1' }}>
-      <div className="bg-[rgba(20,125,185,0.09)] border-l-[6px] border-l-[#147db9] px-[24px] py-[24px]">
+    <div className="w-full border-b border-[#CDCED6]" style={{ gridColumn: '1 / -1' }}>
+      <div className="bg-[#E8F3F9] border-l-[6px] border-l-[#147DB9] px-[24px] py-[24px]">
         {/* Activities Table */}
-        <div className="bg-white rounded-[4px] border border-[rgba(0,0,47,0.15)]">
+        <div className="bg-white rounded-[4px] border border-[#CDCED6]">
           {/* Table Header */}
-          <div className="bg-[#f5f5f5] grid border-b-2 border-[rgba(0,0,47,0.15)] px-[12px] py-[12px]" style={{ gridTemplateColumns: 'repeat(10, minmax(0, 1fr)) 240px' }}>
+          <div className="bg-[#f5f5f5] grid border-b-2 border-[#CDCED6] px-[12px] py-[12px]" style={{ gridTemplateColumns: 'repeat(10, minmax(0, 1fr)) 240px' }}>
             <div className="flex items-center">
-              <p className="font-['Inter:Bold',sans-serif] font-bold leading-[20px] text-[#1c2024] text-[14px]">Tasking</p>
+              <p className="font-['Inter:Bold',sans-serif] font-bold leading-[20px] text-[#1C2024] text-[14px]">Tasking</p>
             </div>
             <div className="flex items-center justify-end text-right">
-              <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] text-[#1c2024] text-[14px]">Approved Tasking</p>
+              <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] text-[#1C2024] text-[14px]">Approved Tasking</p>
             </div>
             <div className="flex items-center justify-end text-right">
-              <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] text-[#1c2024] text-[14px]">Increments</p>
-            </div>
-            <div className="flex items-center">
-              <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] text-[#1c2024] text-[14px]">Auth</p>
-            </div>
-            <div className="flex items-center justify-end text-right">
-              <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] text-[#1c2024] text-[14px]">Distributed</p>
-            </div>
-            <div className="flex items-center justify-end text-right">
-              <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] text-[#1c2024] text-[14px]">Remaining</p>
-            </div>
-            <div className="flex items-center justify-end text-right">
-              <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] text-[#1c2024] text-[14px]">RE Amount</p>
-            </div>
-            <div className="flex items-center justify-end text-right">
-              <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] text-[#1c2024] text-[14px]">DC Amount</p>
+              <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] text-[#1C2024] text-[14px]">Increments</p>
             </div>
             <div className="flex items-center">
-              <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] text-[#1c2024] text-[14px]">RBE</p>
+              <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] text-[#1C2024] text-[14px]">Auth</p>
+            </div>
+            <div className="flex items-center justify-end text-right">
+              <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] text-[#1C2024] text-[14px]">Distributed</p>
+            </div>
+            <div className="flex items-center justify-end text-right">
+              <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] text-[#1C2024] text-[14px]">Remaining</p>
+            </div>
+            <div className="flex items-center justify-end text-right">
+              <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] text-[#1C2024] text-[14px]">RE Amount</p>
+            </div>
+            <div className="flex items-center justify-end text-right">
+              <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] text-[#1C2024] text-[14px]">DC Amount</p>
             </div>
             <div className="flex items-center">
-              <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] text-[#1c2024] text-[14px]">Value Statement</p>
+              <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] text-[#1C2024] text-[14px]">RBE</p>
             </div>
             <div className="flex items-center">
-              <p className="font-['Inter:Bold',sans-serif] font-bold leading-[20px] text-[#1c2024] text-[14px]">Actions</p>
+              <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] text-[#1C2024] text-[14px]">Value Statement</p>
+            </div>
+            <div className="flex items-center">
+              <p className="font-['Inter:Bold',sans-serif] font-bold leading-[20px] text-[#1C2024] text-[14px]">Actions</p>
             </div>
           </div>
 
@@ -826,26 +826,26 @@ function DetailPanel({
           {activities.map((activity) => (
             <div 
               key={activity.id}
-              className="grid border-b border-[rgba(0,0,47,0.15)] px-[12px] py-[12px] hover:bg-[#fafafa] transition-colors"
+              className="grid border-b border-[#CDCED6] px-[12px] py-[12px] hover:bg-[#fafafa] transition-colors"
               style={{ gridTemplateColumns: 'repeat(10, minmax(0, 1fr)) 240px' }}
             >
               {/* Tasking - increment label */}
               <div className="flex items-center">
-                <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] text-[#1c2024] text-[14px] truncate">
+                <p className="font-['Inter:Medium',sans-serif] font-medium leading-[20px] text-[#1C2024] text-[14px] truncate">
                   {activity.incrementLabel}
                 </p>
               </div>
               
               {/* Approved Tasking - read-only currency */}
               <div className="flex items-center justify-end text-right">
-                <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px]">
+                <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1C2024] text-[14px]">
                   {activity.approvedTasking}
                 </p>
               </div>
               
               {/* Increments - read-only $0.00 with info icon */}
               <div className="flex items-center justify-end text-right gap-[4px]">
-                <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px]">
+                <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1C2024] text-[14px]">
                   $0.00
                 </p>
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-[#60646C]">
@@ -861,7 +861,7 @@ function DetailPanel({
               
               {/* Distributed - read-only $0.00 */}
               <div className="flex items-center justify-end text-right">
-                <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1c2024] text-[14px]">
+                <p className="font-['Inter:Regular',sans-serif] font-normal leading-[20px] text-[#1C2024] text-[14px]">
                   $0.00
                 </p>
               </div>
@@ -873,14 +873,14 @@ function DetailPanel({
               {/* RE Amount - editable currency input */}
               <div className="flex items-center pr-[8px]">
                 <div className="relative w-full">
-                  <span className="absolute left-[8px] top-1/2 -translate-y-1/2 font-['Inter:Regular',sans-serif] font-normal text-[14px] text-[#1c2024]">
+                  <span className="absolute left-[8px] top-1/2 -translate-y-1/2 font-['Inter:Regular',sans-serif] font-normal text-[14px] text-[#1C2024]">
                     $
                   </span>
                   <input
                     type="text"
                     value={editableData[activity.id]?.reAmount || '0.00'}
                     onChange={(e) => handleFieldChange(activity.id, 'reAmount', e.target.value)}
-                    className="w-full h-[32px] pl-[20px] pr-[8px] border border-[rgba(0,6,46,0.2)] rounded-[4px] font-['Inter:Regular',sans-serif] font-normal text-[14px] text-[#1c2024] focus:outline-none focus:border-[#004b72] focus:ring-1 focus:ring-[#004b72]"
+                    className="w-full h-[32px] pl-[20px] pr-[8px] border border-[#B9BBC6] rounded-[4px] font-['Inter:Regular',sans-serif] font-normal text-[14px] text-[#1C2024] focus:outline-none focus:border-[#147DB9] focus:ring-1 focus:ring-[rgba(20,125,185,0.2)]"
                   />
                 </div>
               </div>
@@ -888,14 +888,14 @@ function DetailPanel({
               {/* DC Amount - editable currency input */}
               <div className="flex items-center pr-[16px]">
                 <div className="relative w-full">
-                  <span className="absolute left-[8px] top-1/2 -translate-y-1/2 font-['Inter:Regular',sans-serif] font-normal text-[14px] text-[#1c2024]">
+                  <span className="absolute left-[8px] top-1/2 -translate-y-1/2 font-['Inter:Regular',sans-serif] font-normal text-[14px] text-[#1C2024]">
                     $
                   </span>
                   <input
                     type="text"
                     value={editableData[activity.id]?.dcAmount || '0.00'}
                     onChange={(e) => handleFieldChange(activity.id, 'dcAmount', e.target.value)}
-                    className="w-full h-[32px] pl-[20px] pr-[8px] border border-[rgba(0,6,46,0.2)] rounded-[4px] font-['Inter:Regular',sans-serif] font-normal text-[14px] text-[#1c2024] focus:outline-none focus:border-[#004b72] focus:ring-1 focus:ring-[#004b72]"
+                    className="w-full h-[32px] pl-[20px] pr-[8px] border border-[#B9BBC6] rounded-[4px] font-['Inter:Regular',sans-serif] font-normal text-[14px] text-[#1C2024] focus:outline-none focus:border-[#147DB9] focus:ring-1 focus:ring-[rgba(20,125,185,0.2)]"
                   />
                 </div>
               </div>
@@ -906,7 +906,7 @@ function DetailPanel({
                   type="text"
                   value={editableData[activity.id]?.rbe || ''}
                   onChange={(e) => handleFieldChange(activity.id, 'rbe', e.target.value)}
-                  className="w-full h-[32px] px-[8px] border border-[rgba(0,6,46,0.2)] rounded-[4px] font-['Inter:Regular',sans-serif] font-normal text-[14px] text-[#1c2024] focus:outline-none focus:border-[#004b72] focus:ring-1 focus:ring-[#004b72]"
+                  className="w-full h-[32px] px-[8px] border border-[#B9BBC6] rounded-[4px] font-['Inter:Regular',sans-serif] font-normal text-[14px] text-[#1C2024] focus:outline-none focus:border-[#147DB9] focus:ring-1 focus:ring-[rgba(20,125,185,0.2)]"
                 />
               </div>
               
@@ -917,7 +917,7 @@ function DetailPanel({
                   value={editableData[activity.id]?.valueStatement || ''}
                   onChange={(e) => handleFieldChange(activity.id, 'valueStatement', e.target.value)}
                   placeholder="Add value statement…"
-                  className="w-full h-[32px] px-[8px] border border-[rgba(0,6,46,0.2)] rounded-[4px] font-['Inter:Regular',sans-serif] font-normal text-[14px] text-[#1c2024] placeholder:text-[#80838D] focus:outline-none focus:border-[#004b72] focus:ring-1 focus:ring-[#004b72]"
+                  className="w-full h-[32px] px-[8px] border border-[#B9BBC6] rounded-[4px] font-['Inter:Regular',sans-serif] font-normal text-[14px] text-[#1C2024] placeholder:text-[#80838D] focus:outline-none focus:border-[#147DB9] focus:ring-1 focus:ring-[rgba(20,125,185,0.2)]"
                 />
               </div>
               
@@ -935,13 +935,13 @@ function DetailPanel({
 
 function FooterActions({ hasUnsavedChanges }: { hasUnsavedChanges: boolean }) {
   return (
-    <div className="sticky bottom-0 z-20 bg-white px-[24px] py-[12px] flex items-center justify-between border-t border-[#E0E1E6]" style={{ boxShadow: '0 -6px 16px rgba(0,0,0,0.08)' }} data-name="footer-actions">
+    <div className="sticky bottom-0 z-20 bg-white px-[24px] py-[12px] flex items-center justify-between border-t border-[#CDCED6]" style={{ boxShadow: '0 -6px 16px rgba(0,0,0,0.08)' }} data-name="footer-actions">
       <div />
       <div className="flex items-center gap-[12px]">
         {hasUnsavedChanges && (
           <div className="bg-[rgba(255,222,0,0.24)] content-stretch flex gap-[6px] h-[32px] items-center px-[12px] relative rounded-[100px] shrink-0">
-            <ClockIcon className="text-[#ab6400] size-[16px]" />
-            <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#ab6400] text-[14px] whitespace-nowrap">
+            <ClockIcon className="text-[#AB6400] size-[16px]" />
+            <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#AB6400] text-[14px] whitespace-nowrap">
               <p className="leading-[20px]">3 Unsaved Changes</p>
             </div>
           </div>
@@ -950,13 +950,13 @@ function FooterActions({ hasUnsavedChanges }: { hasUnsavedChanges: boolean }) {
           className="bg-white content-stretch flex gap-[8px] h-[32px] items-center justify-center px-[12px] relative rounded-[4px] shrink-0 cursor-pointer hover:bg-[#f5f5f5] transition-colors" 
           data-name="pe-button"
         >
-          <div aria-hidden="true" className="absolute border border-[#004b72] border-solid inset-0 pointer-events-none rounded-[4px]" />
-          <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#004b72] text-[14px] whitespace-nowrap">
+          <div aria-hidden="true" className="absolute border border-[#004B72] border-solid inset-0 pointer-events-none rounded-[4px]" />
+          <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#004B72] text-[14px] whitespace-nowrap">
             <p className="leading-[20px]">Save Authorization</p>
           </div>
         </button>
         <button 
-          className="bg-[#004b72] content-stretch flex gap-[8px] h-[32px] items-center justify-center px-[12px] relative rounded-[4px] shrink-0 cursor-pointer hover:bg-[#003350] transition-colors" 
+          className="bg-[#004B72] content-stretch flex gap-[8px] h-[32px] items-center justify-center px-[12px] relative rounded-[4px] shrink-0 cursor-pointer hover:bg-[#003350] transition-colors" 
           data-name="pe-button"
         >
           <div className="flex flex-col font-['Inter:Medium',sans-serif] font-medium justify-center leading-[0] not-italic relative shrink-0 text-white text-[14px] whitespace-nowrap">
