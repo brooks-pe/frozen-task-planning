@@ -143,5 +143,5 @@ export const router = createBrowserRouter([
     Component: App,
   },
 ], {
-  basename: "/syncpoint-prototype",
+  basename: "/frozen-task-planning",
 });
