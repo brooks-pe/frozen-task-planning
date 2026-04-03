@@ -1,13 +1,15 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router';
+import { createPortal } from 'react-dom';
 import { SyncPointBreadcrumb } from './SyncPointBreadcrumb';
 import VersionDropdown from './VersionDropdown';
 import { CollapsibleFilterSection } from './CollapsibleFilterSection';
 import { SearchableFilterDropdown } from './SearchableFilterDropdown';
-import { SearchIcon } from './InlineIcons';
+import { ChevronDown, ChevronRight, MoreVertical, SearchIcon } from './InlineIcons';
 
 type ProcessingStatus = 'waiting' | 'assigned' | 'inProgress' | 'complete';
 type FundingActionTargetType = 'newDocument' | 'existingDraft' | 'newAmendment';
+type GroupWorkspaceMode = 'edit' | 'addPlans' | null;
 
 interface IncomingPlanRow {
   id: string;
@@ -34,73 +36,162 @@ const MOCK_ROWS: IncomingPlanRow[] = [
     id: 'bfm-001',
     status: 'waiting',
     assignee: 'Unassigned',
-    year: 'FY25',
+    year: 'FY26',
     activity: 'Surface Warfare',
     rbe: 'DR-023005.373',
     project: 'Gun Module',
     lineOfAccounting: '1B1B/C011B1-SO',
     r3cc: 'R3CC-201',
-    taskId: 'T-4109',
+    taskId: 'T-5101',
     taskTitle: 'Mission Package Integration',
-    incrementTotal: 4200000,
-    reimbursableAmount: 1700000,
-    directCiteAmount: 2500000,
-    needDate: '2026-05-10',
+    incrementTotal: 2450000,
+    reimbursableAmount: 950000,
+    directCiteAmount: 1500000,
+    needDate: '2026-05-18',
   },
   {
     id: 'bfm-002',
-    status: 'inProgress',
-    assignee: 'A. Rivera',
-    year: 'FY25',
+    status: 'waiting',
+    assignee: 'Unassigned',
+    year: 'FY26',
     activity: 'Surface Warfare',
     rbe: 'DR-023005.373',
     project: 'Gun Module',
-    lineOfAccounting: '1B1B/C011B1-SX',
+    lineOfAccounting: '1B1B/C011B1-SO',
     r3cc: 'R3CC-201',
-    taskId: 'T-4112',
+    taskId: 'T-5104',
     taskTitle: 'Safety Certification Package',
-    incrementTotal: 1850000,
-    reimbursableAmount: 850000,
-    directCiteAmount: 1000000,
-    needDate: '2026-05-22',
+    incrementTotal: 1960000,
+    reimbursableAmount: 760000,
+    directCiteAmount: 1200000,
+    needDate: '2026-05-27',
   },
   {
     id: 'bfm-003',
     status: 'waiting',
     assignee: 'Unassigned',
-    year: 'FY25',
-    activity: 'Mine Countermeasures',
-    rbe: 'DR-023099.242',
-    project: 'MPAS',
-    lineOfAccounting: '0605512N/3428',
-    r3cc: 'R3CC-188',
-    taskId: 'T-3892',
-    taskTitle: 'Sensor Suite Modernization',
-    incrementTotal: 3100000,
-    reimbursableAmount: 1200000,
-    directCiteAmount: 1900000,
-    needDate: '2026-04-30',
+    year: 'FY26',
+    activity: 'Surface Warfare',
+    rbe: 'DR-023005.373',
+    project: 'Gun Module',
+    lineOfAccounting: '1B1B/C011B1-SO',
+    r3cc: 'R3CC-201',
+    taskId: 'T-5110',
+    taskTitle: 'Launcher Control Software Refresh',
+    incrementTotal: 2240000,
+    reimbursableAmount: 940000,
+    directCiteAmount: 1300000,
+    needDate: '2026-06-02',
   },
   {
     id: 'bfm-004',
-    status: 'complete',
-    assignee: 'J. Patel',
+    status: 'waiting',
+    assignee: 'Unassigned',
     year: 'FY25',
-    activity: 'Mine Countermeasures',
-    rbe: 'DR-023099.242',
-    project: 'MPAS',
-    lineOfAccounting: '0605513N/3067',
-    r3cc: 'R3CC-188',
-    taskId: 'T-3901',
-    taskTitle: 'Launch and Recovery Equipment',
-    incrementTotal: 2650000,
-    reimbursableAmount: 1150000,
-    directCiteAmount: 1500000,
-    needDate: '2026-04-08',
+    activity: 'Integrated Test',
+    rbe: 'DR-090022.247',
+    project: 'Test Range Upgrade',
+    lineOfAccounting: '1C1C/C01C9-00',
+    r3cc: 'R3CC-155',
+    taskId: 'T-7104',
+    taskTitle: 'Instrumentation Refresh',
+    incrementTotal: 2800000,
+    reimbursableAmount: 1000000,
+    directCiteAmount: 1800000,
+    needDate: '2026-07-11',
   },
   {
     id: 'bfm-005',
-    status: 'inProgress',
+    status: 'waiting',
+    assignee: 'Unassigned',
+    year: 'FY26',
+    activity: 'Cyber Operations',
+    rbe: 'DR-070054.81',
+    project: 'Cyber Hardening',
+    lineOfAccounting: 'BLI 1319/PE0603553N',
+    r3cc: 'R3CC-277',
+    taskId: 'T-6215',
+    taskTitle: 'Zero Trust Pilot',
+    incrementTotal: 3350000,
+    reimbursableAmount: 1250000,
+    directCiteAmount: 2100000,
+    needDate: '2026-05-28',
+  },
+  {
+    id: 'bfm-006',
+    status: 'waiting',
+    assignee: 'Unassigned',
+    year: 'FY26',
+    activity: 'Surface Warfare',
+    rbe: 'DR-023005.373',
+    project: 'Autoloader Retrofit',
+    lineOfAccounting: '1B1B/C011B1-SO',
+    r3cc: 'R3CC-201',
+    taskId: 'T-5121',
+    taskTitle: 'Autoloader Retrofit Phase 1',
+    incrementTotal: 1890000,
+    reimbursableAmount: 690000,
+    directCiteAmount: 1200000,
+    needDate: '2026-06-14',
+  },
+  {
+    id: 'bfm-007',
+    status: 'waiting',
+    assignee: 'Unassigned',
+    year: 'FY26',
+    activity: 'Surface Warfare',
+    rbe: 'DR-023005.373',
+    project: 'Gun Module',
+    lineOfAccounting: '1B1B/C011B1-SX',
+    r3cc: 'R3CC-201',
+    taskId: 'T-5126',
+    taskTitle: 'Autoloader Retrofit Phase 2',
+    incrementTotal: 1720000,
+    reimbursableAmount: 640000,
+    directCiteAmount: 1080000,
+    needDate: '2026-06-20',
+  },
+  {
+    id: 'bfm-008',
+    status: 'assigned',
+    assignee: 'A. Rivera',
+    fundingActionId: 'DFA-094',
+    fundingActionLabel: 'Draft Document: FD-26-0188',
+    year: 'FY26',
+    activity: 'Expeditionary Logistics',
+    rbe: 'DR-060070.18',
+    project: 'SSSM',
+    lineOfAccounting: 'BLI 2040/OMN11032',
+    r3cc: 'R3CC-442',
+    taskId: 'T-5031',
+    taskTitle: 'Inventory Reconstitution',
+    incrementTotal: 2100000,
+    reimbursableAmount: 900000,
+    directCiteAmount: 1200000,
+    needDate: '2026-06-17',
+  },
+  {
+    id: 'bfm-009',
+    status: 'assigned',
+    assignee: 'A. Rivera',
+    fundingActionId: 'DFA-094',
+    fundingActionLabel: 'Draft Document: FD-26-0188',
+    year: 'FY26',
+    activity: 'Expeditionary Logistics',
+    rbe: 'DR-060070.18',
+    project: 'SSSM',
+    lineOfAccounting: 'BLI 2040/OMN11032',
+    r3cc: 'R3CC-442',
+    taskId: 'T-5034',
+    taskTitle: 'Forward Stock Positioning',
+    incrementTotal: 2380000,
+    reimbursableAmount: 940000,
+    directCiteAmount: 1440000,
+    needDate: '2026-06-26',
+  },
+  {
+    id: 'bfm-010',
+    status: 'assigned',
     assignee: 'M. Walker',
     year: 'FY26',
     activity: 'Expeditionary Logistics',
@@ -116,26 +207,64 @@ const MOCK_ROWS: IncomingPlanRow[] = [
     needDate: '2026-06-02',
   },
   {
-    id: 'bfm-006',
-    status: 'waiting',
-    assignee: 'Unassigned',
+    id: 'bfm-017',
+    status: 'assigned',
+    assignee: 'K. Owens',
     year: 'FY26',
     activity: 'Expeditionary Logistics',
     rbe: 'DR-060070.18',
     project: 'SSSM',
     lineOfAccounting: 'BLI 2040/OMN11032',
     r3cc: 'R3CC-442',
-    taskId: 'T-5031',
-    taskTitle: 'Inventory Reconstitution',
-    incrementTotal: 2100000,
-    reimbursableAmount: 900000,
-    directCiteAmount: 1200000,
-    needDate: '2026-06-17',
+    taskId: 'T-5038',
+    taskTitle: 'Afloat Replenishment Kit Refresh',
+    incrementTotal: 2260000,
+    reimbursableAmount: 880000,
+    directCiteAmount: 1380000,
+    needDate: '2026-06-30',
   },
   {
-    id: 'bfm-007',
-    status: 'complete',
-    assignee: 'S. Nguyen',
+    id: 'bfm-011',
+    status: 'inProgress',
+    assignee: 'J. Patel',
+    fundingActionId: 'DFA-101',
+    fundingActionLabel: 'Draft Document: FD-26-0142',
+    year: 'FY25',
+    activity: 'Mine Countermeasures',
+    rbe: 'DR-023099.242',
+    project: 'MPAS',
+    lineOfAccounting: '0605512N/3428',
+    r3cc: 'R3CC-188',
+    taskId: 'T-3892',
+    taskTitle: 'Sensor Suite Modernization',
+    incrementTotal: 3100000,
+    reimbursableAmount: 1200000,
+    directCiteAmount: 1900000,
+    needDate: '2026-04-30',
+  },
+  {
+    id: 'bfm-012',
+    status: 'inProgress',
+    assignee: 'J. Patel',
+    fundingActionId: 'DFA-101',
+    fundingActionLabel: 'Draft Document: FD-26-0142',
+    year: 'FY25',
+    activity: 'Mine Countermeasures',
+    rbe: 'DR-023099.242',
+    project: 'MPAS',
+    lineOfAccounting: '0605512N/3428',
+    r3cc: 'R3CC-188',
+    taskId: 'T-3901',
+    taskTitle: 'Launch and Recovery Equipment',
+    incrementTotal: 2650000,
+    reimbursableAmount: 1150000,
+    directCiteAmount: 1500000,
+    needDate: '2026-05-08',
+  },
+  {
+    id: 'bfm-013',
+    status: 'inProgress',
+    assignee: 'A. Rivera',
     year: 'FY26',
     activity: 'Cyber Operations',
     rbe: 'DR-070054.81',
@@ -150,55 +279,59 @@ const MOCK_ROWS: IncomingPlanRow[] = [
     needDate: '2026-04-12',
   },
   {
-    id: 'bfm-008',
-    status: 'inProgress',
-    assignee: 'A. Rivera',
-    year: 'FY26',
-    activity: 'Cyber Operations',
-    rbe: 'DR-070054.81',
-    project: 'Cyber Hardening',
-    lineOfAccounting: 'BLI 1319/PE0603553N',
-    r3cc: 'R3CC-277',
-    taskId: 'T-6215',
-    taskTitle: 'Zero Trust Pilot',
-    incrementTotal: 3350000,
-    reimbursableAmount: 1250000,
-    directCiteAmount: 2100000,
-    needDate: '2026-05-28',
-  },
-  {
-    id: 'bfm-009',
-    status: 'waiting',
-    assignee: 'Unassigned',
-    year: 'FY26',
-    activity: 'Integrated Test',
-    rbe: 'DR-090022.247',
-    project: 'Test Range Upgrade',
-    lineOfAccounting: '1C1C/C01C9-00',
-    r3cc: 'R3CC-155',
-    taskId: 'T-7104',
-    taskTitle: 'Instrumentation Refresh',
-    incrementTotal: 2800000,
-    reimbursableAmount: 1000000,
-    directCiteAmount: 1800000,
-    needDate: '2026-07-11',
-  },
-  {
-    id: 'bfm-010',
+    id: 'bfm-014',
     status: 'complete',
-    assignee: 'J. Patel',
+    assignee: 'S. Nguyen',
+    fundingActionId: 'DFA-087',
+    fundingActionLabel: 'Amendment: FD-25-0091 (A02)',
     year: 'FY27',
     activity: 'Integrated Test',
     rbe: 'DR-090022.247',
     project: 'Test Range Upgrade',
     lineOfAccounting: '1D4D/C01C9-IL',
     r3cc: 'R3CC-155',
-    taskId: 'T-7112',
-    taskTitle: 'Data Reduction Tooling',
-    incrementTotal: 1680000,
-    reimbursableAmount: 780000,
-    directCiteAmount: 900000,
+    taskId: 'T-7118',
+    taskTitle: 'Telemetry Data Pipeline Update',
+    incrementTotal: 1840000,
+    reimbursableAmount: 790000,
+    directCiteAmount: 1050000,
+    needDate: '2026-03-26',
+  },
+  {
+    id: 'bfm-015',
+    status: 'complete',
+    assignee: 'S. Nguyen',
+    fundingActionId: 'DFA-087',
+    fundingActionLabel: 'Amendment: FD-25-0091 (A02)',
+    year: 'FY27',
+    activity: 'Integrated Test',
+    rbe: 'DR-090022.247',
+    project: 'Test Range Upgrade',
+    lineOfAccounting: '1D4D/C01C9-IL',
+    r3cc: 'R3CC-155',
+    taskId: 'T-7122',
+    taskTitle: 'Range Instrumentation Calibration',
+    incrementTotal: 1560000,
+    reimbursableAmount: 640000,
+    directCiteAmount: 920000,
     needDate: '2026-03-29',
+  },
+  {
+    id: 'bfm-016',
+    status: 'complete',
+    assignee: 'J. Patel',
+    year: 'FY26',
+    activity: 'Surface Warfare',
+    rbe: 'DR-023005.373',
+    project: 'Gun Module',
+    lineOfAccounting: '1B1B/C011B1-SX',
+    r3cc: 'R3CC-201',
+    taskId: 'T-4098',
+    taskTitle: 'Combat System Interface Verification',
+    incrementTotal: 1490000,
+    reimbursableAmount: 590000,
+    directCiteAmount: 900000,
+    needDate: '2026-03-18',
   },
 ];
 
@@ -242,6 +375,49 @@ function buildSavedFundingActionLabel(form: FundingActionFormState, suggestedDra
     return `Draft Funding Action: ${targetReference}`;
   }
   return `Draft Funding Action: ${suggestedDraftGroupName || 'Pending Name'}`;
+}
+
+function matchesCriticalGroupingDimensions(candidate: IncomingPlanRow, groupRows: IncomingPlanRow[]) {
+  if (groupRows.length === 0) return false;
+  const anchor = groupRows[0];
+  return CRITICAL_GROUPING_KEYS.every((key) => candidate[key] === anchor[key]);
+}
+
+function parseFundingActionLabel(fundingActionLabel: string): {
+  targetType: FundingActionTargetType;
+  targetReference: string;
+  amendmentNumber: string;
+} {
+  const amendmentMatch = fundingActionLabel.match(/^Amendment:\s*(.+?)(?:\s*\((.+)\))?$/);
+  if (amendmentMatch) {
+    return {
+      targetType: 'newAmendment',
+      targetReference: (amendmentMatch[1] || '').trim(),
+      amendmentNumber: (amendmentMatch[2] || '').trim(),
+    };
+  }
+
+  if (fundingActionLabel.startsWith('Draft Document:')) {
+    return {
+      targetType: 'existingDraft',
+      targetReference: fundingActionLabel.replace('Draft Document:', '').trim(),
+      amendmentNumber: '',
+    };
+  }
+
+  if (fundingActionLabel.startsWith('Draft Funding Action:')) {
+    return {
+      targetType: 'newDocument',
+      targetReference: fundingActionLabel.replace('Draft Funding Action:', '').trim(),
+      amendmentNumber: '',
+    };
+  }
+
+  return {
+    targetType: 'newDocument',
+    targetReference: fundingActionLabel.trim(),
+    amendmentNumber: '',
+  };
 }
 
 interface FundingActionFormState {
@@ -423,6 +599,8 @@ export default function BFMProcessingContent() {
   const [saveConfirmation, setSaveConfirmation] = useState('');
   const [workflowWarning, setWorkflowWarning] = useState('');
   const [nextFundingActionNumber, setNextFundingActionNumber] = useState(1);
+  const [editingFundingActionId, setEditingFundingActionId] = useState<string | null>(null);
+  const [groupWorkspaceMode, setGroupWorkspaceMode] = useState<GroupWorkspaceMode>(null);
 
   const yearOptions = useMemo(
     () => ['All Years', ...new Set(planRows.map((row) => row.year))],
@@ -504,6 +682,28 @@ export default function BFMProcessingContent() {
   const selectedRows = useMemo(
     () => planRows.filter((row) => selectedIds.has(row.id)),
     [planRows, selectedIds],
+  );
+  const editingGroupRows = useMemo(
+    () => (editingFundingActionId ? planRows.filter((row) => row.fundingActionId === editingFundingActionId) : []),
+    [editingFundingActionId, planRows],
+  );
+  const editingGroupRowIdSet = useMemo(
+    () => new Set(editingGroupRows.map((row) => row.id)),
+    [editingGroupRows],
+  );
+  const addPlanCandidates = useMemo(() => {
+    if (!editingFundingActionId || groupWorkspaceMode !== 'addPlans') return [];
+    return planRows.filter(
+      (row) =>
+        !row.fundingActionId &&
+        isGroupableStatus(row.status) &&
+        matchesCriticalGroupingDimensions(row, editingGroupRows),
+    );
+  }, [editingFundingActionId, editingGroupRows, groupWorkspaceMode, planRows]);
+  const selectedCandidateIds = useMemo(
+    () =>
+      [...selectedIds].filter((rowId) => !editingGroupRowIdSet.has(rowId) && addPlanCandidates.some((row) => row.id === rowId)),
+    [addPlanCandidates, editingGroupRowIdSet, selectedIds],
   );
   const selectedEligibleForGrouping = useMemo(
     () => selectedRows.filter((row) => isGroupableStatus(row.status)),
@@ -690,12 +890,16 @@ export default function BFMProcessingContent() {
     setFormErrors({});
     setIsTargetReferenceManuallyEdited(false);
     setHasIncompatibleOverrideAck(false);
+    setEditingFundingActionId(null);
+    setGroupWorkspaceMode(null);
   };
 
   const handleCancelFundingAction = () => {
     setIsFundingActionWorkspaceOpen(false);
     setFormErrors({});
     setHasIncompatibleOverrideAck(false);
+    setEditingFundingActionId(null);
+    setGroupWorkspaceMode(null);
   };
 
   const updateFundingActionField = (
@@ -769,7 +973,7 @@ export default function BFMProcessingContent() {
 
     const savedCount = selectedRows.length;
     const draftAssignee = fundingActionForm.assignee.trim();
-    const savedFundingActionId = `DFA-${String(nextFundingActionNumber).padStart(3, '0')}`;
+    const savedFundingActionId = editingFundingActionId ?? `DFA-${String(nextFundingActionNumber).padStart(3, '0')}`;
     const savedFundingActionLabel = buildSavedFundingActionLabel(fundingActionForm, suggestedDraftGroupName);
     setPlanRows((prev) =>
       prev.map((row) => {
@@ -799,8 +1003,14 @@ export default function BFMProcessingContent() {
         };
       }),
     );
-    setNextFundingActionNumber((prev) => prev + 1);
-    setSaveConfirmation(`Draft Funding Action saved for ${savedCount} APM Plan${savedCount === 1 ? '' : 's'}.`);
+    if (!editingFundingActionId) {
+      setNextFundingActionNumber((prev) => prev + 1);
+    }
+    setSaveConfirmation(
+      editingFundingActionId
+        ? `Draft Funding Action ${savedFundingActionId} updated for ${savedCount} APM Plan${savedCount === 1 ? '' : 's'}.`
+        : `Draft Funding Action saved for ${savedCount} APM Plan${savedCount === 1 ? '' : 's'}.`,
+    );
     setSelectedIds(new Set());
     setFundingActionForm(INITIAL_FUNDING_ACTION_FORM);
     setIsTargetReferenceManuallyEdited(false);
@@ -809,6 +1019,163 @@ export default function BFMProcessingContent() {
     setIsFundingActionWorkspaceOpen(false);
     setIsAssignPanelOpen(false);
     setAssignPanelError('');
+    setEditingFundingActionId(null);
+    setGroupWorkspaceMode(null);
+  };
+
+  const handleUngroupFundingAction = (fundingActionId: string) => {
+    const groupedRows = planRows.filter((row) => row.fundingActionId === fundingActionId);
+    if (groupedRows.length === 0) return;
+
+    const hasIneligibleStatus = groupedRows.some((row) => !isGroupableStatus(row.status));
+    if (hasIneligibleStatus) {
+      setWorkflowWarning(
+        `Cannot ungroup ${fundingActionId}. Ungroup is only available before active processing starts (Waiting to Be Assigned or Assigned).`,
+      );
+      return;
+    }
+
+    setPlanRows((prev) =>
+      prev.map((row) =>
+        row.fundingActionId === fundingActionId
+          ? { ...row, fundingActionId: undefined, fundingActionLabel: undefined }
+          : row,
+      ),
+    );
+    setWorkflowWarning('');
+    setSaveConfirmation(
+      `Ungrouped ${fundingActionId}. ${groupedRows.length} APM Plan${groupedRows.length === 1 ? '' : 's'} returned to standalone rows.`,
+    );
+  };
+
+  const handleEditFundingActionGroup = (fundingActionId: string) => {
+    const groupedRows = planRows.filter((row) => row.fundingActionId === fundingActionId);
+    if (groupedRows.length === 0) return;
+
+    const hasIneligibleStatus = groupedRows.some((row) => !isGroupableStatus(row.status));
+    if (hasIneligibleStatus) {
+      setWorkflowWarning(
+        `Cannot edit ${fundingActionId}. Group editing is only available before active processing starts (Waiting to Be Assigned or Assigned).`,
+      );
+      return;
+    }
+
+    const groupLabel = groupedRows[0].fundingActionLabel || '';
+    const parsedTarget = parseFundingActionLabel(groupLabel);
+    const uniqueAssignees = [...new Set(groupedRows.map((row) => row.assignee).filter((assignee) => !isAssigneeUnset(assignee)))];
+    const nextAssignee = uniqueAssignees.length === 1 ? uniqueAssignees[0] : '';
+
+    setSelectedIds(new Set(groupedRows.map((row) => row.id)));
+    setFundingActionForm({
+      ...INITIAL_FUNDING_ACTION_FORM,
+      targetType: parsedTarget.targetType,
+      targetReference: parsedTarget.targetReference,
+      amendmentNumber: parsedTarget.amendmentNumber,
+      assignee: nextAssignee,
+    });
+    setIsTargetReferenceManuallyEdited(Boolean(parsedTarget.targetReference));
+    setHasIncompatibleOverrideAck(false);
+    setFormErrors({});
+    setWorkflowWarning('');
+    setSaveConfirmation('');
+    setIsFundingActionWorkspaceOpen(true);
+    setIsAssignPanelOpen(false);
+    setAssignPanelError('');
+    setEditingFundingActionId(fundingActionId);
+    setGroupWorkspaceMode('edit');
+  };
+
+  const handleAddPlansToFundingActionGroup = (fundingActionId: string) => {
+    const groupedRows = planRows.filter((row) => row.fundingActionId === fundingActionId);
+    if (groupedRows.length === 0) return;
+
+    const hasIneligibleStatus = groupedRows.some((row) => !isGroupableStatus(row.status));
+    if (hasIneligibleStatus) {
+      setWorkflowWarning(
+        `Cannot add plans to ${fundingActionId}. Group updates are only available before active processing starts (Waiting to Be Assigned or Assigned).`,
+      );
+      return;
+    }
+
+    const groupLabel = groupedRows[0].fundingActionLabel || '';
+    const parsedTarget = parseFundingActionLabel(groupLabel);
+    const uniqueAssignees = [...new Set(groupedRows.map((row) => row.assignee).filter((assignee) => !isAssigneeUnset(assignee)))];
+    const nextAssignee = uniqueAssignees.length === 1 ? uniqueAssignees[0] : '';
+
+    setSelectedIds(new Set(groupedRows.map((row) => row.id)));
+    setFundingActionForm({
+      ...INITIAL_FUNDING_ACTION_FORM,
+      targetType: parsedTarget.targetType,
+      targetReference: parsedTarget.targetReference,
+      amendmentNumber: parsedTarget.amendmentNumber,
+      assignee: nextAssignee,
+    });
+    setIsTargetReferenceManuallyEdited(Boolean(parsedTarget.targetReference));
+    setHasIncompatibleOverrideAck(false);
+    setFormErrors({});
+    setWorkflowWarning('');
+    setSaveConfirmation('');
+    setIsFundingActionWorkspaceOpen(true);
+    setIsAssignPanelOpen(false);
+    setAssignPanelError('');
+    setEditingFundingActionId(fundingActionId);
+    setGroupWorkspaceMode('addPlans');
+  };
+
+  const handleToggleAddPlanCandidate = (rowId: string) => {
+    if (!editingFundingActionId || groupWorkspaceMode !== 'addPlans') return;
+    if (!addPlanCandidates.some((row) => row.id === rowId)) return;
+
+    setSelectedIds((prev) => {
+      const updated = new Set(prev);
+      if (updated.has(rowId)) {
+        updated.delete(rowId);
+      } else {
+        updated.add(rowId);
+      }
+      return updated;
+    });
+  };
+
+  const handleRemoveChildFromGroup = (rowId: string, fundingActionId: string) => {
+    const groupedRows = planRows.filter((row) => row.fundingActionId === fundingActionId);
+    if (groupedRows.length === 0) return;
+
+    const hasIneligibleStatus = groupedRows.some((row) => !isGroupableStatus(row.status));
+    if (hasIneligibleStatus) {
+      setWorkflowWarning(
+        `Cannot remove plans from ${fundingActionId}. Membership changes are only available before active processing starts (Waiting to Be Assigned or Assigned).`,
+      );
+      return;
+    }
+
+    if (!groupedRows.some((row) => row.id === rowId)) return;
+
+    const shouldDissolveGroup = groupedRows.length <= 2;
+    if (shouldDissolveGroup) {
+      setPlanRows((prev) =>
+        prev.map((row) =>
+          row.fundingActionId === fundingActionId
+            ? { ...row, fundingActionId: undefined, fundingActionLabel: undefined }
+            : row,
+        ),
+      );
+      setSaveConfirmation(
+        `Removed plan from ${fundingActionId}. Group dissolved because one child would have remained; both plans returned to standalone rows.`,
+      );
+      setWorkflowWarning('');
+      return;
+    }
+
+    setPlanRows((prev) =>
+      prev.map((row) =>
+        row.id === rowId
+          ? { ...row, fundingActionId: undefined, fundingActionLabel: undefined }
+          : row,
+      ),
+    );
+    setSaveConfirmation(`Removed 1 APM Plan from ${fundingActionId}. The plan is now a standalone row.`);
+    setWorkflowWarning('');
   };
 
   return (
@@ -860,6 +1227,9 @@ export default function BFMProcessingContent() {
                 selectedIncrementTotal={selectedIncrementTotal}
                 selectedReimbursableTotal={selectedReimbursableTotal}
                 selectedDirectCiteTotal={selectedDirectCiteTotal}
+                workspaceMode={groupWorkspaceMode}
+                addPlanCandidates={addPlanCandidates}
+                selectedCandidateIds={selectedCandidateIds}
                 formState={fundingActionForm}
                 formErrors={formErrors}
                 groupingDecision={groupingDecision}
@@ -867,6 +1237,7 @@ export default function BFMProcessingContent() {
                 suggestedDraftGroupName={suggestedDraftGroupName}
                 onFieldChange={updateFundingActionField}
                 onIncompatibleOverrideChange={handleIncompatibleOverrideChange}
+                onToggleAddCandidate={handleToggleAddPlanCandidate}
                 onCancel={handleCancelFundingAction}
                 onSave={handleSaveDraftFundingAction}
               />
@@ -929,7 +1300,7 @@ export default function BFMProcessingContent() {
                         if (assignPanelError) setAssignPanelError('');
                       }}
                       placeholder="Enter or select assignee"
-                      className="h-[32px] px-[10px] border border-[#B9BBC6] rounded-[4px] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] placeholder:text-[#80838D] focus:outline-none focus:border-[#147DB9] focus:ring-1 focus:ring-[rgba(20,125,185,0.2)]"
+                      className="h-[32px] px-[10px] border border-[#B9BBC6] rounded-[4px] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#1C2024] placeholder:text-[#60646C] focus:outline-none focus:border-[#147DB9] focus:ring-1 focus:ring-[rgba(20,125,185,0.2)]"
                     />
                     <datalist id="bfm-assignee-options">
                       {assigneeOptions
@@ -975,6 +1346,10 @@ export default function BFMProcessingContent() {
               allVisibleSelected={allVisibleSelected}
               onToggleAll={toggleSelectAll}
               onToggleRow={toggleSelectRow}
+              onAddPlansToFundingActionGroup={handleAddPlansToFundingActionGroup}
+              onEditFundingActionGroup={handleEditFundingActionGroup}
+              onRemoveChildFromGroup={handleRemoveChildFromGroup}
+              onUngroupFundingAction={handleUngroupFundingAction}
             />
           </div>
         </div>
@@ -1139,6 +1514,9 @@ function FundingActionWorkspace({
   selectedIncrementTotal,
   selectedReimbursableTotal,
   selectedDirectCiteTotal,
+  workspaceMode,
+  addPlanCandidates,
+  selectedCandidateIds,
   formState,
   formErrors,
   groupingDecision,
@@ -1146,6 +1524,7 @@ function FundingActionWorkspace({
   suggestedDraftGroupName,
   onFieldChange,
   onIncompatibleOverrideChange,
+  onToggleAddCandidate,
   onCancel,
   onSave,
 }: {
@@ -1153,6 +1532,9 @@ function FundingActionWorkspace({
   selectedIncrementTotal: number;
   selectedReimbursableTotal: number;
   selectedDirectCiteTotal: number;
+  workspaceMode: GroupWorkspaceMode;
+  addPlanCandidates: IncomingPlanRow[];
+  selectedCandidateIds: string[];
   formState: FundingActionFormState;
   formErrors: Record<string, string>;
   groupingDecision: GroupingDecision;
@@ -1160,6 +1542,7 @@ function FundingActionWorkspace({
   suggestedDraftGroupName: string;
   onFieldChange: (field: keyof FundingActionFormState, value: string, options?: { markTargetEdited?: boolean }) => void;
   onIncompatibleOverrideChange: (checked: boolean) => void;
+  onToggleAddCandidate: (rowId: string) => void;
   onCancel: () => void;
   onSave: () => void;
 }) {
@@ -1177,6 +1560,7 @@ function FundingActionWorkspace({
         : 'Draft Group Name';
   const saveDisabled =
     groupingDecision.status === 'likelyIncompatible' && !hasIncompatibleOverrideAck;
+  const currentGroupMemberCount = Math.max(0, selectedRows.length - selectedCandidateIds.length);
   const criticalConflictDetails = groupingDecision.criticalConflicts.map((field) => ({
     label: field.label,
     value: `${field.distinctValues.length} values: ${field.summary}`,
@@ -1199,7 +1583,9 @@ function FundingActionWorkspace({
           </h2>
         </div>
         <p className="mt-[4px] font-['Inter:Regular',sans-serif] font-normal text-[14px] leading-[20px] text-[#60646C]">
-          Combine selected APM Plans into a draft Funding Action.
+          {workspaceMode === 'addPlans'
+            ? 'Review current group and add compatible standalone plans before saving.'
+            : 'Combine selected APM Plans into a draft Funding Action.'}
         </p>
       </div>
 
@@ -1218,6 +1604,79 @@ function FundingActionWorkspace({
           <SummaryCard label="Total Reimbursable Amount" value={formatCurrency(selectedReimbursableTotal)} />
           <SummaryCard label="Total Direct Cite Amount" value={formatCurrency(selectedDirectCiteTotal)} />
         </div>
+
+        {workspaceMode === 'addPlans' && (
+          <div className="bg-white border border-[#CDCED6] rounded-[5px]">
+            <div className="px-[12px] py-[10px] border-b border-[#CDCED6] grid gap-[4px]">
+              <p className="font-['Inter:Semi_Bold',sans-serif] font-semibold text-[13px] leading-[18px] uppercase tracking-[0.5px] text-[#1C2024]">
+                Add Compatible Standalone Plans
+              </p>
+              <p className="font-['Inter:Regular',sans-serif] font-normal text-[12px] leading-[16px] text-[#60646C]">
+                Current group members: {currentGroupMemberCount} | Compatible candidates: {addPlanCandidates.length} | Selected to add:{' '}
+                {selectedCandidateIds.length}
+              </p>
+              <p className="font-['Inter:Regular',sans-serif] font-normal text-[12px] leading-[16px] text-[#60646C]">
+                Candidates are standalone plans in Waiting to Be Assigned or Assigned status that match this group's Activity, RBE, Project, and Line of Accounting.
+              </p>
+            </div>
+            <div className="max-h-[160px] overflow-auto">
+              {addPlanCandidates.length === 0 ? (
+                <p className="px-[12px] py-[10px] font-['Inter:Regular',sans-serif] font-normal text-[13px] leading-[18px] text-[#60646C]">
+                  No compatible standalone plans are currently available for this group.
+                </p>
+              ) : (
+                <>
+                  <div className="w-full grid items-center gap-[10px] px-[12px] py-[7px] border-b border-[#CDCED6] bg-[#f9f9fb]" style={{ gridTemplateColumns: '22px 96px minmax(220px, 1fr) 130px 110px' }}>
+                    <span />
+                    <span className="font-['Inter:Medium',sans-serif] font-medium text-[11px] leading-[14px] uppercase tracking-[0.3px] text-[#60646C]">
+                      Task ID
+                    </span>
+                    <span className="font-['Inter:Medium',sans-serif] font-medium text-[11px] leading-[14px] uppercase tracking-[0.3px] text-[#60646C]">
+                      Task Title
+                    </span>
+                    <span className="font-['Inter:Medium',sans-serif] font-medium text-[11px] leading-[14px] uppercase tracking-[0.3px] text-[#60646C]">
+                      Need Date
+                    </span>
+                    <span className="font-['Inter:Medium',sans-serif] font-medium text-[11px] leading-[14px] uppercase tracking-[0.3px] text-[#60646C] text-right">
+                      Increment
+                    </span>
+                  </div>
+                  {addPlanCandidates.map((row) => {
+                    const isSelected = selectedCandidateIds.includes(row.id);
+                    return (
+                      <label
+                        key={`candidate-${row.id}`}
+                        className={`w-full grid items-center gap-[10px] px-[12px] py-[9px] border-b border-[#CDCED6] cursor-pointer ${
+                          isSelected ? 'bg-[rgba(20,125,185,0.06)]' : 'hover:bg-[#fafafa]'
+                        }`}
+                        style={{ gridTemplateColumns: '22px 96px minmax(220px, 1fr) 130px 110px' }}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={() => onToggleAddCandidate(row.id)}
+                          className="h-[16px] w-[16px] accent-[#147DB9] cursor-pointer"
+                        />
+                        <span className="font-['Inter:Medium',sans-serif] font-medium text-[13px] leading-[18px] text-[#1C2024]">
+                          {row.taskId}
+                        </span>
+                        <span className="font-['Inter:Regular',sans-serif] font-normal text-[13px] leading-[18px] text-[#1C2024] truncate">
+                          {row.taskTitle}
+                        </span>
+                        <span className="font-['Inter:Regular',sans-serif] font-normal text-[12px] leading-[16px] text-[#60646C]">
+                          {row.needDate}
+                        </span>
+                        <span className="font-['Inter:Regular',sans-serif] font-normal text-[12px] leading-[16px] text-[#60646C] text-right">
+                          {formatCurrency(row.incrementTotal)}
+                        </span>
+                      </label>
+                    );
+                  })}
+                </>
+              )}
+            </div>
+          </div>
+        )}
 
         <div className="bg-white border border-[#CDCED6] rounded-[5px] px-[14px] py-[10px] grid gap-[8px]">
           <div className="flex items-center gap-[8px] flex-wrap">
@@ -1283,7 +1742,7 @@ function FundingActionWorkspace({
               </div>
             </div>
           ) : (
-            <p className="font-['Inter:Regular',sans-serif] font-normal text-[12px] leading-[16px] text-[#80838D]">
+            <p className="font-['Inter:Regular',sans-serif] font-normal text-[12px] leading-[16px] text-[#60646C]">
               No aligned context across the current selection.
             </p>
           )}
@@ -1602,8 +2061,8 @@ function WorkspaceField({
           disabled
             ? 'border-[#CDCED6] bg-[#f5f5f7] text-[#8B8D98] placeholder:text-[#8B8D98] cursor-not-allowed'
             : error
-              ? 'border-[#EB8E90] text-[#1C2024] placeholder:text-[#80838D] focus:border-[#CE2C31]'
-              : 'border-[#B9BBC6] text-[#1C2024] placeholder:text-[#80838D] focus:border-[#147DB9]'
+              ? 'border-[#EB8E90] text-[#1C2024] placeholder:text-[#60646C] focus:border-[#CE2C31]'
+              : 'border-[#B9BBC6] text-[#1C2024] placeholder:text-[#60646C] focus:border-[#147DB9]'
         }`}
       />
       {error && (
@@ -1626,14 +2085,22 @@ function FlatPlansTable({
   allVisibleSelected,
   onToggleAll,
   onToggleRow,
+  onAddPlansToFundingActionGroup,
+  onEditFundingActionGroup,
+  onRemoveChildFromGroup,
+  onUngroupFundingAction,
 }: {
   rows: IncomingPlanRow[];
   selectedIds: Set<string>;
   allVisibleSelected: boolean;
   onToggleAll: () => void;
   onToggleRow: (rowId: string) => void;
+  onAddPlansToFundingActionGroup: (fundingActionId: string) => void;
+  onEditFundingActionGroup: (fundingActionId: string) => void;
+  onRemoveChildFromGroup: (rowId: string, fundingActionId: string) => void;
+  onUngroupFundingAction: (fundingActionId: string) => void;
 }) {
-  const GRID_COLS = '48px 170px 160px 90px 150px 130px 170px 180px 100px 110px 250px 130px 145px 130px 120px';
+  const GRID_COLS = '48px 170px 160px 90px 150px 130px 170px 180px 100px 110px 250px 130px 145px 130px 120px 92px';
   const [collapsedGroupIds, setCollapsedGroupIds] = useState<Set<string>>(new Set());
 
   const displayItems = useMemo(() => {
@@ -1689,7 +2156,7 @@ function FlatPlansTable({
 
   return (
     <div className="bg-white rounded-b-[5px] border border-[#CDCED6] border-t-0 w-full overflow-x-auto">
-      <div className="min-w-[2080px]">
+      <div className="min-w-[2172px]">
         <div className="bg-[#f9f9fb] border-b border-[#CDCED6] w-full grid" style={{ gridTemplateColumns: GRID_COLS }}>
           <div className="px-[12px] py-[12px] flex items-center justify-center min-w-0">
             <input
@@ -1714,6 +2181,7 @@ function FlatPlansTable({
           {headerCell('Reimbursable', 'right')}
           {headerCell('Direct Cite', 'right')}
           {headerCell('Need Date')}
+          {headerCell('Actions')}
         </div>
 
         {rows.length === 0 ? (
@@ -1741,22 +2209,27 @@ function FlatPlansTable({
 
             const { group } = item;
             const isExpanded = !collapsedGroupIds.has(group.id);
+            const canUngroup = group.rows.every((row) => isGroupableStatus(row.status));
             const childCount = group.rows.length;
             const groupIncrementTotal = group.rows.reduce((total, row) => total + row.incrementTotal, 0);
 
             return (
               <div key={group.id}>
                 <div
-                  className="w-full border-b border-[#CDCED6] bg-[#f6f9fc] grid"
+                  className="w-full border-b border-[#B9BBC6] border-t border-t-[#B9BBC6] bg-[#f3f7fb] hover:bg-[#edf3fa] transition-colors grid"
                   style={{ gridTemplateColumns: GRID_COLS }}
                 >
                   <div className="px-[12px] py-[10px] flex items-center justify-center min-w-0">
                     <button
                       onClick={() => toggleGroupCollapse(group.id)}
                       aria-label={`${isExpanded ? 'Collapse' : 'Expand'} ${group.id}`}
-                      className="h-[22px] w-[22px] rounded-[4px] border border-[#B9BBC6] bg-white text-[#004B72] text-[12px] leading-none cursor-pointer hover:bg-[#f5f5f5] transition-colors"
+                      className="cursor-pointer flex items-center justify-center outline-none focus-visible:ring-[3px] focus-visible:ring-[rgba(20,125,185,0.22)] rounded-[3px]"
                     >
-                      {isExpanded ? '▾' : '▸'}
+                      {isExpanded ? (
+                        <ChevronDown className="size-[16px] text-[#1C2024]" />
+                      ) : (
+                        <ChevronRight className="size-[16px] text-[#1C2024] opacity-40" />
+                      )}
                     </button>
                   </div>
                   <div className="px-[12px] py-[10px] flex items-center gap-[10px] min-w-0 flex-wrap" style={{ gridColumn: '2 / -1' }}>
@@ -1775,12 +2248,40 @@ function FlatPlansTable({
                     <span className="font-['Inter:Regular',sans-serif] font-normal text-[12px] leading-[16px] text-[#60646C] whitespace-nowrap">
                       {formatCurrency(groupIncrementTotal)} increment
                     </span>
+                    {canUngroup ? (
+                      <div className="flex items-center gap-[6px]">
+                        <button
+                          onClick={() => onAddPlansToFundingActionGroup(group.id)}
+                          className="h-[24px] px-[10px] rounded-[4px] border border-[#B9BBC6] bg-white text-[#1C2024] font-['Inter:Medium',sans-serif] font-medium text-[12px] leading-[16px] cursor-pointer hover:bg-[#f5f5f5] transition-colors whitespace-nowrap"
+                        >
+                          Add Plans
+                        </button>
+                        <button
+                          onClick={() => onEditFundingActionGroup(group.id)}
+                          className="h-[24px] px-[10px] rounded-[4px] border border-[#B9BBC6] bg-white text-[#1C2024] font-['Inter:Medium',sans-serif] font-medium text-[12px] leading-[16px] cursor-pointer hover:bg-[#f5f5f5] transition-colors whitespace-nowrap"
+                        >
+                          Edit Group
+                        </button>
+                        <button
+                          onClick={() => onUngroupFundingAction(group.id)}
+                          className="h-[24px] px-[10px] rounded-[4px] border border-[#B9BBC6] bg-white text-[#1C2024] font-['Inter:Medium',sans-serif] font-medium text-[12px] leading-[16px] cursor-pointer hover:bg-[#f5f5f5] transition-colors whitespace-nowrap"
+                        >
+                          Ungroup
+                        </button>
+                      </div>
+                    ) : (
+                      <span className="font-['Inter:Regular',sans-serif] font-normal text-[12px] leading-[16px] text-[#60646C] whitespace-nowrap">
+                        Group actions locked after start
+                      </span>
+                    )}
                   </div>
                 </div>
 
                 {isExpanded &&
-                  group.rows.map((row) => {
+                  group.rows.map((row, index) => {
                     const selected = selectedIds.has(row.id);
+                    const isFirstGroupedChild = index === 0;
+                    const isLastGroupedChild = index === group.rows.length - 1;
                     return (
                       <PlanDataRow
                         key={row.id}
@@ -1788,6 +2289,10 @@ function FlatPlansTable({
                         selected={selected}
                         onToggleRow={onToggleRow}
                         isGroupedChild
+                        isFirstGroupedChild={isFirstGroupedChild}
+                        isLastGroupedChild={isLastGroupedChild}
+                        canManageGroupedChild={canUngroup}
+                        onRemoveFromGroup={onRemoveChildFromGroup}
                         gridCols={GRID_COLS}
                       />
                     );
@@ -1806,25 +2311,37 @@ function PlanDataRow({
   selected,
   onToggleRow,
   isGroupedChild,
+  isFirstGroupedChild,
+  isLastGroupedChild,
+  canManageGroupedChild,
+  onRemoveFromGroup,
   gridCols,
 }: {
   row: IncomingPlanRow;
   selected: boolean;
   onToggleRow: (rowId: string) => void;
   isGroupedChild: boolean;
+  isFirstGroupedChild?: boolean;
+  isLastGroupedChild?: boolean;
+  canManageGroupedChild?: boolean;
+  onRemoveFromGroup?: (rowId: string, fundingActionId: string) => void;
   gridCols: string;
 }) {
   return (
     <div
-      className={`w-full border-b border-[#CDCED6] hover:bg-[#fafafa] transition-colors grid ${
-        selected ? 'bg-[rgba(20,125,185,0.06)]' : isGroupedChild ? 'bg-[#fcfdff]' : ''
+      className={`w-full border-b hover:bg-[#fafafa] transition-colors grid ${
+        isGroupedChild ? 'border-b-[#CDCED6] border-l-[2px] border-l-[#B9BBC6]' : 'border-b-[#CDCED6]'
+      } ${isGroupedChild && isFirstGroupedChild ? 'border-t border-t-[#B9BBC6]' : ''} ${
+        isGroupedChild && isLastGroupedChild ? 'border-b-[2px] border-b-[#8B8D98]' : ''
+      } ${selected ? 'bg-[rgba(20,125,185,0.06)]' : isGroupedChild ? 'bg-[#f3f7fb]' : ''
       }`}
       style={{ gridTemplateColumns: gridCols }}
     >
       <div className="px-[12px] py-[12px] flex items-center justify-center min-w-0">
         {isGroupedChild ? (
           <div className="flex items-center gap-[8px] pl-[8px]">
-            <span aria-hidden="true" className="h-[1px] w-[10px] bg-[#CDCED6]" />
+            <span aria-hidden="true" className="h-[18px] w-[1px] bg-[#B9BBC6]" />
+            <span aria-hidden="true" className="h-[1px] w-[10px] bg-[#B9BBC6]" />
             <input
               type="checkbox"
               checked={selected}
@@ -1859,6 +2376,105 @@ function PlanDataRow({
       <DataCell align="right">{formatCurrency(row.reimbursableAmount)}</DataCell>
       <DataCell align="right">{formatCurrency(row.directCiteAmount)}</DataCell>
       <DataCell>{row.needDate}</DataCell>
+      <div className="px-[12px] py-[12px] flex items-center justify-center min-w-0">
+        {isGroupedChild ? (
+          <ChildRowActions
+            canRemove={Boolean(canManageGroupedChild)}
+            onRemove={() => row.fundingActionId && onRemoveFromGroup?.(row.id, row.fundingActionId)}
+          />
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
+function ChildRowActions({ canRemove, onRemove }: { canRemove: boolean; onRemove: () => void }) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0, openUpward: false });
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const menuRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!isMenuOpen) return;
+
+    const updatePosition = () => {
+      const buttonEl = buttonRef.current;
+      if (!buttonEl) return;
+
+      const rect = buttonEl.getBoundingClientRect();
+      const menuWidth = 170;
+      const menuHeight = 42;
+      const shouldOpenUpward = window.innerHeight - rect.bottom < menuHeight + 12 && rect.top > menuHeight + 12;
+
+      const top = shouldOpenUpward ? rect.top - menuHeight - 4 : rect.bottom + 4;
+      const left = Math.max(8, Math.min(rect.right - menuWidth, window.innerWidth - menuWidth - 8));
+
+      setMenuPosition({ top, left, openUpward: shouldOpenUpward });
+    };
+
+    const handlePointerDown = (event: MouseEvent) => {
+      const target = event.target as Node;
+      const withinButton = buttonRef.current?.contains(target);
+      const withinMenu = menuRef.current?.contains(target);
+      if (!withinButton && !withinMenu) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsMenuOpen(false);
+      }
+    };
+
+    updatePosition();
+    window.addEventListener('resize', updatePosition);
+    window.addEventListener('scroll', updatePosition, true);
+    document.addEventListener('mousedown', handlePointerDown);
+    document.addEventListener('keydown', handleEscape);
+
+    return () => {
+      window.removeEventListener('resize', updatePosition);
+      window.removeEventListener('scroll', updatePosition, true);
+      document.removeEventListener('mousedown', handlePointerDown);
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [isMenuOpen]);
+
+  return (
+    <div className="relative">
+      <button
+        ref={buttonRef}
+        onClick={() => setIsMenuOpen((prev) => !prev)}
+        aria-label="Row actions"
+        className="h-[24px] w-[24px] rounded-[4px] border border-[#B9BBC6] bg-white flex items-center justify-center cursor-pointer hover:bg-[#f5f5f5] transition-colors"
+      >
+        <MoreVertical size={14} className="text-[#1C2024]" />
+      </button>
+      {isMenuOpen &&
+        createPortal(
+          <div
+            ref={menuRef}
+            className="fixed z-[120] min-w-[150px] bg-white border border-[#B9BBC6] rounded-[4px] shadow-[0_4px_12px_rgba(0,0,0,0.12)] p-[4px]"
+            style={{ top: menuPosition.top, left: menuPosition.left }}
+            data-open-direction={menuPosition.openUpward ? 'up' : 'down'}
+          >
+            <button
+              disabled={!canRemove}
+              onClick={() => {
+                if (!canRemove) return;
+                onRemove();
+                setIsMenuOpen(false);
+              }}
+              className={`w-full h-[28px] px-[10px] rounded-[4px] text-left font-['Inter:Regular',sans-serif] text-[12px] leading-[16px] ${
+                canRemove ? 'text-[#1C2024] hover:bg-[#f5f5f5] cursor-pointer' : 'text-[#80838D] cursor-default'
+              }`}
+            >
+              Remove from Group
+            </button>
+          </div>,
+          document.body,
+        )}
     </div>
   );
 }
